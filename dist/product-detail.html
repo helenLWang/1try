@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NailTech Pro - Premium Press-On Nails</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --primary-900: #1a1a2e;
+            --primary-800: #16213e;
+            --primary-600: #0f3460;
+            --accent-500: #e94560;
+            --accent-400: #f39c6b;
+            --neutral-100: #f8fafc;
+            --neutral-200: #e2e8f0;
+            --neutral-800: #1e293b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--neutral-100);
+        }
+        
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .bg-vanta {
+            background: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-800) 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .ar-container {
+            position: relative;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .ar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .nail-preview {
+            position: absolute;
+            width: 80px;
+            height: 120px;
+            background: linear-gradient(45deg, var(--accent-500), var(--accent-400));
+            border-radius: 40px 40px 0 0;
+            transform: rotate(-15deg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .rating-stars {
+            color: #fbbf24;
+        }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background: var(--accent-500);
+            color: white;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(233, 69, 96, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(233, 69, 96, 0.6); }
+        }
+    </style>
+</head>
+<body class="bg-neutral-100 text-neutral-800">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-neutral-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="font-display text-2xl font-bold text-primary-900">NailTech Pro</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-neutral-600 hover:text-accent-500 transition-colors">Home</a>
+                    <a href="index.html#products" class="text-neutral-600 hover:text-accent-500 transition-colors">Products</a>
+                    <a href="technology.html" class="text-neutral-600 hover:text-accent-500 transition-colors">Technology</a>
+                    <a href="cart.html" class="text-neutral-600 hover:text-accent-500 transition-colors">Cart (<span id="cart-count">0</span>)</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Detail Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Product Images & AR -->
+            <div class="space-y-6">
+                <!-- Main Product Image -->
+                <div class="relative">
+                    <img id="main-product-image" 
+                         src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=800&fit=crop" 
+                         alt="Premium Press-On Nails" 
+                         class="w-full h-96 object-cover rounded-2xl shadow-lg">
+                    <div class="absolute top-4 left-4 bg-accent-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        Best Seller
+                    </div>
+                </div>
+
+                <!-- AR Try-On Section -->
+                <div class="ar-container h-80">
+                    <div class="ar-overlay">
+                        <div class="text-center text-white">
+                            <div class="nail-preview mx-auto mb-4"></div>
+                            <h3 class="text-xl font-semibold mb-2">AR Virtual Try-On</h3>
+                            <p class="text-sm opacity-80 mb-4">See how these nails look on your hands</p>
+                            <button id="ar-try-on-btn" class="bg-accent-500 hover:bg-accent-400 text-white px-6 py-3 rounded-full font-medium transition-all pulse-glow">
+                                Start AR Try-On
+                            </button>
+                        </div>
+                    </div>
+                    <video id="ar-video" class="w-full h-full object-cover hidden"></video>
+                    <canvas id="ar-canvas" class="w-full h-full hidden"></canvas>
+                </div>
+
+                <!-- Thumbnail Images -->
+                <div class="grid grid-cols-4 gap-3">
+                    <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=200&h=200&fit=crop" 
+                         class="w-full h-20 object-cover rounded-lg cursor-pointer border-2 border-accent-500" 
+                         onclick="changeMainImage(this.src)">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200&h=200&fit=crop" 
+                         class="w-full h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-accent-400" 
+                         onclick="changeMainImage(this.src)">
+                    <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=200&fit=crop" 
+                         class="w-full h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-accent-400" 
+                         onclick="changeMainImage(this.src)">
+                    <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=200&h=200&fit=crop" 
+                         class="w-full h-20 object-cover rounded-lg cursor-pointer border-2 border-transparent hover:border-accent-400" 
+                         onclick="changeMainImage(this.src)">
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="space-y-6">
+                <!-- Product Title & Rating -->
+                <div>
+                    <h1 class="font-display text-4xl font-bold text-neutral-900 mb-2">
+                        Rose Gold Elegance Collection
+                    </h1>
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="flex items-center">
+                            <span class="rating-stars text-xl">★★★★★</span>
+                            <span class="ml-2 text-neutral-600">(4.8/5)</span>
+                        </div>
+                        <span class="text-sm text-neutral-500">127 reviews</span>
+                        <span class="text-sm text-accent-500 font-medium">2.3k sold</span>
+                    </div>
+                    <p class="text-neutral-600 leading-relaxed">
+                        Experience salon-quality nails at home with our premium Rose Gold Elegance collection. 
+                        Hand-crafted with precision and designed to last up to 14 days with proper application.
+                    </p>
+                </div>
+
+                <!-- Price -->
+                <div class="flex items-center space-x-4">
+                    <span class="text-4xl font-bold text-accent-500">$24.99</span>
+                    <span class="text-xl text-neutral-400 line-through">$34.99</span>
+                    <span class="bg-accent-500 text-white px-3 py-1 rounded-full text-sm font-medium">29% OFF</span>
+                </div>
+
+                <!-- Size Selection -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Size</h3>
+                    <div class="flex space-x-3">
+                        <button class="size-btn w-12 h-12 border-2 border-neutral-300 rounded-lg hover:border-accent-500 transition-colors" 
+                                onclick="selectSize(this, 'XS')">XS</button>
+                        <button class="size-btn w-12 h-12 border-2 border-neutral-300 rounded-lg hover:border-accent-500 transition-colors" 
+                                onclick="selectSize(this, 'S')">S</button>
+                        <button class="size-btn w-12 h-12 border-2 border-accent-500 bg-accent-500 text-white rounded-lg" 
+                                onclick="selectSize(this, 'M')">M</button>
+                        <button class="size-btn w-12 h-12 border-2 border-neutral-300 rounded-lg hover:border-accent-500 transition-colors" 
+                                onclick="selectSize(this, 'L')">L</button>
+                        <button class="size-btn w-12 h-12 border-2 border-neutral-300 rounded-lg hover:border-accent-500 transition-colors" 
+                                onclick="selectSize(this, 'XL')">XL</button>
+                    </div>
+                </div>
+
+                <!-- Quantity -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Quantity</h3>
+                    <div class="flex items-center space-x-4">
+                        <button id="qty-minus" class="w-10 h-10 border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors">-</button>
+                        <span id="quantity" class="text-xl font-semibold w-8 text-center">1</span>
+                        <button id="qty-plus" class="w-10 h-10 border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors">+</button>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-4">
+                    <button id="add-to-cart" class="flex-1 bg-accent-500 hover:bg-accent-400 text-white py-4 rounded-full font-semibold transition-all pulse-glow">
+                        Add to Cart
+                    </button>
+                    <button class="w-16 h-16 border-2 border-accent-500 text-accent-500 hover:bg-accent-500 hover:text-white rounded-full transition-all">
+                        ❤️
+                    </button>
+                </div>
+
+                <!-- AI Recommendation -->
+                <div class="bg-gradient-to-r from-primary-900 to-primary-800 text-white p-6 rounded-2xl">
+                    <h3 class="font-semibold mb-2">🤖 AI Recommendation</h3>
+                    <p class="text-sm opacity-90 mb-3">
+                        Based on your browsing history, you might also like these styles.
+                    </p>
+                    <div class="flex space-x-3">
+                        <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=60&h=60&fit=crop" 
+                             class="w-15 h-15 object-cover rounded-lg cursor-pointer hover:scale-110 transition-transform">
+                        <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=60&h=60&fit=crop" 
+                             class="w-15 h-15 object-cover rounded-lg cursor-pointer hover:scale-110 transition-transform">
+                        <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=60&h=60&fit=crop" 
+                             class="w-15 h-15 object-cover rounded-lg cursor-pointer hover:scale-110 transition-transform">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details Tabs -->
+        <div class="mt-16">
+            <div class="border-b border-neutral-200 mb-8">
+                <nav class="flex space-x-8">
+                    <button class="tab-button active px-4 py-3 font-medium" onclick="switchTab('details')">Details</button>
+                    <button class="tab-button px-4 py-3 font-medium" onclick="switchTab('ingredients')">Ingredients</button>
+                    <button class="tab-button px-4 py-3 font-medium" onclick="switchTab('reviews')">Reviews</button>
+                    <button class="tab-button px-4 py-3 font-medium" onclick="switchTab('shipping')">Shipping</button>
+                </nav>
+            </div>
+
+            <div id="tab-content" class="fade-in">
+                <!-- Details Tab -->
+                <div id="details-tab" class="tab-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Product Features</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">✓</span>
+                                    <span>24 premium press-on nails in 12 sizes</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">✓</span>
+                                    <span>Professional-grade adhesive tabs</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">✓</span>
+                                    <span>Up to 14-day wear time</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">✓</span>
+                                    <span>Waterproof and chip-resistant</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">✓</span>
+                                    <span>Easy application and removal</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">What's Included</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">•</span>
+                                    <span>24 press-on nails</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">•</span>
+                                    <span>Adhesive tabs (2 sheets)</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">•</span>
+                                    <span>Nail file & cuticle stick</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">•</span>
+                                    <span>Alcohol prep pad</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">•</span>
+                                    <span>Instruction guide</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ingredients Tab -->
+                <div id="ingredients-tab" class="tab-content hidden">
+                    <h3 class="text-xl font-semibold mb-4">Premium Materials</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <h4 class="font-semibold mb-2">ABS Plastic</h4>
+                            <p class="text-sm text-neutral-600">Durable, lightweight, and flexible material that mimics natural nail strength.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <h4 class="font-semibold mb-2">UV Gel Coating</h4>
+                            <p class="text-sm text-neutral-600">High-gloss finish that resists chipping and maintains shine for weeks.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <h4 class="font-semibold mb-2">Acrylic Paint</h4>
+                            <p class="text-sm text-neutral-600">Professional-grade pigments for vibrant, long-lasting color.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Tab -->
+                <div id="reviews-tab" class="tab-content hidden">
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=50&h=50&fit=crop&crop=face" 
+                                         class="w-12 h-12 rounded-full object-cover">
+                                    <div>
+                                        <h4 class="font-semibold">Sarah M.</h4>
+                                        <div class="rating-stars">★★★★★</div>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-neutral-500">2 weeks ago</span>
+                            </div>
+                            <p class="text-neutral-600">
+                                "Absolutely love these! The rose gold color is perfect and they lasted me almost 2 weeks. 
+                                The AR try-on feature helped me choose the right size. Will definitely buy more!"
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face" 
+                                         class="w-12 h-12 rounded-full object-cover">
+                                    <div>
+                                        <h4 class="font-semibold">Jessica L.</h4>
+                                        <div class="rating-stars">★★★★☆</div>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-neutral-500">1 month ago</span>
+                            </div>
+                            <p class="text-neutral-600">
+                                "Great quality and easy to apply. The color is exactly as shown. 
+                                Only minor issue is one nail started lifting after 10 days, but that's still impressive!"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Tab -->
+                <div id="shipping-tab" class="tab-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Shipping Options</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center p-4 bg-white rounded-lg shadow-sm">
+                                    <div>
+                                        <span class="font-medium">Standard Shipping</span>
+                                        <p class="text-sm text-neutral-600">5-7 business days</p>
+                                    </div>
+                                    <span class="font-semibold">FREE</span>
+                                </div>
+                                <div class="flex justify-between items-center p-4 bg-white rounded-lg shadow-sm">
+                                    <div>
+                                        <span class="font-medium">Express Shipping</span>
+                                        <p class="text-sm text-neutral-600">2-3 business days</p>
+                                    </div>
+                                    <span class="font-semibold">$9.99</span>
+                                </div>
+                                <div class="flex justify-between items-center p-4 bg-white rounded-lg shadow-sm">
+                                    <div>
+                                        <span class="font-medium">Overnight Shipping</span>
+                                        <p class="text-sm text-neutral-600">1 business day</p>
+                                    </div>
+                                    <span class="font-semibold">$19.99</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">Return Policy</h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">✓</span>
+                                    <span>30-day money-back guarantee</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">✓</span>
+                                    <span>Free return shipping</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">✓</span>
+                                    <span>Full refund or exchange</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-accent-500 mr-3">✓</span>
+                                    <span>Customer satisfaction priority</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        <div class="mt-16">
+            <h2 class="font-display text-3xl font-bold text-center mb-12">You Might Also Like</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=300&fit=crop" 
+                         class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold mb-2">Midnight Sparkle</h3>
+                        <div class="rating-stars text-sm mb-2">★★★★★</div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-accent-500">$22.99</span>
+                            <button class="bg-accent-500 text-white px-4 py-2 rounded-full text-sm hover:bg-accent-400 transition-colors">
+                                Quick Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop" 
+                         class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold mb-2">Ocean Dreams</h3>
+                        <div class="rating-stars text-sm mb-2">★★★★★</div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-accent-500">$26.99</span>
+                            <button class="bg-accent-500 text-white px-4 py-2 rounded-full text-sm hover:bg-accent-400 transition-colors">
+                                Quick Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=300&h=300&fit=crop" 
+                         class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold mb-2">Sunset Glow</h3>
+                        <div class="rating-stars text-sm mb-2">★★★★★</div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-accent-500">$24.99</span>
+                            <button class="bg-accent-500 text-white px-4 py-2 rounded-full text-sm hover:bg-accent-400 transition-colors">
+                                Quick Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop" 
+                         class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-semibold mb-2">Classic Nude</h3>
+                        <div class="rating-stars text-sm mb-2">★★★★★</div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-accent-500">$21.99</span>
+                            <button class="bg-accent-500 text-white px-4 py-2 rounded-full text-sm hover:bg-accent-400 transition-colors">
+                                Quick Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-primary-900 text-white py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="font-display text-2xl font-bold mb-4">NailTech Pro</h2>
+            <p class="text-neutral-300 mb-6">Revolutionizing nail care with AI-powered technology</p>
+            <p class="text-sm text-neutral-400">© 2024 NailTech Pro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Product detail page functionality
+        let selectedSize = 'M';
+        let quantity = 1;
+        let cartCount = 0;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAR();
+            initializeQuantityControls();
+            initializeAddToCart();
+            loadCartCount();
+        });
+
+        // Change main product image
+        function changeMainImage(src) {
+            const mainImage = document.getElementById('main-product-image');
+            mainImage.src = src;
+            
+            // Update thumbnail borders
+            document.querySelectorAll('.grid img').forEach(img => {
+                img.classList.remove('border-accent-500');
+                img.classList.add('border-transparent');
+            });
+            event.target.classList.remove('border-transparent');
+            event.target.classList.add('border-accent-500');
+        }
+
+        // Size selection
+        function selectSize(button, size) {
+            selectedSize = size;
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.classList.remove('border-accent-500', 'bg-accent-500', 'text-white');
+                btn.classList.add('border-neutral-300');
+            });
+            button.classList.remove('border-neutral-300');
+            button.classList.add('border-accent-500', 'bg-accent-500', 'text-white');
+        }
+
+        // Quantity controls
+        function initializeQuantityControls() {
+            const minusBtn = document.getElementById('qty-minus');
+            const plusBtn = document.getElementById('qty-plus');
+            const qtyDisplay = document.getElementById('quantity');
+
+            minusBtn.addEventListener('click', () => {
+                if (quantity > 1) {
+                    quantity--;
+                    qtyDisplay.textContent = quantity;
+                }
+            });
+
+            plusBtn.addEventListener('click', () => {
+                quantity++;
+                qtyDisplay.textContent = quantity;
+            });
+        }
+
+        // Add to cart functionality
+        function initializeAddToCart() {
+            const addToCartBtn = document.getElementById('add-to-cart');
+            
+            addToCartBtn.addEventListener('click', () => {
+                const product = {
+                    id: 'rose-gold-elegance',
+                    name: 'Rose Gold Elegance Collection',
+                    price: 24.99,
+                    size: selectedSize,
+                    quantity: quantity,
+                    image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=300&fit=crop'
+                };
+
+                addToCart(product);
+                showAddToCartAnimation();
+            });
+        }
+
+        function addToCart(product) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const existingItem = cart.find(item => item.id === product.id && item.size === product.size);
+            
+            if (existingItem) {
+                existingItem.quantity += product.quantity;
+            } else {
+                cart.push(product);
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = cartCount;
+        }
+
+        function loadCartCount() {
+            updateCartCount();
+        }
+
+        function showAddToCartAnimation() {
+            const button = document.getElementById('add-to-cart');
+            const originalText = button.textContent;
+            
+            button.textContent = 'Added! ✓';
+            button.style.background = '#10b981';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+            }, 2000);
+        }
+
+        // AR Try-On functionality
+        function initializeAR() {
+            const arBtn = document.getElementById('ar-try-on-btn');
+            
+            arBtn.addEventListener('click', () => {
+                startARTryOn();
+            });
+        }
+
+        function startARTryOn() {
+            const overlay = document.querySelector('.ar-overlay');
+            const video = document.getElementById('ar-video');
+            const canvas = document.getElementById('ar-canvas');
+            
+            overlay.style.display = 'none';
+            video.classList.remove('hidden');
+            
+            // Simulate AR experience
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        video.srcObject = stream;
+                        video.play();
+                        
+                        // Add AR overlay after 2 seconds
+                        setTimeout(() => {
+                            canvas.classList.remove('hidden');
+                            const ctx = canvas.getContext('2d');
+                            canvas.width = video.videoWidth;
+                            canvas.height = video.videoHeight;
+                            
+                            function drawAROverlay() {
+                                ctx.drawImage(video, 0, 0);
+                                
+                                // Draw virtual nails (simulated)
+                                ctx.fillStyle = 'rgba(233, 69, 96, 0.7)';
+                                ctx.fillRect(100, 200, 30, 40);
+                                ctx.fillRect(150, 190, 30, 42);
+                                ctx.fillRect(200, 185, 30, 44);
+                                
+                                requestAnimationFrame(drawAROverlay);
+                            }
+                            
+                            drawAROverlay();
+                        }, 2000);
+                    })
+                    .catch(function(error) {
+                        console.log("Camera access denied or not available");
+                        // Show fallback message
+                        overlay.innerHTML = `
+                            <div class="text-center text-white">
+                                <div class="text-4xl mb-4">📱</div>
+                                <h3 class="text-xl font-semibold mb-2">AR Try-On</h3>
+                                <p class="text-sm opacity-80">Camera access required for AR experience</p>
+                            </div>
+                        `;
+                    });
+            }
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            const activeTab = document.getElementById(tabName + '-tab');
+            if (activeTab) {
+                activeTab.classList.remove('hidden');
+                activeTab.classList.add('fade-in');
+            }
+        }
+
+        // Quick add functionality for related products
+        document.querySelectorAll('.bg-white button').forEach(btn => {
+            if (btn.textContent.includes('Quick Add')) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const productCard = btn.closest('.bg-white');
+                    const productName = productCard.querySelector('h3').textContent;
+                    
+                    // Add to cart animation
+                    btn.textContent = 'Added! ✓';
+                    btn.style.background = '#10b981';
+                    
+                    setTimeout(() => {
+                        btn.textContent = 'Quick Add';
+                        btn.style.background = '';
+                    }, 2000);
+                    
+                    // Add to cart logic here
+                    console.log('Quick added:', productName);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

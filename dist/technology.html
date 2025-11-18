@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technology - NailTech Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/3.0.3/plotly.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --primary-900: #1a1a2e;
+            --primary-800: #16213e;
+            --primary-600: #0f3460;
+            --accent-500: #e94560;
+            --accent-400: #f39c6b;
+            --neutral-100: #f8fafc;
+            --neutral-200: #e2e8f0;
+            --neutral-800: #1e293b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--neutral-100);
+        }
+        
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .bg-vanta {
+            background: linear-gradient(135deg, var(--primary-900) 0%, var(--primary-800) 100%);
+        }
+        
+        .tech-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .tech-card:hover {
+            border-color: var(--accent-500);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(233, 69, 96, 0.1);
+        }
+        
+        .code-block {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 3s infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 30px rgba(233, 69, 96, 0.3); }
+            50% { box-shadow: 0 0 60px rgba(233, 69, 96, 0.6); }
+        }
+        
+        .tech-stack-item {
+            transition: all 0.3s ease;
+        }
+        
+        .tech-stack-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .demo-button {
+            background: linear-gradient(45deg, var(--accent-500), var(--accent-400));
+            transition: all 0.3s ease;
+        }
+        
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(233, 69, 96, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-neutral-100 text-neutral-800">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-neutral-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="font-display text-2xl font-bold text-primary-900">NailTech Pro</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-neutral-600 hover:text-accent-500 transition-colors">Home</a>
+                    <a href="index.html#products" class="text-neutral-600 hover:text-accent-500 transition-colors">Products</a>
+                    <a href="technology.html" class="text-accent-500 font-medium">Technology</a>
+                    <a href="cart.html" class="text-neutral-600 hover:text-accent-500 transition-colors">Cart (<span id="cart-count">0</span>)</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="bg-vanta text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="font-display text-5xl font-bold mb-6 fade-in">Our Technology Stack</h1>
+            <p class="text-xl mb-8 max-w-3xl mx-auto fade-in">
+                Discover the cutting-edge technologies powering NailTech Pro's revolutionary nail shopping experience
+            </p>
+            <div class="flex justify-center space-x-4 fade-in">
+                <button onclick="scrollToDemo()" class="demo-button text-white px-8 py-3 rounded-full font-semibold">
+                    Try Live Demo
+                </button>
+                <button onclick="scrollToArchitecture()" class="border-2 border-white text-white hover:bg-white hover:text-primary-900 px-8 py-3 rounded-full font-semibold transition-all">
+                    View Architecture
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technology Overview -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center mb-16">
+            <h2 class="font-display text-4xl font-bold mb-6">Revolutionary Features</h2>
+            <p class="text-xl text-neutral-600 max-w-3xl mx-auto">
+                Our platform combines AI, AR, and modern web technologies to deliver an unparalleled shopping experience
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- AR Try-On -->
+            <div class="tech-card bg-white rounded-2xl p-8 shadow-lg">
+                <div class="text-4xl mb-4">🥽</div>
+                <h3 class="text-2xl font-bold mb-4">AR Virtual Try-On</h3>
+                <p class="text-neutral-600 mb-6">
+                    Experience real-time augmented reality nail try-on using advanced computer vision and machine learning algorithms.
+                </p>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Real-time hand tracking</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>3D nail rendering</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Size detection algorithm</span>
+                    </div>
+                </div>
+                <button onclick="demoAR()" class="mt-6 bg-accent-500 hover:bg-accent-400 text-white px-6 py-3 rounded-full font-semibold transition-colors w-full">
+                    Try AR Demo
+                </button>
+            </div>
+
+            <!-- AI Recommendations -->
+            <div class="tech-card bg-white rounded-2xl p-8 shadow-lg">
+                <div class="text-4xl mb-4">🤖</div>
+                <h3 class="text-2xl font-bold mb-4">AI Smart Recommendations</h3>
+                <p class="text-neutral-600 mb-6">
+                    Machine learning algorithms analyze your preferences and browsing behavior to suggest perfect nail matches.
+                </p>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Collaborative filtering</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Content-based analysis</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Real-time learning</span>
+                    </div>
+                </div>
+                <button onclick="demoAI()" class="mt-6 bg-accent-500 hover:bg-accent-400 text-white px-6 py-3 rounded-full font-semibold transition-colors w-full">
+                    Test AI Engine
+                </button>
+            </div>
+
+            <!-- Web Scraping -->
+            <div class="tech-card bg-white rounded-2xl p-8 shadow-lg">
+                <div class="text-4xl mb-4">🕷️</div>
+                <h3 class="text-2xl font-bold mb-4">Intelligent Web Scraping</h3>
+                <p class="text-neutral-600 mb-6">
+                    Automated data collection from multiple sources to ensure the latest trends and competitive pricing.
+                </p>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Multi-source aggregation</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Real-time updates</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Data validation</span>
+                    </div>
+                </div>
+                <button onclick="demoScraping()" class="mt-6 bg-accent-500 hover:bg-accent-400 text-white px-6 py-3 rounded-full font-semibold transition-colors w-full">
+                    View Scraping Demo
+                </button>
+            </div>
+
+            <!-- RAG System -->
+            <div class="tech-card bg-white rounded-2xl p-8 shadow-lg">
+                <div class="text-4xl mb-4">💬</div>
+                <h3 class="text-2xl font-bold mb-4">RAG Q&A Assistant</h3>
+                <p class="text-neutral-600 mb-6">
+                    Retrieval-Augmented Generation system providing intelligent answers about products, care, and styling.
+                </p>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Natural language processing</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Knowledge base integration</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Contextual understanding</span>
+                    </div>
+                </div>
+                <button onclick="demoRAG()" class="mt-6 bg-accent-500 hover:bg-accent-400 text-white px-6 py-3 rounded-full font-semibold transition-colors w-full">
+                    Chat with Assistant
+                </button>
+            </div>
+
+            <!-- Functional Calling -->
+            <div class="tech-card bg-white rounded-2xl p-8 shadow-lg">
+                <div class="text-4xl mb-4">📞</div>
+                <h3 class="text-2xl font-bold mb-4">Functional Calling API</h3>
+                <p class="text-neutral-600 mb-6">
+                    Advanced API integration enabling seamless third-party services and real-time functionality.
+                </p>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Multi-service integration</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Real-time data sync</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Error handling & retry</span>
+                    </div>
+                </div>
+                <button onclick="demoAPI()" class="mt-6 bg-accent-500 hover:bg-accent-400 text-white px-6 py-3 rounded-full font-semibold transition-colors w-full">
+                    Test API Integration
+                </button>
+            </div>
+
+            <!-- Performance Optimization -->
+            <div class="tech-card bg-white rounded-2xl p-8 shadow-lg">
+                <div class="text-4xl mb-4">⚡</div>
+                <h3 class="text-2xl font-bold mb-4">Performance Optimization</h3>
+                <p class="text-neutral-600 mb-6">
+                    Advanced caching, lazy loading, and CDN integration for lightning-fast user experiences.
+                </p>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>CDN acceleration</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Image optimization</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-accent-500 mr-2">✓</span>
+                        <span>Progressive web app</span>
+                    </div>
+                </div>
+                <button onclick="demoPerformance()" class="mt-6 bg-accent-500 hover:bg-accent-400 text-white px-6 py-3 rounded-full font-semibold transition-colors w-full">
+                    Run Speed Test
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Architecture Diagram -->
+    <div id="architecture-section" class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-4xl font-bold mb-6">System Architecture</h2>
+                <p class="text-xl text-neutral-600">
+                    Scalable microservices architecture built for high performance and reliability
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" 
+                         alt="System Architecture" 
+                         class="w-full rounded-2xl shadow-lg">
+                </div>
+                <div class="space-y-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-accent-500 rounded-full flex items-center justify-center text-white font-bold">1</div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Frontend Layer</h3>
+                            <p class="text-neutral-600">React/Vue.js with Tailwind CSS for responsive, modern UI components and smooth interactions.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-accent-500 rounded-full flex items-center justify-center text-white font-bold">2</div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">API Gateway</h3>
+                            <p class="text-neutral-600">Centralized request routing, authentication, and rate limiting for all microservices.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-accent-500 rounded-full flex items-center justify-center text-white font-bold">3</div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Microservices</h3>
+                            <p class="text-neutral-600">Independent services for recommendations, AR processing, inventory, and user management.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 bg-accent-500 rounded-full flex items-center justify-center text-white font-bold">4</div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2">Data Layer</h3>
+                            <p class="text-neutral-600">MongoDB for product data, Redis for caching, and vector databases for AI processing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-4xl font-bold mb-6">Technology Stack</h2>
+                <p class="text-xl text-neutral-600">
+                    Built with industry-leading technologies for maximum performance and scalability
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                <div class="tech-stack-item text-center">
+                    <div class="w-16 h-16 bg-blue-500 rounded-xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        R
+                    </div>
+                    <h4 class="font-semibold">React</h4>
+                    <p class="text-sm text-neutral-600">Frontend Framework</p>
+                </div>
+                <div class="tech-stack-item text-center">
+                    <div class="w-16 h-16 bg-green-500 rounded-xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        V
+                    </div>
+                    <h4 class="font-semibold">Vue.js</h4>
+                    <p class="text-sm text-neutral-600">Component Framework</p>
+                </div>
+                <div class="tech-stack-item text-center">
+                    <div class="w-16 h-16 bg-yellow-500 rounded-xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        F
+                    </div>
+                    <h4 class="font-semibold">Flask</h4>
+                    <p class="text-sm text-neutral-600">Python Backend</p>
+                </div>
+                <div class="tech-stack-item text-center">
+                    <div class="w-16 h-16 bg-red-500 rounded-xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        S
+                    </div>
+                    <h4 class="font-semibold">Spring Boot</h4>
+                    <p class="text-sm text-neutral-600">Java Services</p>
+                </div>
+                <div class="tech-stack-item text-center">
+                    <div class="w-16 h-16 bg-green-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        M
+                    </div>
+                    <h4 class="font-semibold">MongoDB</h4>
+                    <p class="text-sm text-neutral-600">NoSQL Database</p>
+                </div>
+                <div class="tech-stack-item text-center">
+                    <div class="w-16 h-16 bg-red-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-3">
+                        R
+                    </div>
+                    <h4 class="font-semibold">Redis</h4>
+                    <p class="text-sm text-neutral-600">Caching Layer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Metrics -->
+    <div class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-4xl font-bold mb-6">Performance Metrics</h2>
+                <p class="text-xl text-neutral-600">
+                    Real-time performance data and analytics
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6">Response Time Analysis</h3>
+                    <div id="performance-chart" class="h-80"></div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6">System Health</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-4 bg-green-50 rounded-lg">
+                            <span class="font-medium">API Uptime</span>
+                            <span class="text-green-600 font-bold">99.9%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-blue-50 rounded-lg">
+                            <span class="font-medium">Average Response Time</span>
+                            <span class="text-blue-600 font-bold">120ms</span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-purple-50 rounded-lg">
+                            <span class="font-medium">Cache Hit Rate</span>
+                            <span class="text-purple-600 font-bold">94.2%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-orange-50 rounded-lg">
+                            <span class="font-medium">Error Rate</span>
+                            <span class="text-orange-600 font-bold">0.1%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Examples -->
+    <div class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-4xl font-bold mb-6">Code Examples</h2>
+                <p class="text-xl text-neutral-600">
+                    Sample implementations of our key features
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- AI Recommendation Algorithm -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4">AI Recommendation Engine</h3>
+                    <div class="code-block text-green-400">
+<pre>class RecommendationEngine:
+    def __init__(self):
+        self.user_preferences = {}
+        self.product_features = {}
+        
+    def get_recommendations(self, user_id):
+        # Collaborative filtering
+        similar_users = self.find_similar_users(user_id)
+        
+        # Content-based filtering
+        user_history = self.get_user_history(user_id)
+        
+        # Hybrid approach
+        recommendations = self.hybrid_recommend(
+            similar_users, user_history
+        )
+        
+        return recommendations
+        
+    def calculate_similarity(self, user1, user2):
+        # Cosine similarity calculation
+        return cosine_similarity(
+            user1.preferences, user2.preferences
+        )</pre>
+                    </div>
+                </div>
+
+                <!-- AR Processing -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4">AR Hand Tracking</h3>
+                    <div class="code-block text-blue-400">
+<pre>class ARHandTracker:
+    def __init__(self):
+        self.detector = HandDetector()
+        self.nail_renderer = NailRenderer()
+        
+    def process_frame(self, frame):
+        # Detect hand landmarks
+        landmarks = self.detector.find_hands(frame)
+        
+        if landmarks:
+            # Extract nail positions
+            nail_positions = self.extract_nail_positions(landmarks)
+            
+            # Render virtual nails
+            augmented_frame = self.nail_renderer.render(
+                frame, nail_positions, selected_style
+            )
+            
+            return augmented_frame
+            
+        return frame
+        
+    def extract_nail_positions(self, landmarks):
+        # Calculate nail bed positions
+        return [
+            self.calculate_nail_tip(finger_tip)
+            for finger_tip in landmarks.finger_tips
+        ]</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Section -->
+    <div id="demo-section" class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="font-display text-4xl font-bold mb-6">Interactive Demos</h2>
+            <p class="text-xl text-neutral-600 mb-12">
+                Experience our technology in action
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="tech-card bg-gradient-to-br from-blue-500 to-purple-600 text-white p-8 rounded-2xl">
+                    <div class="text-4xl mb-4">🎯</div>
+                    <h3 class="text-xl font-semibold mb-3">AR Try-On</h3>
+                    <p class="text-sm opacity-90 mb-4">Experience virtual nail try-on</p>
+                    <button onclick="startARTryOn()" class="bg-white text-blue-600 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                        Start Demo
+                    </button>
+                </div>
+
+                <div class="tech-card bg-gradient-to-br from-green-500 to-teal-600 text-white p-8 rounded-2xl">
+                    <div class="text-4xl mb-4">🤖</div>
+                    <h3 class="text-xl font-semibold mb-3">AI Assistant</h3>
+                    <p class="text-sm opacity-90 mb-4">Chat with our AI assistant</p>
+                    <button onclick="startAIChat()" class="bg-white text-green-600 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                        Chat Now
+                    </button>
+                </div>
+
+                <div class="tech-card bg-gradient-to-br from-orange-500 to-red-600 text-white p-8 rounded-2xl">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-semibold mb-3">Data Analytics</h3>
+                    <p class="text-sm opacity-90 mb-4">Real-time analytics dashboard</p>
+                    <button onclick="showAnalytics()" class="bg-white text-orange-600 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                        View Dashboard
+                    </button>
+                </div>
+
+                <div class="tech-card bg-gradient-to-br from-purple-500 to-pink-600 text-white p-8 rounded-2xl">
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h3 class="text-xl font-semibold mb-3">Performance</h3>
+                    <p class="text-sm opacity-90 mb-4">System performance metrics</p>
+                    <button onclick="showPerformance()" class="bg-white text-purple-600 px-4 py-2 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                        Run Test
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-primary-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="font-display text-2xl font-bold mb-4">NailTech Pro</h2>
+            <p class="text-neutral-300 mb-6">Revolutionizing nail care with AI-powered technology</p>
+            <p class="text-sm text-neutral-400">© 2024 NailTech Pro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePerformanceChart();
+            updateCartCount();
+        });
+
+        // Performance chart
+        function initializePerformanceChart() {
+            const data = [{
+                x: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                y: [120, 115, 130, 125, 118, 122],
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Response Time (ms)',
+                line: { color: '#e94560', width: 3 },
+                marker: { color: '#e94560', size: 8 }
+            }];
+
+            const layout = {
+                title: {
+                    text: 'API Response Time (24h)',
+                    font: { size: 16 }
+                },
+                xaxis: { title: 'Time' },
+                yaxis: { title: 'Response Time (ms)' },
+                margin: { t: 50, r: 50, b: 50, l: 50 },
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)'
+            };
+
+            Plotly.newPlot('performance-chart', data, layout, {responsive: true});
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = cartCount;
+        }
+
+        // Demo functions
+        function scrollToDemo() {
+            document.getElementById('demo-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToArchitecture() {
+            document.getElementById('architecture-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function demoAR() {
+            alert('AR Demo: Point your camera at your hand to see virtual nail overlays. This would integrate with device camera API in production.');
+        }
+
+        function demoAI() {
+            const userInput = prompt('Ask me anything about nail care or products!');
+            if (userInput) {
+                const responses = [
+                    "Based on your preferences, I'd recommend our Rose Gold collection for a classic elegant look.",
+                    "For long-lasting wear, make sure to clean your nails thoroughly before application.",
+                    "Our AI detected you might like the Midnight Sparkle design based on your browsing history.",
+                    "For sensitive skin, we recommend our hypoallergenic adhesive tabs included in every set."
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                alert(`AI Assistant: ${randomResponse}`);
+            }
+        }
+
+        function demoScraping() {
+            alert('Web Scraping Demo: Currently monitoring 15+ beauty retailers for latest trends and pricing. Last update: 2 minutes ago. Found 23 new trending designs.');
+        }
+
+        function demoRAG() {
+            const question = prompt('Ask me about nail care, trends, or product recommendations!');
+            if (question) {
+                alert(`RAG Assistant: I found relevant information about "${question}" in our knowledge base. Based on the latest trends and expert advice, here's what I recommend...`);
+            }
+        }
+
+        function demoAPI() {
+            alert('Functional Calling Demo: Successfully integrated with 8 external services including payment processing, shipping APIs, and social media platforms.');
+        }
+
+        function demoPerformance() {
+            alert('Performance Test: Page load time: 1.2s, API response: 120ms, Cache hit rate: 94.2%, Overall score: A+ (95/100)');
+        }
+
+        function startARTryOn() {
+            alert('AR Try-On: This would activate the camera and overlay virtual nails on your hand in real-time.');
+        }
+
+        function startAIChat() {
+            demoAI();
+        }
+
+        function showAnalytics() {
+            alert('Analytics Dashboard: Real-time data showing 1,247 active users, $12,340 revenue today, 23% conversion rate.');
+        }
+
+        function showPerformance() {
+            demoPerformance();
+        }
+    </script>
+</body>
+</html>

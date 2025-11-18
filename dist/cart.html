@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - NailTech Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --primary-900: #1a1a2e;
+            --primary-800: #16213e;
+            --primary-600: #0f3460;
+            --accent-500: #e94560;
+            --accent-400: #f39c6b;
+            --neutral-100: #f8fafc;
+            --neutral-200: #e2e8f0;
+            --neutral-800: #1e293b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--neutral-100);
+        }
+        
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(233, 69, 96, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(233, 69, 96, 0.6); }
+        }
+        
+        .checkout-step {
+            transition: all 0.3s ease;
+        }
+        
+        .checkout-step.active {
+            background: var(--accent-500);
+            color: white;
+        }
+        
+        .checkout-step.completed {
+            background: #10b981;
+            color: white;
+        }
+        
+        .form-field {
+            transition: all 0.3s ease;
+        }
+        
+        .form-field:focus {
+            border-color: var(--accent-500);
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-neutral-100 text-neutral-800">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-neutral-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="font-display text-2xl font-bold text-primary-900">NailTech Pro</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-neutral-600 hover:text-accent-500 transition-colors">Home</a>
+                    <a href="index.html#products" class="text-neutral-600 hover:text-accent-500 transition-colors">Products</a>
+                    <a href="technology.html" class="text-neutral-600 hover:text-accent-500 transition-colors">Technology</a>
+                    <a href="cart.html" class="text-accent-500 font-medium">Cart (<span id="cart-count">0</span>)</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Header -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center mb-8">
+            <h1 class="font-display text-4xl font-bold mb-4">Shopping Cart</h1>
+            <p class="text-neutral-600">Review your items and proceed to checkout</p>
+        </div>
+
+        <!-- Checkout Steps -->
+        <div class="flex justify-center mb-12">
+            <div class="flex items-center space-x-4">
+                <div class="checkout-step active w-10 h-10 rounded-full flex items-center justify-center font-semibold">1</div>
+                <div class="w-16 h-1 bg-neutral-300"></div>
+                <div class="checkout-step w-10 h-10 rounded-full flex items-center justify-center font-semibold bg-neutral-300">2</div>
+                <div class="w-16 h-1 bg-neutral-300"></div>
+                <div class="checkout-step w-10 h-10 rounded-full flex items-center justify-center font-semibold bg-neutral-300">3</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Cart Items -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-sm p-6">
+                    <h2 class="text-2xl font-semibold mb-6">Your Items</h2>
+                    
+                    <div id="cart-items" class="space-y-6">
+                        <!-- Cart items will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="border-t pt-6 mt-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-lg font-medium">Subtotal</span>
+                            <span id="subtotal" class="text-xl font-semibold">$0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-lg font-medium">Shipping</span>
+                            <span id="shipping" class="text-xl font-semibold">FREE</span>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <span class="text-xl font-bold">Total</span>
+                            <span id="total" class="text-2xl font-bold text-accent-500">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommended Products -->
+                <div class="bg-white rounded-2xl shadow-sm p-6 mt-8">
+                    <h3 class="text-xl font-semibold mb-6">You might also like</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex space-x-4 p-4 border border-neutral-200 rounded-xl hover:shadow-md transition-shadow cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=80&h=80&fit=crop" 
+                                 class="w-20 h-20 object-cover rounded-lg">
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1">Midnight Sparkle</h4>
+                                <div class="rating-stars text-sm mb-2">★★★★★</div>
+                                <span class="text-lg font-bold text-accent-500">$22.99</span>
+                                <button class="ml-2 bg-accent-500 text-white px-3 py-1 rounded-full text-sm hover:bg-accent-400 transition-colors">
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-4 p-4 border border-neutral-200 rounded-xl hover:shadow-md transition-shadow cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=80&h=80&fit=crop" 
+                                 class="w-20 h-20 object-cover rounded-lg">
+                            <div class="flex-1">
+                                <h4 class="font-semibold mb-1">Ocean Dreams</h4>
+                                <div class="rating-stars text-sm mb-2">★★★★★</div>
+                                <span class="text-lg font-bold text-accent-500">$26.99</span>
+                                <button class="ml-2 bg-accent-500 text-white px-3 py-1 rounded-full text-sm hover:bg-accent-400 transition-colors">
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Checkout Form -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
+                    <h2 class="text-2xl font-semibold mb-6">Checkout</h2>
+                    
+                    <!-- Shipping Information -->
+                    <div id="shipping-section" class="checkout-section">
+                        <h3 class="text-lg font-semibold mb-4">Shipping Information</h3>
+                        <form id="shipping-form" class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="text" placeholder="First Name" 
+                                       class="form-field w-full p-3 border border-neutral-300 rounded-lg focus:outline-none" required>
+                                <input type="text" placeholder="Last Name" 
+                                       class="form-field w-full p-3 border border-neutral-300 rounded-lg focus:outline-none" required>
+                            </div>
+                            <input type="email" placeholder="Email Address" 
+                                   class="form-field w-full p-3 border border-neutral-300 rounded-lg focus:outline-none" required>
+                            <input type="tel" placeholder="Phone Number" 
+                                   class="form-field w-full p-3 border border-neutral-300 rounded-lg focus:outline-none" required>
+                            <input type="text" placeholder="Street Address" 
+                                   class="form-field w-full p-3 border border-neutral-300 rounded-lg focus:outline-none" required>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="text" placeholder="City" 
+                                       class="form-field w-full p-3 border border-neutral-300 rounded-lg focus:outline-none" required>
+                                <input type="text" placeholder="ZIP Code" 
+                                       class="form-field w-full p-3 border border-neutral-300 rounded-lg focus:outline-none" required>
+                            </div>
+                            <select class="form-field w-full p-3 border border-neutral-300 rounded-lg focus:outline-none" required>
+                                <option value="">Select State</option>
+                                <option value="CA">California</option>
+                                <option value="NY">New York</option>
+                                <option value="TX">Texas</option>
+                                <option value="FL">Florida</option>
+                                <option value="WA">Washington</option>
+                            </select>
+                        </form>
+                    </div>
+
+                    <!-- Payment Information -->
+                    <div id="payment-section" class="checkout-section mt-8">
+                        <h3 class="text-lg font-semibold mb-4">Payment Method</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center p-4 border border-neutral-300 rounded-lg cursor-pointer hover:bg-neutral-50">
+                                <input type="radio" name="payment" value="card" class="mr-3" checked>
+                                <span class="font-medium">Credit/Debit Card</span>
+                                <div class="ml-auto flex space-x-2">
+                                    <span class="text-sm text-neutral-500">💳</span>
+                                    <span class="text-sm text-neutral-500">💳</span>
+                                    <span class="text-sm text-neutral-500">💳</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-4 border border-neutral-300 rounded-lg cursor-pointer hover:bg-neutral-50">
+                                <input type="radio" name="payment" value="paypal" class="mr-3">
+                                <span class="font-medium">PayPal</span>
+                                <span class="ml-auto text-sm text-neutral-500">🅿️</span>
+                            </div>
+                            <div class="flex items-center p-4 border border-neutral-300 rounded-lg cursor-pointer hover:bg-neutral-50">
+                                <input type="radio" name="payment" value="apple" class="mr-3">
+                                <span class="font-medium">Apple Pay</span>
+                                <span class="ml-auto text-sm text-neutral-500">🍎</span>
+                            </div>
+                        </div>
+
+                        <!-- Card Details -->
+                        <div id="card-details" class="mt-4 space-y-4">
+                            <input type="text" placeholder="Card Number" 
+                                   class="form-field w-full p-3 border border-neutral-300 rounded-lg focus:outline-none" 
+                                   maxlength="19" pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}">
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="text" placeholder="MM/YY" 
+                                       class="form-field w-full p-3 border border-neutral-300 rounded-lg focus:outline-none" 
+                                       maxlength="5" pattern="[0-9]{2}/[0-9]{2}">
+                                <input type="text" placeholder="CVV" 
+                                       class="form-field w-full p-3 border border-neutral-300 rounded-lg focus:outline-none" 
+                                       maxlength="4" pattern="[0-9]{3,4}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="mt-8 p-4 bg-neutral-50 rounded-xl">
+                        <h3 class="font-semibold mb-3">Order Summary</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>Subtotal</span>
+                                <span id="summary-subtotal">$0.00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Shipping</span>
+                                <span id="summary-shipping">FREE</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Tax</span>
+                                <span id="summary-tax">$0.00</span>
+                            </div>
+                            <div class="border-t pt-2 flex justify-between font-semibold">
+                                <span>Total</span>
+                                <span id="summary-total">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Place Order Button -->
+                    <button id="place-order-btn" 
+                            class="w-full mt-6 bg-accent-500 hover:bg-accent-400 text-white py-4 rounded-full font-semibold transition-all pulse-glow disabled:opacity-50 disabled:cursor-not-allowed">
+                        Place Order
+                    </button>
+
+                    <!-- Security Badges -->
+                    <div class="mt-6 text-center">
+                        <div class="flex justify-center space-x-4 text-sm text-neutral-500">
+                            <span>🔒 SSL Secure</span>
+                            <span>✓ Guaranteed Safe</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center fade-in">
+            <div class="text-6xl mb-4">🎉</div>
+            <h2 class="text-2xl font-bold mb-4">Order Placed Successfully!</h2>
+            <p class="text-neutral-600 mb-6">Thank you for your purchase. You'll receive a confirmation email shortly.</p>
+            <div class="space-y-3">
+                <button onclick="continueShopping()" 
+                        class="w-full bg-accent-500 hover:bg-accent-400 text-white py-3 rounded-full font-semibold transition-colors">
+                    Continue Shopping
+                </button>
+                <button onclick="trackOrder()" 
+                        class="w-full border border-accent-500 text-accent-500 hover:bg-accent-500 hover:text-white py-3 rounded-full font-semibold transition-colors">
+                    Track Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-primary-900 text-white py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="font-display text-2xl font-bold mb-4">NailTech Pro</h2>
+            <p class="text-neutral-300 mb-6">Revolutionizing nail care with AI-powered technology</p>
+            <p class="text-sm text-neutral-400">© 2024 NailTech Pro. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Cart functionality
+        let cart = [];
+        let subtotal = 0;
+        let shipping = 0;
+        let tax = 0;
+        let total = 0;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCart();
+            initializePaymentMethods();
+            initializeFormValidation();
+            initializePlaceOrder();
+        });
+
+        // Load cart from localStorage
+        function loadCart() {
+            cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            renderCartItems();
+            calculateTotals();
+            updateCartCount();
+        }
+
+        // Render cart items
+        function renderCartItems() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="text-6xl mb-4">🛒</div>
+                        <h3 class="text-xl font-semibold mb-2">Your cart is empty</h3>
+                        <p class="text-neutral-600 mb-6">Add some beautiful nails to get started!</p>
+                        <a href="index.html#products" 
+                           class="bg-accent-500 hover:bg-accent-400 text-white px-6 py-3 rounded-full font-semibold transition-colors">
+                            Shop Now
+                        </a>
+                    </div>
+                `;
+                document.getElementById('place-order-btn').disabled = true;
+                return;
+            }
+
+            cartItemsContainer.innerHTML = cart.map((item, index) => `
+                <div class="flex items-center space-x-4 p-4 border border-neutral-200 rounded-xl slide-in">
+                    <img src="${item.image}" alt="${item.name}" 
+                         class="w-20 h-20 object-cover rounded-lg">
+                    <div class="flex-1">
+                        <h3 class="font-semibold text-lg">${item.name}</h3>
+                        <p class="text-neutral-600">Size: ${item.size}</p>
+                        <p class="text-lg font-semibold text-accent-500">$${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button onclick="updateQuantity(${index}, ${item.quantity - 1})" 
+                                class="w-8 h-8 border border-neutral-300 rounded-full hover:bg-neutral-100 transition-colors"
+                                ${item.quantity <= 1 ? 'disabled' : ''}>
+                            -
+                        </button>
+                        <span class="w-8 text-center font-semibold">${item.quantity}</span>
+                        <button onclick="updateQuantity(${index}, ${item.quantity + 1})" 
+                                class="w-8 h-8 border border-neutral-300 rounded-full hover:bg-neutral-100 transition-colors">
+                            +
+                        </button>
+                    </div>
+                    <button onclick="removeItem(${index})" 
+                            class="text-red-500 hover:text-red-700 transition-colors p-2">
+                        🗑️
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Update item quantity
+        function updateQuantity(index, newQuantity) {
+            if (newQuantity <= 0) {
+                removeItem(index);
+                return;
+            }
+            
+            cart[index].quantity = newQuantity;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        // Remove item from cart
+        function removeItem(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        // Calculate totals
+        function calculateTotals() {
+            subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            shipping = subtotal > 50 ? 0 : 5.99; // Free shipping over $50
+            tax = subtotal * 0.08; // 8% tax
+            total = subtotal + shipping + tax;
+
+            // Update displays
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('shipping').textContent = shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('summary-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('summary-shipping').textContent = shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+            document.getElementById('summary-tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('summary-total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Update cart count in navigation
+        function updateCartCount() {
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = cartCount;
+        }
+
+        // Initialize payment method switching
+        function initializePaymentMethods() {
+            const paymentRadios = document.querySelectorAll('input[name="payment"]');
+            const cardDetails = document.getElementById('card-details');
+
+            paymentRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'card') {
+                        cardDetails.classList.remove('hidden');
+                    } else {
+                        cardDetails.classList.add('hidden');
+                    }
+                });
+            });
+        }
+
+        // Initialize form validation
+        function initializeFormValidation() {
+            const form = document.getElementById('shipping-form');
+            const inputs = form.querySelectorAll('input, select');
+            const placeOrderBtn = document.getElementById('place-order-btn');
+
+            function validateForm() {
+                let isValid = true;
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        isValid = false;
+                    }
+                });
+                
+                placeOrderBtn.disabled = !isValid || cart.length === 0;
+            }
+
+            inputs.forEach(input => {
+                input.addEventListener('input', validateForm);
+                input.addEventListener('blur', validateForm);
+            });
+
+            // Card number formatting
+            const cardNumberInput = document.querySelector('input[placeholder="Card Number"]');
+            cardNumberInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s/g, '');
+                let formattedValue = value.replace(/(.{4})/g, '$1 ').trim();
+                e.target.value = formattedValue;
+            });
+
+            // Expiry date formatting
+            const expiryInput = document.querySelector('input[placeholder="MM/YY"]');
+            expiryInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                e.target.value = value;
+            });
+        }
+
+        // Initialize place order functionality
+        function initializePlaceOrder() {
+            const placeOrderBtn = document.getElementById('place-order-btn');
+            
+            placeOrderBtn.addEventListener('click', function() {
+                if (this.disabled) return;
+                
+                // Simulate order processing
+                this.textContent = 'Processing...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    showSuccessModal();
+                    clearCart();
+                }, 2000);
+            });
+        }
+
+        // Show success modal
+        function showSuccessModal() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('hidden');
+        }
+
+        // Continue shopping
+        function continueShopping() {
+            window.location.href = 'index.html';
+        }
+
+        // Track order
+        function trackOrder() {
+            alert('Order tracking feature coming soon! Check your email for order confirmation.');
+            window.location.href = 'index.html';
+        }
+
+        // Clear cart
+        function clearCart() {
+            localStorage.removeItem('cart');
+            cart = [];
+            updateCartCount();
+        }
+
+        // Add recommended products
+        document.querySelectorAll('.bg-white button').forEach(btn => {
+            if (btn.textContent.includes('Add')) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const productCard = btn.closest('.flex');
+                    const productName = productCard.querySelector('h4').textContent;
+                    const productPrice = parseFloat(btn.previousElementSibling.textContent.replace('$', ''));
+                    const productImage = productCard.querySelector('img').src;
+                    
+                    const newProduct = {
+                        id: productName.toLowerCase().replace(/\s+/g, '-'),
+                        name: productName,
+                        price: productPrice,
+                        size: 'M',
+                        quantity: 1,
+                        image: productImage
+                    };
+                    
+                    addToCart(newProduct);
+                    
+                    // Add to cart animation
+                    btn.textContent = 'Added! ✓';
+                    btn.style.background = '#10b981';
+                    
+                    setTimeout(() => {
+                        btn.textContent = 'Add';
+                        btn.style.background = '';
+                    }, 2000);
+                });
+            }
+        });
+
+        function addToCart(product) {
+            const existingItem = cart.find(item => item.id === product.id && item.size === product.size);
+            
+            if (existingItem) {
+                existingItem.quantity += product.quantity;
+            } else {
+                cart.push(product);
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+    </script>
+</body>
+</html>
