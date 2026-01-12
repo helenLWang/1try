@@ -1,3 +1,11 @@
+# Notes for the MLiP Assignment
+
+We strongly recommend to work with the recommended setup using Vagrant as described in the documentation: https://zulip.readthedocs.io/en/latest/development/setup-recommended.html
+
+This way you can install all dependencies for a development environment with `vagrant up`, use `vagrant ssh`  to get a shell in the VM with all dependencies from where you can start the server with `tools/run-dev` and edit with VSCode's Remote-SSH feature.
+
+
+
 # Zulip overview
 
 [Zulip](https://zulip.com) is an open-source organized team chat app with unique
