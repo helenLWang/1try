@@ -1,0 +1,5 @@
+8: {"city": "Pittsburgh", "timestamp": "2026-08-27 18:45:22", "temperature_f": 64}
+9: {"city": "Shanghai", "timestamp": "2026-08-27 18:45:22", "temperature_f": 82}
+10: {"city": "Shanghai", "timestamp": "2026-08-27 18:45:23", "temperature_f": 82}
+11: {"city": "Shanghai", "timestamp": "2026-08-27 18:45:23", "temperature_f": 82}
+12: {"city": "Shanghai", "timestamp": "2026-08-27 18:45:24", "temperature_f": 82}

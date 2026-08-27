@@ -1,0 +1,5 @@
+Metadata for all topics (from broker 1: localhost:9092/1):
+ 1 brokers:
+  broker 1 at localhost:9092 (controller)
+  topic "movielog1" with 2 partitions:
+  topic "lab01-helenlwang" with 1 partitions:
