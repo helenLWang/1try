@@ -1,0 +1,11 @@
+# kcat -b localhost:9092 -t movielog1 -C -o beginning -c 5 -e -f '%o: %s\n'
+0: 2026-07-17T14:50:46,28083,GET /data/m/ace+ventura+pet+detective+1994/0.mpg
+1: 2026-07-17T14:52:43,28083,GET /data/m/ace+ventura+pet+detective+1994/2.mpg
+2: 2026-07-17T14:54:41,28083,GET /data/m/ace+ventura+pet+detective+1994/4.mpg
+3: 2026-07-17T14:56:43,28083,GET /data/m/ace+ventura+pet+detective+1994/6.mpg
+4: 2026-07-17T14:58:53,28083,GET /data/m/ace+ventura+pet+detective+1994/8.mpg
+
+# recent end of log
+91839544: 2026-08-27T18:44:45.585,118511,GET /data/m/fight+club+1999/19.mpg
+91839545: 2026-08-27T18:44:45.610,115671,GET /data/m/the+monkey+king+2014/21.mpg
+91839546: 2026-08-27T18:44:45.633,117897,GET /data/m/law+of+desire+1987/97.mpg
