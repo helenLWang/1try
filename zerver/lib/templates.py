@@ -1,6 +1,7 @@
 import time
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import markdown
 import markdown.extensions.admonition
@@ -218,5 +219,11 @@ def webpack_entry(entrypoint: str) -> list[str]:
         raise KeyError(
             f"'{entrypoint}' entrypoint could not be found. Please define it in web/webpack.assets.json."
         )
+
+    if settings.DEVELOPMENT:
+        # Keep webpack script/link hrefs same-origin. Absolute
+        # http://localhost:9991/webpack/... URLs never load when the
+        # HTML is served through a Cursor/HTTPS port-forward preview.
+        files_from_entrypoints = [urlsplit(url).path or url for url in files_from_entrypoints]
 
     return files_from_entrypoints
