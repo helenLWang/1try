@@ -72,6 +72,7 @@ export function is_overlay_hash(hash: string | undefined): boolean {
         "scheduled",
         "reminders",
         "user",
+        "recap",
     ];
     const main_hash = get_hash_category(hash);
 

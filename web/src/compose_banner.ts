@@ -45,6 +45,7 @@ export const CLASSNAMES = {
     unmute_topic_notification: "unmute_topic_notification warning-style",
     // warnings
     topic_resolved: "topic_resolved",
+    topic_title_suggestion: "topic_title_suggestion",
     recipient_not_subscribed: "recipient_not_subscribed",
     group_entirely_not_subscribed: "group_entirely_not_subscribed",
     wildcard_warning: "wildcard_warning",

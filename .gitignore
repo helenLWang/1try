@@ -83,6 +83,9 @@ zulip.kdev4
 # Core dump files
 core
 
+# LLM API credentials for the recap / topic-title features. Never commit this file.
+/api.key
+
 # Static generated files for landing page.
 /static/images/landing-page/hello/generated
 

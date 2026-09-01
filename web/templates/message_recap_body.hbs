@@ -1,0 +1,30 @@
+{{#if error}}
+    <div class="recap-status recap-error">{{error}}</div>
+{{else}}
+    {{#if (eq unread_count 0)}}
+        <div class="recap-status">{{t "You have no unread messages." }}</div>
+    {{else}}
+        <p class="recap-overview">{{overview}}</p>
+        {{#if truncated}}
+            <p class="recap-note">{{t "Only the most recent unread messages were included." }}</p>
+        {{/if}}
+        {{#each sections}}
+            <section class="recap-section">
+                <h2 class="recap-section-title">{{title}}</h2>
+                <p class="recap-section-summary">{{summary}}</p>
+                {{#if references}}
+                    <ul class="recap-references">
+                        {{#each references}}
+                            <li>
+                                <a class="recap-message-link" href="{{permalink}}">
+                                    {{t "Jump to message" }} #{{message_id}}
+                                </a>
+                                <span class="recap-message-sender">{{sender}}</span>
+                            </li>
+                        {{/each}}
+                    </ul>
+                {{/if}}
+            </section>
+        {{/each}}
+    {{/if}}
+{{/if}}

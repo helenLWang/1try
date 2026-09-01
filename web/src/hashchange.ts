@@ -13,6 +13,7 @@ import {$t_html} from "./i18n.ts";
 import * as inbox_ui from "./inbox_ui.ts";
 import * as info_overlay from "./info_overlay.ts";
 import * as message_fetch from "./message_fetch.ts";
+import * as message_recap from "./message_recap.ts";
 import * as message_view from "./message_view.ts";
 import * as message_viewport from "./message_viewport.ts";
 import * as modals from "./modals.ts";
@@ -264,6 +265,7 @@ function do_hashchange_normal(from_reload: boolean, restore_selected_id: boolean
         case "#about-zulip":
         case "#scheduled":
         case "#reminders":
+        case "#recap":
             blueslip.error("overlay logic skipped for: " + hash[0]);
             break;
         default:
@@ -525,6 +527,11 @@ function do_hashchange_overlay(old_hash: string | undefined): void {
 
     if (base === "reminders") {
         reminders_overlay_ui.launch();
+        return;
+    }
+
+    if (base === "recap") {
+        message_recap.launch();
         return;
     }
 

@@ -167,6 +167,12 @@
     </div>
     {{tooltip_hotkey_hints "D"}}
 </template>
+<template id="recap-tooltip-template">
+    <div class="views-tooltip-container" data-view-code="recap">
+        <div>{{t 'Unread recap' }}</div>
+        <div class="tooltip-inner-content italic">{{t 'Summarize unread messages with an LLM.' }}</div>
+    </div>
+</template>
 <template id="scheduled-tooltip-template">
     <div class="views-tooltip-container" data-view-code="scheduled_message">
         <div>{{t 'Scheduled messages'}}</div>
