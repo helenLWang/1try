@@ -39,9 +39,14 @@ The recap can hallucinate; every claim is paired with a jump link. A title renam
 
 ## Demo video
 
-Recorded from the running Zulip UI (`./tools/run-dev` at http://localhost:9991):
+Both recordings are from the **running Zulip UI** (`./tools/run-dev` at http://localhost:9991), logged in as Hamlet. Files are in this repository (private classroom repo; graders already have access):
 
-1. Hamlet logs in, Iago has unread channel messages, **Unread recap** overlay, **Jump to message**.
-2. In topic `question`, Hamlet sends three off-title messages; **Rename topic** banner applies the suggestion.
+1. **Unread recap:** [docs/demo/unread_recap.mp4](docs/demo/unread_recap.mp4)  
+   Left sidebar **Unread recap** → overlay with grouped unreads and **Jump to message** → `#Denmark > Release Friday`.
+2. **Topic title improver:** [docs/demo/topic_title_improver.mp4](docs/demo/topic_title_improver.mp4)  
+   Topic `question`, three off-title messages, compose banner **Rename topic**.
 
-Upload the recordings (unlisted YouTube or Google Drive) and replace this paragraph with the public URL.
+Same files on GitHub after this commit is on `main`:
+
+- https://github.com/cmu-seai/f26-zulip-lew2/blob/main/docs/demo/unread_recap.mp4
+- https://github.com/cmu-seai/f26-zulip-lew2/blob/main/docs/demo/topic_title_improver.mp4

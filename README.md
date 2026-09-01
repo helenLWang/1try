@@ -7,7 +7,7 @@ This is the course Zulip tree (`mlip-cmu/zulip-template`) plus two LLM-backed pr
 1. **Unread recap** — a dedicated page that summarizes a user's unread messages and links back to the originals.
 2. **Topic title improver** — after you send a channel message, the server checks whether the topic has drifted and can suggest a better title.
 
-The LLM calls go through **LiteLLM**, which is already a Zulip dependency, so you can switch providers without changing application code. API keys are never committed.
+The LLM calls go through **LiteLLM** (`litellm==1.80.11` in `pyproject.toml`). Vagrant / `uv sync --frozen` installs it automatically. API keys are never committed.
 
 ## 1. Get an LLM API key
 
@@ -54,10 +54,10 @@ Restart `./tools/run-dev` after backend changes. Reload the browser after fronte
 API_KEY=$(curl -s -X POST 'http://localhost:9991/api/v1/dev_fetch_api_key' \
   --data-urlencode 'username=hamlet@zulip.com' | python3 -c "import sys,json; print(json.load(sys.stdin)['api_key'])")
 
-curl -s -X GET 'http://localhost:9991/api/v1/messages/recap' -u :"$API_KEY"
+curl -s -X GET 'http://localhost:9991/api/v1/messages/recap' -u "hamlet@zulip.com:$API_KEY"
 
 curl -s -X POST 'http://localhost:9991/api/v1/messages/topic_title_suggest' \
-  -u :"$API_KEY" \
+  -u "hamlet@zulip.com:$API_KEY" \
   --data-urlencode 'stream_id=1' \
   --data-urlencode 'topic=Weekend plans'
 ```
@@ -81,11 +81,11 @@ The tests mock LiteLLM; they do not need a live API key.
 
 ## 6. Canvas submission
 
-Submit the commit URL:
+Submit the commit URL of **this** repository's latest commit:
 
 `https://github.com/cmu-seai/f26-zulip-lew2/commit/<full-commit-sha>`
 
-Record a short UI demo (both features, or one video) and paste the link into `implementation.md`.
+Demo videos are already linked from `implementation.md` (`docs/demo/*.mp4`).
 
 ## 7. What was added
 

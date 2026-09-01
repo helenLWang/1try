@@ -182,6 +182,9 @@ prod = [
 
   # For requesting LLM API endpoints.
   "openai",
+  # LiteLLM is used by the I1 recap / topic-title features (not bundled
+  # in this course Zulip tree). Pinned so `uv sync --frozen` installs it.
+  "litellm==1.80.11",
 
   # Used for running the Zulip production Django server
   "uwsgi",
