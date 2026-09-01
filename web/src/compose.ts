@@ -26,6 +26,7 @@ import * as scheduled_messages from "./scheduled_messages.ts";
 import * as sent_messages from "./sent_messages.ts";
 import * as server_events_state from "./server_events_state.ts";
 import {current_user} from "./state_data.ts";
+import * as topic_title_improver from "./topic_title_improver.ts";
 import * as transmit from "./transmit.ts";
 import * as typing from "./typing.ts";
 import {user_settings} from "./user_settings.ts";
@@ -132,6 +133,14 @@ export function send_message_success(
     sent_message: SentMessageData | LocalMessage,
     data: PostMessageAPIData,
 ): void {
+    if (sent_message.type === "stream") {
+        topic_title_improver.check_after_send({
+            stream_id: sent_message.stream_id,
+            topic: sent_message.topic,
+            message_id: data.id,
+        });
+    }
+
     if (!sent_message.locally_echoed) {
         clear_compose_box();
     }

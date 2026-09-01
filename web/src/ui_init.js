@@ -75,6 +75,7 @@ import * as message_fetch from "./message_fetch.ts";
 import * as message_list_hover from "./message_list_hover.ts";
 import * as message_list_tooltips from "./message_list_tooltips.ts";
 import * as message_lists from "./message_lists.ts";
+import * as message_recap from "./message_recap.ts";
 import * as message_reminder from "./message_reminder.ts";
 import * as message_scroll from "./message_scroll.ts";
 import * as message_view from "./message_view.ts";
@@ -160,6 +161,7 @@ import * as timerender from "./timerender.ts";
 import * as tippyjs from "./tippyjs.ts";
 import * as topic_list from "./topic_list.ts";
 import * as topic_popover from "./topic_popover.ts";
+import * as topic_title_improver from "./topic_title_improver.ts";
 import * as transmit from "./transmit.ts";
 import * as typeahead_helper from "./typeahead_helper.ts";
 import * as typing from "./typing.ts";
@@ -783,6 +785,8 @@ export async function initialize_everything(state_data) {
     });
     drafts.initialize_ui();
     drafts_overlay_ui.initialize();
+    message_recap.initialize();
+    topic_title_improver.initialize();
     // This needs to happen after activity_ui.initialize, so that user_filter
     // is defined. Also, must happen after people.initialize()
     onboarding_steps.initialize(state_data.onboarding_steps, {

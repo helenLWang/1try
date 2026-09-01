@@ -1,0 +1,19 @@
+<div
+  class="main-view-banner warning {{classname}}"
+  data-stream-id="{{stream_id}}"
+  data-topic-name="{{topic_name}}"
+  data-message-id="{{message_id}}"
+  data-suggested-title="{{suggested_title}}">
+    <div class="main-view-banner-elements-wrapper">
+        <div class="banner_content">
+            {{t "This topic may have drifted."}}
+            {{t "Suggested title:"}}
+            <strong>{{suggested_title}}</strong>
+            {{#if reason}}
+                <span class="topic-title-suggestion-reason">{{reason}}</span>
+            {{/if}}
+        </div>
+        <button type="button" class="main-view-banner-action-button topic-title-apply-button">{{button_text}}</button>
+    </div>
+    <a role="button" class="zulip-icon zulip-icon-close main-view-banner-close-button" tabindex="0" aria-label="{{t 'Dismiss' }}"></a>
+</div>

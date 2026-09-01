@@ -1,80 +1,101 @@
-# Zulip overview
+# Machine Learning in Production — I1: LLM features for Zulip
 
-[Zulip](https://zulip.com) is an open-source organized team chat app with unique
-[topic-based threading][why-zulip] that combines the best of email and chat to
-make remote work productive and delightful. Fortune 500 companies, [leading open
-source projects][rust-case-study], and thousands of other organizations use
-Zulip every day. Zulip is the only [modern team chat app][features] that is
-designed for both live and asynchronous conversations.
+Repository for Canvas submission: `https://github.com/cmu-seai/f26-zulip-lew2`
 
-Zulip is built by a distributed community of developers from all around the
-world, with 99+ people who have each contributed 100+ commits. With
-over 1,500 contributors merging over 500 commits a month, Zulip is the
-largest and fastest growing open source team chat project.
+This is the course Zulip tree (`mlip-cmu/zulip-template`) plus two LLM-backed product features:
 
-Come find us on the [development community chat](https://zulip.com/development-community/)!
+1. **Unread recap** — a dedicated page that summarizes a user's unread messages and links back to the originals.
+2. **Topic title improver** — after you send a channel message, the server checks whether the topic has drifted and can suggest a better title.
 
-[![GitHub Actions build status](https://github.com/zulip/zulip/actions/workflows/zulip-ci.yml/badge.svg)](https://github.com/zulip/zulip/actions/workflows/zulip-ci.yml?query=branch%3Amain)
-[![coverage status](https://img.shields.io/codecov/c/github/zulip/zulip/main.svg)](https://codecov.io/gh/zulip/zulip)
-[![Mypy coverage](https://img.shields.io/badge/mypy-100%25-green.svg)][mypy-coverage]
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![GitHub release](https://img.shields.io/github/release/zulip/zulip.svg)](https://github.com/zulip/zulip/releases/latest)
-[![docs](https://readthedocs.org/projects/zulip/badge/?version=latest)](https://zulip.readthedocs.io/en/latest/)
-[![Zulip chat](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://chat.zulip.org)
-[![Bluesky](https://img.shields.io/badge/bluesky-@zulip.bsky.social-blue.svg?style=flat)](https://bsky.app/profile/zulip.bsky.social)
-[![GitHub Sponsors](https://img.shields.io/github/sponsors/zulip)](https://github.com/sponsors/zulip)
+The LLM calls go through **LiteLLM**, which is already a Zulip dependency, so you can switch providers without changing application code. API keys are never committed.
 
-[mypy-coverage]: https://blog.zulip.org/2016/10/13/static-types-in-python-oh-mypy/
-[why-zulip]: https://zulip.com/why-zulip/
-[rust-case-study]: https://zulip.com/case-studies/rust/
-[features]: https://zulip.com/features/
+## 1. Get an LLM API key
 
-## Getting started
+Any LiteLLM-supported chat model works (OpenAI, Groq, OpenRouter, Azure, etc.). A few dollars of credit is enough.
 
-- **Contributing code**. Check out our [guide for new
-  contributors](https://zulip.readthedocs.io/en/latest/contributing/contributing.html)
-  to get started. We have invested in making Zulip’s code highly
-  readable, thoughtfully tested, and easy to modify. Beyond that, we
-  have written an extraordinary 185K words of documentation for Zulip
-  contributors.
+Create a file named `api.key` in the **repository root** containing only the key:
 
-- **Contributing non-code**. [Report an
-  issue](https://zulip.readthedocs.io/en/latest/contributing/reporting-bugs.html),
-  [translate](https://zulip.readthedocs.io/en/latest/translating/translating.html)
-  Zulip into your language, or [give us
-  feedback](https://zulip.readthedocs.io/en/latest/contributing/suggesting-features.html).
-  We'd love to hear from you, whether you've been using Zulip for years, or are just
-  trying it out for the first time.
+```text
+sk-...your-key...
+```
 
-- **Checking Zulip out**. The best way to see Zulip in action is to [drop
-  by](https://chat.zulip.org/?show_try_zulip_modal) the Zulip development
-  community (no account required). We also recommend reading about Zulip's
-  [unique approach](https://zulip.com/why-zulip/) to organizing conversations.
+`api.key` is gitignored. **Do not commit it.**
 
-- **Running a Zulip server**. Self-host Zulip directly on Ubuntu or Debian
-  Linux, in [Docker](https://github.com/zulip/docker-zulip), or with prebuilt
-  images for [Digital Ocean](https://marketplace.digitalocean.com/apps/zulip) and
-  [Render](https://render.com/docs/deploy-zulip).
-  Learn more about [self-hosting Zulip](https://zulip.com/self-hosting/).
+Optional environment variables (these override the file):
 
-- **Using Zulip without setting up a server**. Learn about [Zulip
-  Cloud](https://zulip.com/zulip-cloud/) hosting options. Zulip sponsors free [Zulip
-  Cloud Standard](https://zulip.com/plans/) for hundreds of worthy
-  organizations, including [fellow open-source
-  projects](https://zulip.com/for/open-source/).
+| Variable | Purpose |
+| --- | --- |
+| `LLM_API_KEY` or `OPENAI_API_KEY` | Secret |
+| `LLM_MODEL` | Model id (default: Zulip's `TOPIC_SUMMARIZATION_MODEL`, e.g. Groq Llama, or `gpt-4o-mini`) |
+| `LLM_API_BASE` | Base URL for OpenAI-compatible providers, e.g. `https://openrouter.ai/api/v1` |
 
-- **Participating in [outreach
-  programs](https://zulip.readthedocs.io/en/latest/contributing/contributing.html#outreach-programs)**
-  like [Google Summer of Code](https://developers.google.com/open-source/gsoc/).
+You can instead put `topic_summarization_api_key = ...` in `zproject/dev-secrets.conf` (also gitignored).
 
-- **Supporting Zulip**. Learn about all the ways you can [support
-  Zulip](https://zulip.com/help/support-zulip-project), including contributing
-  financially, and helping others discover it.
+## 2. Install and run Zulip (Vagrant — required by the course)
 
-You may also be interested in reading our [blog](https://blog.zulip.org/), and
-following us on [LinkedIn](https://www.linkedin.com/company/zulip-project/),
-[Mastodon](https://fosstodon.org/@zulip), and [X](https://x.com/zulip).
+Follow Zulip's documented development setup: https://zulip.readthedocs.io/en/latest/development/setup-recommended.html
 
-Zulip is distributed under the
-[Apache 2.0](https://github.com/zulip/zulip/blob/main/LICENSE) license.
+From a clone of **this** repository:
+
+```bash
+vagrant up
+vagrant ssh
+cd /srv/zulip
+./tools/run-dev
+```
+
+The web app is at http://localhost:9991. Log in as `hamlet@zulip.com` / `abcd1234`.
+
+Restart `./tools/run-dev` after backend changes. Reload the browser after frontend changes.
+
+## 3. Check the APIs
+
+```bash
+API_KEY=$(curl -s -X POST 'http://localhost:9991/api/v1/dev_fetch_api_key' \
+  --data-urlencode 'username=hamlet@zulip.com' | python3 -c "import sys,json; print(json.load(sys.stdin)['api_key'])")
+
+curl -s -X GET 'http://localhost:9991/api/v1/messages/recap' -u :"$API_KEY"
+
+curl -s -X POST 'http://localhost:9991/api/v1/messages/topic_title_suggest' \
+  -u :"$API_KEY" \
+  --data-urlencode 'stream_id=1' \
+  --data-urlencode 'topic=Weekend plans'
+```
+
+## 4. Using the features in the UI
+
+**Unread recap.** Left sidebar → **Unread recap**. Follow **Jump to message** links (`#narrow/channel/<id>-<name>/topic/<topic>/near/<message_id>`).
+
+**Topic title improver.** Send a few channel messages that wander off the title (e.g. title `Weekend plans`, then talk about a database migration). A compose banner offers **Rename topic**.
+
+## 5. Tests
+
+Inside the Vagrant VM:
+
+```bash
+cd /srv/zulip
+./tools/test-backend zerver.tests.test_llm_features
+```
+
+The tests mock LiteLLM; they do not need a live API key.
+
+## 6. Canvas submission
+
+Submit the commit URL:
+
+`https://github.com/cmu-seai/f26-zulip-lew2/commit/<full-commit-sha>`
+
+Record a short UI demo (both features, or one video) and paste the link into `implementation.md`.
+
+## 7. What was added
+
+| Area | Path |
+| --- | --- |
+| LLM helper (LiteLLM) | `zerver/lib/llm_client.py` |
+| Recap backend | `zerver/lib/message_recap.py`, `zerver/views/llm_features.py` |
+| Title improver | `zerver/lib/topic_title_improver.py` |
+| Routes | `GET /messages/recap`, `POST /messages/topic_title_suggest` |
+| Recap UI | `web/src/message_recap.ts`, overlay templates, left-sidebar view |
+| Title UI | `web/src/topic_title_improver.ts`, compose banner, `web/src/compose.ts` |
+| Tests | `zerver/tests/test_llm_features.py` |
+| Design write-up | `implementation.md` |
