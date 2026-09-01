@@ -15,7 +15,7 @@ The LLM is asked for JSON `{overview, sections: [{title, summary, message_ids}]}
 
 That is the same fragment the web app uses (`web/src/hash_util.ts`). If the model returns non-JSON, a fallback still lists conversations and attaches those permalinks.
 
-Secrets are read by `zerver/lib/llm_client.py` from `LLM_API_KEY` / `api.key` / `topic_summarization_api_key`. Calls go through **LiteLLM** (`litellm.completion`), the same stack Zulip already uses for topic summaries.
+Secrets are read by `zerver/lib/llm_client.py` from `LLM_API_KEY` / `api.key` / `topic_summarization_api_key`. Calls go through **LiteLLM** (`litellm.completion`, pinned in `pyproject.toml`).
 
 **Frontend.** A left-sidebar view `recap` (`web/src/navigation_views.ts`) hashes to `#recap`. `web/src/hashchange.ts` opens `web/src/message_recap.ts`, which `GET`s `/json/messages/recap` and renders `web/templates/message_recap_body.hbs`. **Jump to message** follows the fragment so the main view narrows to that message.
 
@@ -25,7 +25,7 @@ Secrets are read by `zerver/lib/llm_client.py` from `LLM_API_KEY` / `api.key` / 
 
 Latency, cost, and scalability:
 
-- **Skip the LLM when possible.** Fewer than 3 messages, or a title whose tokens still appear in recent bodies, return `skipped_llm: true`. Generic titles (`hi`, `question`, …) always call the model.
+- **Skip the LLM when possible.** Fewer than 3 messages, or a title whose tokens still appear in recent bodies, return `skipped_llm: true`. Generic titles (`hi`, `question`, …) always call the model when a key is configured.
 - **Small prompts.** 20 messages × ~280 characters, `max_tokens=180`, temperature 0.1.
 - **Cache.** Keyed by `(stream_id, last_message_id, topic)` for 45 seconds so retries are not double-billed.
 - **Sender-only.** The frontend calls the endpoint after *that user* sends. No fan-out to subscribers, no extra Tornado event. At large scale this would still need a worker and a monthly budget (Zulip already tracks `ai_credit_usage::day`); this assignment uses the cheap synchronous path.
