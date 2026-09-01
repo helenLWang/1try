@@ -12,18 +12,16 @@
             <section class="recap-section">
                 <h2 class="recap-section-title">{{title}}</h2>
                 <p class="recap-section-summary">{{summary}}</p>
-                {{#if references}}
-                    <ul class="recap-references">
-                        {{#each references}}
-                            <li>
-                                <a class="recap-message-link" href="{{permalink}}">
-                                    {{t "Jump to message" }} #{{message_id}}
-                                </a>
-                                <span class="recap-message-sender">{{sender}}</span>
-                            </li>
-                        {{/each}}
-                    </ul>
-                {{/if}}
+                <ul class="recap-references">
+                    {{#each references}}
+                        <li>
+                            <a class="recap-message-link" href="{{permalink}}">
+                                {{t "Jump to message" }} #{{message_id}}
+                            </a>
+                            <span class="recap-message-sender">{{sender}}</span>
+                        </li>
+                    {{/each}}
+                </ul>
             </section>
         {{/each}}
     {{/if}}

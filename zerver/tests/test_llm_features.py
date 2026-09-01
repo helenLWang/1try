@@ -88,11 +88,22 @@ class LLMFeaturesTestCase(ZulipTestCase):
             result, "Not logged in: API authentication or user session required", 401
         )
 
-    def test_recap_requires_llm_configuration(self) -> None:
+    def test_recap_groups_unread_without_llm_key(self) -> None:
+        msg_id = self.send_stream_message(
+            self.writer,
+            self.channel_name,
+            content="The launch date slipped to Friday.",
+            topic_name="Release plan",
+        )
         self.login_user(self.reader)
         with self.settings(TOPIC_SUMMARIZATION_MODEL=None, TOPIC_SUMMARIZATION_API_KEY=None):
             result = self.client_get("/json/messages/recap")
-        self.assert_json_error_contains(result, "LLM is not configured")
+        self.assert_json_success(result)
+        data = orjson.loads(result.content)
+        self.assertGreaterEqual(data["unread_count"], 1)
+        self.assertGreaterEqual(len(data["sections"]), 1)
+        permalink = data["sections"][0]["references"][0]["permalink"]
+        self.assertIn("/near/" + str(msg_id), permalink)
 
     def test_recap_empty_inbox(self) -> None:
         self.login_user(self.reader)

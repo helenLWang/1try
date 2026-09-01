@@ -9,7 +9,7 @@ from typing import Any
 
 import orjson
 
-from zerver.lib.llm_client import chat_completion, parse_json_object
+from zerver.lib.llm_client import chat_completion, llm_is_configured, parse_json_object
 from zerver.lib.streams import access_stream_by_id
 from zerver.lib.topic import messages_for_topic
 from zerver.models import Message, Stream, UserProfile
@@ -97,6 +97,25 @@ def _cache_set(key: tuple[int, int, str], payload: dict[str, Any]) -> None:
         _suggestion_cache[key] = (time.monotonic(), payload)
 
 
+def _heuristic_title(current_title: str, texts: list[str]) -> str:
+    """Best-effort title from message bodies when no LLM key is configured."""
+    best = ""
+    for text in texts:
+        cleaned = " ".join(text.split())
+        if len(cleaned) > len(best):
+            best = cleaned
+    if not best:
+        return current_title
+    # Use the first clause, capped to Zulip's topic length.
+    clause = re.split(r"[.!?]", best, maxsplit=1)[0].strip(" -–:")
+    if len(clause) < 8:
+        clause = best
+    words = clause.split()
+    if len(words) > 8:
+        clause = " ".join(words[:8])
+    return clause[:60].rstrip()
+
+
 def suggest_topic_title(
     user_profile: UserProfile,
     *,
@@ -148,6 +167,19 @@ def suggest_topic_title(
             no_drift["reason"] = "Recent messages still match the current title."
         _cache_set(cache_key, no_drift)
         return no_drift
+
+    if not llm_is_configured():
+        suggested = _heuristic_title(topic_name, texts)
+        payload = {
+            "drifted": bool(suggested) and suggested.casefold() != topic_name.casefold(),
+            "suggested_title": suggested or topic_name,
+            "reason": "Suggested from recent messages because no LLM API key is configured.",
+            "skipped_llm": True,
+            "message_count": len(messages),
+            "latest_message_id": messages[-1].id,
+        }
+        _cache_set(cache_key, payload)
+        return payload
 
     prompt_messages = [
         {

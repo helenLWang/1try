@@ -7,7 +7,7 @@ from typing import Any
 
 import orjson
 
-from zerver.lib.llm_client import chat_completion, parse_json_object
+from zerver.lib.llm_client import chat_completion, llm_is_configured, parse_json_object
 from zerver.lib.url_encoding import pm_message_url, stream_message_url
 from zerver.models import Message, Stream, UserMessage, UserProfile
 from zerver.models.recipients import Recipient
@@ -151,6 +151,18 @@ def generate_unread_recap(user_profile: UserProfile) -> dict[str, Any]:
     streams = _stream_map(messages)
     formatted, by_id = _format_unread_for_prompt(messages, streams)
     truncated = len(user_messages) == MAX_UNREAD_MESSAGES
+
+    if not llm_is_configured():
+        labels = {
+            _conversation_label(message, _stream_for(message, streams)) for message in messages
+        }
+        overview = (
+            f"You have {len(messages)} unread message(s) across {len(labels)} "
+            "conversation(s). Jump links go to the original messages."
+        )
+        recap = _fallback_recap(user_profile, messages, streams, overview)
+        recap["truncated"] = truncated
+        return recap
 
     prompt_messages = [
         {

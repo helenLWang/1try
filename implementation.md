@@ -39,10 +39,9 @@ The recap can hallucinate; every claim is paired with a jump link. A title renam
 
 ## Demo video
 
-Record from the **running Zulip UI** (`./tools/run-dev` at http://localhost:9991):
+Recorded from the running Zulip UI (`./tools/run-dev` at http://localhost:9991):
 
-1. Log in as Hamlet. Have Iago send unread channel messages.
-2. Click **Unread recap** and follow a **Jump to message** link.
-3. In a stale topic, send off-title messages until the banner appears, then **Rename topic**.
+1. Hamlet logs in, Iago has unread channel messages, **Unread recap** overlay, **Jump to message**.
+2. In topic `question`, Hamlet sends three off-title messages; **Rename topic** banner applies the suggestion.
 
-Upload (Zoom, unlisted YouTube, or Google Drive) and replace this paragraph with the URL.
+Upload the recordings (unlisted YouTube or Google Drive) and replace this paragraph with the public URL.
