@@ -3,7 +3,8 @@
 Uses LiteLLM (already a Zulip dependency) so graders can switch providers
 without code changes. Credentials are resolved in this order:
 
-1. ``LLM_API_KEY`` / ``OPENAI_API_KEY`` / ``OPENROUTER_API_KEY``
+1. ``LLM_API_KEY`` / ``OPENAI_API_KEY`` / ``OPENROUTER_API_KEY`` /
+   ``GEMINI_API_KEY`` / ``GOOGLE_API_KEY``
 2. An ``api.key`` file in the repository root (gitignored)
 3. Zulip's ``topic_summarization_api_key`` secret
 """
@@ -24,10 +25,24 @@ os.environ.setdefault("LITELLM_LOCAL_MODEL_COST_MAP", "True")
 import litellm
 
 GENERIC_MODEL_FALLBACK = "gpt-4o-mini"
+GEMINI_MODEL_FALLBACK = "gemini/gemini-2.0-flash"
+
+
+def default_model_for_key(api_key: str) -> str:
+    """Pick a LiteLLM model id when the user did not set LLM_MODEL."""
+    if api_key.startswith(("AQ.", "AIza")):
+        return GEMINI_MODEL_FALLBACK
+    return GENERIC_MODEL_FALLBACK
 
 
 def get_llm_api_key() -> str | None:
-    for env_name in ("LLM_API_KEY", "OPENAI_API_KEY", "OPENROUTER_API_KEY"):
+    for env_name in (
+        "LLM_API_KEY",
+        "OPENAI_API_KEY",
+        "OPENROUTER_API_KEY",
+        "GEMINI_API_KEY",
+        "GOOGLE_API_KEY",
+    ):
         value = os.environ.get(env_name)
         if value:
             return value.strip()
@@ -48,8 +63,9 @@ def get_llm_model() -> str | None:
         return env_model
     if settings.TOPIC_SUMMARIZATION_MODEL:
         return settings.TOPIC_SUMMARIZATION_MODEL
-    if get_llm_api_key():
-        return GENERIC_MODEL_FALLBACK
+    api_key = get_llm_api_key()
+    if api_key:
+        return default_model_for_key(api_key)
     return None
 
 

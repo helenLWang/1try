@@ -25,8 +25,8 @@ Optional environment variables (these override the file):
 
 | Variable | Purpose |
 | --- | --- |
-| `LLM_API_KEY` or `OPENAI_API_KEY` | Secret |
-| `LLM_MODEL` | Model id (default: Zulip's `TOPIC_SUMMARIZATION_MODEL`, e.g. Groq Llama, or `gpt-4o-mini`) |
+| `LLM_API_KEY` / `OPENAI_API_KEY` / `GEMINI_API_KEY` | Secret |
+| `LLM_MODEL` | Model id. If unset: Gemini keys (`AQ.` / `AIza`) use `gemini/gemini-2.0-flash`; otherwise `gpt-4o-mini` |
 | `LLM_API_BASE` | Base URL for OpenAI-compatible providers, e.g. `https://openrouter.ai/api/v1` |
 
 You can instead put `topic_summarization_api_key = ...` in `zproject/dev-secrets.conf` (also gitignored).

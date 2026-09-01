@@ -9,7 +9,7 @@ from typing_extensions import override
 os.environ.setdefault("LITELLM_LOCAL_MODEL_COST_MAP", "True")
 
 from zerver.actions.message_flags import do_mark_all_as_read
-from zerver.lib.llm_client import parse_json_object
+from zerver.lib.llm_client import default_model_for_key, parse_json_object
 from zerver.lib.test_classes import ZulipTestCase
 from zerver.lib.topic_title_improver import (
     _suggestion_cache,
@@ -56,6 +56,11 @@ class LLMHelperUnitTest(SimpleTestCase):
             )
         )
         self.assertTrue(should_call_llm("hi", 3, ["hello there", "still around?", "ping"]))
+
+    def test_default_model_for_key_prefix(self) -> None:
+        self.assertEqual(default_model_for_key("AQ.example"), "gemini/gemini-2.0-flash")
+        self.assertEqual(default_model_for_key("AIzaSyExample"), "gemini/gemini-2.0-flash")
+        self.assertEqual(default_model_for_key("sk-example"), "gpt-4o-mini")
 
 
 class LLMFeaturesTestCase(ZulipTestCase):
