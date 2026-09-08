@@ -1,34 +1,34 @@
 {
   "k": 20,
   "random_seed": 42,
-  "n_train_rows": 46522,
-  "n_test_rows": 10197,
+  "n_train_rows": 99708,
+  "n_test_rows": 22408,
   "n_eval_users_cap": 400,
   "ranking": {
     "collaborative": {
       "n_users": 400,
-      "hit_rate": 0.0825,
-      "precision": 0.004125,
-      "recall": 0.0825,
-      "ndcg": 0.03288143558588548,
-      "elapsed_s": 0.1,
+      "hit_rate": 0.095,
+      "precision": 0.004750000000000001,
+      "recall": 0.08791666666666666,
+      "ndcg": 0.034947272125832,
+      "elapsed_s": 0.13,
       "k": 20
     },
     "content": {
       "n_users": 400,
-      "hit_rate": 0.005,
-      "precision": 0.00025,
-      "recall": 0.005,
-      "ndcg": 0.001190071888194963,
-      "elapsed_s": 0.15,
+      "hit_rate": 0.01,
+      "precision": 0.0005,
+      "recall": 0.008333333333333333,
+      "ndcg": 0.0033915764696034025,
+      "elapsed_s": 0.23,
       "k": 20
     },
     "popularity": {
       "n_users": 400,
-      "hit_rate": 0.095,
-      "precision": 0.004750000000000001,
-      "recall": 0.095,
-      "ndcg": 0.03723919502934041,
+      "hit_rate": 0.115,
+      "precision": 0.006000000000000001,
+      "recall": 0.10958333333333332,
+      "ndcg": 0.04344013246707755,
       "elapsed_s": 0.01,
       "k": 20
     }
@@ -40,184 +40,199 @@
     "extractor": "heuristic_schema_compatible",
     "cold_start": {
       "n_users": 40,
-      "hit_rate": 0.125,
-      "precision": 0.00625,
-      "recall": 0.05416666666666666,
-      "ndcg": 0.041651377883673124
+      "hit_rate": 0.075,
+      "precision": 0.0037500000000000007,
+      "recall": 0.02857142857142857,
+      "ndcg": 0.013173429818269355
     },
     "popularity_baseline": {
       "n_users": 40,
-      "hit_rate": 0.2,
-      "precision": 0.013750000000000002,
-      "recall": 0.12083333333333335,
-      "ndcg": 0.07253716570523759
+      "hit_rate": 0.275,
+      "precision": 0.0175,
+      "recall": 0.1244047619047619,
+      "ndcg": 0.06818727864422622
     },
-    "elapsed_s": 2.64,
+    "elapsed_s": 3.23,
     "examples": [
       {
-        "user_id": 16904,
-        "likes": "I like poppular famly an fantacy movis. Star Wars, Shawshank, Die Hard are great. The Wrong Trousers too.",
-        "dislikes": "Not into dark stuff like Silence of the Lambs or Vertigo. Too depressing.",
-        "prefs": {
-          "liked_genres": [],
-          "disliked_genres": [],
-          "liked_titles": [],
-          "disliked_titles": [],
-          "notes": "heuristic_extractor",
-          "source": "heuristic",
-          "raw_likes": "I like poppular famly an fantacy movis. Star Wars, Shawshank, Die Hard are great. The Wrong Trousers too.",
-          "raw_dislikes": "Not into dark stuff like Silence of the Lambs or Vertigo. Too depressing."
-        },
-        "recommended": [
-          "the+wrong+trousers+1993",
-          "star+wars+1977",
-          "die+hard+1988",
-          "wrong+2012",
-          "the+shawshank+redemption+1994",
-          "pulp+fiction+1994",
-          "forrest+gump+1994",
-          "the+matrix+1999"
-        ],
-        "held_liked": [
-          "indiana+jones+and+the+last+crusade+1989",
-          "the+empire+strikes+back+1980",
-          "window+to+paris+1993"
-        ]
-      },
-      {
-        "user_id": 22057,
-        "likes": "Mystery, Sci-Fi, Action. Popular movies. Loved The Great Escape, Dark Knight Returns Part 1.",
-        "dislikes": "Avoid horror, romance. Didn't like The Craft or Never Been Kissed.",
+        "user_id": 9375,
+        "likes": "My preferences lean towards highly-rated dramatic, crime, and romantic films. Examples of highly-rated films I appreciate include 'The Godfather', 'The English Patient', and 'Twelve Monkeys'. I also enjoy popular romantic comedies.",
+        "dislikes": "I generally do not select comedies of a low quality or science fiction films with poor reception, such as 'Down Periscope' and 'The Island of Dr. Moreau'.",
         "prefs": {
           "liked_genres": [
-            "Action",
-            "Mystery",
-            "Science Fiction"
+            "Crime"
           ],
           "disliked_genres": [
-            "Horror",
-            "Romance"
+            "Science Fiction"
           ],
           "liked_titles": [],
           "disliked_titles": [],
           "notes": "heuristic_extractor",
           "source": "heuristic",
-          "raw_likes": "Mystery, Sci-Fi, Action. Popular movies. Loved The Great Escape, Dark Knight Returns Part 1.",
-          "raw_dislikes": "Avoid horror, romance. Didn't like The Craft or Never Been Kissed."
-        },
-        "recommended": [
-          "escape+2012",
-          "the+great+escape+1963",
-          "escape+1940",
-          "batman+the+dark+knight+returns_+part+2+2013",
-          "batman+the+dark+knight+returns_+part+1+2012",
-          "return+of+the+jedi+1983",
-          "batman+beyond+return+of+the+joker+2000",
-          "escape+from+new+york+1981"
-        ],
-        "held_liked": [
-          "american+beauty+1999",
-          "the+empire+strikes+back+1980"
-        ]
-      },
-      {
-        "user_id": 22965,
-        "likes": "I enjoy critically acclaimed crime dramas and thrillers like The Godfather and Die Hard, and I have a soft spot for classic adventure films such as North by Northwest and The Great Escape. I appreciate a good Western too, like The Outlaw Jo",
-        "dislikes": "I tend to avoid overly comedic or romantic films, and anything that feels like a weak remake or a poorly executed genre piece, like Bedazzled or Gangster No. 1.",
-        "prefs": {
-          "liked_genres": [
-            "Adventure",
-            "Crime",
-            "Western"
-          ],
-          "disliked_genres": [],
-          "liked_titles": [],
-          "disliked_titles": [],
-          "notes": "heuristic_extractor",
-          "source": "heuristic",
-          "raw_likes": "I enjoy critically acclaimed crime dramas and thrillers like The Godfather and Die Hard, and I have a soft spot for classic adventure films such as North by Northwest and The Great Escape. I appreciate a good Western too, like The Outlaw Josey Wales. I like a mix of popular and less common titles.",
-          "raw_dislikes": "I tend to avoid overly comedic or romantic films, and anything that feels like a weak remake or a poorly executed genre piece, like Bedazzled or Gangster No. 1."
+          "raw_likes": "My preferences lean towards highly-rated dramatic, crime, and romantic films. Examples of highly-rated films I appreciate include 'The Godfather', 'The English Patient', and 'Twelve Monkeys'. I also enjoy popular romantic comedies.",
+          "raw_dislikes": "I generally do not select comedies of a low quality or science fiction films with poor reception, such as 'Down Periscope' and 'The Island of Dr. Moreau'."
         },
         "recommended": [
           "the+godfather+1972",
-          "north+by+northwest+1959",
-          "the+great+escape+1963",
-          "the+outlaw+josey+wales+1976",
-          "common+2014",
-          "outlaw+2007",
-          "western+1997",
-          "escape+2012"
+          "twelve+2010",
+          "the+english+patient+1996",
+          "twelve+monkeys+1995",
+          "roman+2006",
+          "the+godfather+part+ii+1974",
+          "dear+zachary+a+letter+to+a+son+about+his+father+2008",
+          "the+godfather+part+iii+1990"
         ],
         "held_liked": [
-          "home+alone+1990",
-          "the+curse+of+the+werewolf+1961"
+          "austin+powers+international+man+of+mystery+1997",
+          "dead+man+walking+1995",
+          "donnie+brasco+1997",
+          "grosse+pointe+blank+1997",
+          "happy+gilmore+1996",
+          "mars+attacks+1996",
+          "the+evening+star+1996"
         ]
       },
       {
-        "user_id": 24121,
-        "likes": "My preferences lean towards critically acclaimed mystery, crime, and drama films. I particularly enjoyed titles such as Se7en, Trainspotting, and Vertigo. I generally seek out popular and engaging cinematic experiences.",
-        "dislikes": "I tend to avoid genres that are primarily action-oriented or overtly comedic, especially films perceived as less sophisticated.",
+        "user_id": 12502,
+        "likes": "For movies, I like drama and history. 'Gone with the Wind' is great. Also musicals like 'Sound of Music'. Science fiction is okay too, like 'Close Encounters'.",
+        "dislikes": "I do not like horror movies. Movies like 'Blair Witch Project' are not for me.",
         "prefs": {
           "liked_genres": [
-            "Crime",
             "Drama",
-            "Mystery"
+            "History",
+            "Music",
+            "Science Fiction"
           ],
           "disliked_genres": [
-            "Action"
+            "Horror"
           ],
           "liked_titles": [],
           "disliked_titles": [],
           "notes": "heuristic_extractor",
           "source": "heuristic",
-          "raw_likes": "My preferences lean towards critically acclaimed mystery, crime, and drama films. I particularly enjoyed titles such as Se7en, Trainspotting, and Vertigo. I generally seek out popular and engaging cinematic experiences.",
-          "raw_dislikes": "I tend to avoid genres that are primarily action-oriented or overtly comedic, especially films perceived as less sophisticated."
+          "raw_likes": "For movies, I like drama and history. 'Gone with the Wind' is great. Also musicals like 'Sound of Music'. Science fiction is okay too, like 'Close Encounters'.",
+          "raw_dislikes": "I do not like horror movies. Movies like 'Blair Witch Project' are not for me."
         },
         "recommended": [
-          "trainspotting+1996",
-          "vertigo+1958",
-          "se7en+1995",
-          "lupin+the+third+the+secret+of+mamo+1978",
-          "mystery+road+2013",
-          "the+generals+daughter+1999",
-          "mystery+team+2009",
-          "the+general+1998"
+          "gone+with+the+wind+1939",
+          "the+wind+1928",
+          "close+encounters+of+the+third+kind+1977",
+          "the+history+of+future+folk+2012",
+          "high+school+musical+2+2007",
+          "american+history+x+1998",
+          "amadeus+1984",
+          "stranger+than+fiction+2006"
         ],
         "held_liked": [
-          "edward+scissorhands+1990",
-          "kind+hearts+and+coronets+1949",
-          "thrive+2011"
+          "erin+brockovich+2000",
+          "out+of+africa+1985"
         ]
       },
       {
-        "user_id": 24646,
-        "likes": "Dramas, comedies, heartwarming stories.",
-        "dislikes": "Generic action, predictable plots.",
+        "user_id": 12943,
+        "likes": "So, yeah, I'm into the big hitters, you know? Like, the ones everyone talks about and are actually good. Star Wars, Pulp Fiction, Forrest Gump \u2013 totally my jam. Also dig historical stuff and war movies, the kind that are actually engaging, ",
+        "dislikes": "What I usually skip? Anything super corny or predictable, like those Police Academy sequels or Twister. If a movie's just kinda 'meh' or a bad follow-up to some",
         "prefs": {
-          "liked_genres": [],
+          "liked_genres": [
+            "Action",
+            "War"
+          ],
+          "disliked_genres": [],
+          "liked_titles": [],
+          "disliked_titles": [],
+          "notes": "heuristic_extractor",
+          "source": "heuristic",
+          "raw_likes": "So, yeah, I'm into the big hitters, you know? Like, the ones everyone talks about and are actually good. Star Wars, Pulp Fiction, Forrest Gump \u2013 totally my jam. Also dig historical stuff and war movies, the kind that are actually engaging, not just random action.",
+          "raw_dislikes": "What I usually skip? Anything super corny or predictable, like those Police Academy sequels or Twister. If a movie's just kinda 'meh' or a bad follow-up to something great, I'm probably not gonna bother."
+        },
+        "recommended": [
+          "pulp+fiction+1994",
+          "forrest+gump+1994",
+          "star+wars+1977",
+          "the+one+2001",
+          "the+big+hit+1998",
+          "stand+by+for+action+1942",
+          "missing+in+action+2+the+beginning+1985",
+          "last+action+hero+1993"
+        ],
+        "held_liked": [
+          "star+wars+1977",
+          "the+rock+1996"
+        ]
+      },
+      {
+        "user_id": 13630,
+        "likes": "Family comedies, animation, fantasy.",
+        "dislikes": "Sci-fi animation.",
+        "prefs": {
+          "liked_genres": [
+            "Animation",
+            "Family",
+            "Fantasy"
+          ],
           "disliked_genres": [
-            "Action"
+            "Animation",
+            "Science Fiction"
           ],
           "liked_titles": [],
           "disliked_titles": [],
           "notes": "heuristic_extractor",
           "source": "heuristic",
-          "raw_likes": "Dramas, comedies, heartwarming stories.",
-          "raw_dislikes": "Generic action, predictable plots."
+          "raw_likes": "Family comedies, animation, fantasy.",
+          "raw_dislikes": "Sci-fi animation."
         },
         "recommended": [
-          "into+the+arms+of+strangers+stories+of+the+kindertransport+2000",
-          "stories+we+tell+2012",
-          "kitchen+stories+2003",
-          "a+good+job+stories+of+the+fdny+2014",
-          "living+in+emergency+stories+of+doctors+without+borders+2008",
-          "robot+stories+2003",
-          "new+york+stories+1989",
-          "four+stories+of+st.+julian+2010"
+          "addams+family+values+1993",
+          "addams+family+reunion+1998",
+          "the+family+man+2000",
+          "swiss+family+robinson+1960",
+          "the+addams+family+1991",
+          "the+adventures+of+the+wilderness+family+1975",
+          "a+muppet+family+christmas+1987",
+          "the+one+and+only_+genuine_+original+family+band+1968"
         ],
         "held_liked": [
-          "persuasion+1995",
-          "troll+hunter+2010"
+          "a+goofy+movie+1995",
+          "home+alone+3+1997",
+          "the+borrowers+1997",
+          "the+caller+2011",
+          "the+little+rascals+1994"
+        ]
+      },
+      {
+        "user_id": 13993,
+        "likes": "i like acton and thirller movis sci-fi to. the populr ones like fugitive and t2.",
+        "dislikes": "dont like slow drams or boring stuff.",
+        "prefs": {
+          "liked_genres": [
+            "Science Fiction"
+          ],
+          "disliked_genres": [],
+          "liked_titles": [],
+          "disliked_titles": [],
+          "notes": "heuristic_extractor",
+          "source": "heuristic",
+          "raw_likes": "i like acton and thirller movis sci-fi to. the populr ones like fugitive and t2.",
+          "raw_dislikes": "dont like slow drams or boring stuff."
+        },
+        "recommended": [
+          "the+fugitive+1993",
+          "i+am+a+fugitive+from+a+chain+gang+1932",
+          "fugitive+pieces+2007",
+          "the+fugitive+kind+1960",
+          "little+fugitive+1953",
+          "zatichi+the+fugitive+1963",
+          "they+made+me+a+fugitive+1947",
+          "the+fugitive+1947"
+        ],
+        "held_liked": [
+          "american+psycho+2000",
+          "clear+and+present+danger+1994",
+          "jurassic+park+1993",
+          "muriels+wedding+1994",
+          "schindlers+list+1993",
+          "speed+1994",
+          "star+trek+generations+1994"
         ]
       }
     ],

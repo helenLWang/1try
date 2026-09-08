@@ -9,10 +9,9 @@ the course metadata API. Code pointers are relative to the repository root.
 (`localhost:9092`). The retained log is huge (hundreds of millions of lines)
 but a **single tail slice is only a few hours of traffic**, so almost every
 user has one movie. By default we therefore read about 5 million messages
-from **12 slices spaced across the retained offsets**. That is enough ratings
-and watch pairs for a laptop model, and it matches how a production job would
-train on a sliding set of windows rather than one afternoon. Offsets, event
-counts, and timestamps are written to `data/collection_meta.json`.
+from **12 slices spaced across the retained offsets** (each slice also has a
+45-second time budget so a cold Kafka segment cannot stall the job). The
+evaluation run scanned 4.94M lines spanning 2026-07-17 through 2026-09-08.
 
 We parse three record types in `src/parse.py`:
 

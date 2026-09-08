@@ -46,7 +46,7 @@ class CollaborativeSVD:
         self.random_state = random_state
         self.maps: _Maps | None = None
         self.item_vectors = None  # (n_movies, n_users) L2-normalized columns as rows
-        self.user_rows: dict[int, np.ndarray] = {}
+        self.user_history: dict[int, tuple[np.ndarray, np.ndarray]] = {}
         self.seen: dict[int, set[str]] = {}
         self.popularity_order: list[str] = []
 
@@ -79,12 +79,17 @@ class CollaborativeSVD:
         self.item_vectors = normalize(matrix.T.tocsr())
 
         for user_id, group in filtered.groupby("user_id"):
-            vec = np.zeros(n_movies, dtype=np.float32)
+            cols_u = []
+            vals_u = []
             for movie_id, rating in zip(
                 group["movie_id"].astype(str), group["rating"]
             ):
-                vec[movie_to_idx[movie_id]] = float(rating)
-            self.user_rows[int(user_id)] = vec
+                cols_u.append(movie_to_idx[movie_id])
+                vals_u.append(float(rating))
+            self.user_history[int(user_id)] = (
+                np.asarray(cols_u, dtype=np.int32),
+                np.asarray(vals_u, dtype=np.float32),
+            )
 
         self.seen = {
             int(user_id): set(group["movie_id"].astype(str))
@@ -103,12 +108,14 @@ class CollaborativeSVD:
     def _scores_for_user(self, user_id: int) -> np.ndarray | None:
         if self.maps is None or self.item_vectors is None:
             raise RuntimeError("Model is not fitted.")
-        history = self.user_rows.get(int(user_id))
-        if history is None:
+        history_parts = self.user_history.get(int(user_id))
+        if history_parts is None:
             return None
+        cols_u, vals_u = history_parts
+        history = np.zeros(self.item_vectors.shape[0], dtype=np.float32)
+        history[cols_u] = vals_u
         # scores_i = sum_j sim(i, j) * r_uj  with sim = cosine of item columns
-        # item_vectors is (n_movies, n_users); G = item_vectors @ item_vectors.T
-        # too big to store: compute (item_vectors @ (item_vectors.T @ history))
+        # item_vectors is (n_movies, n_users); avoid materializing S
         projected = self.item_vectors.T.dot(history)  # (n_users,)
         scores = np.asarray(self.item_vectors.dot(projected)).ravel()
         return scores
