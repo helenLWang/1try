@@ -59,7 +59,22 @@ def test_heuristic_genre_extract_and_score() -> None:
     assert ranked.iloc[-1]["movie_id"] == "scream+1996"
 
 
-def test_gemini_key_selects_google_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_gemini_aq_key_selects_google_native(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("LLM_BASE_URL", raising=False)
+    monkeypatch.delenv("LLM_MODEL", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("LLM_API_KEY", raising=False)
+    monkeypatch.delenv("GOOGLE_API_KEY", raising=False)
+    monkeypatch.setenv("GEMINI_API_KEY", "AQ.DummyAuthKeyForTests")
+    from src.models.cold_start import _use_gemini_native
+
+    kwargs, model = llm_client_settings()
+    assert kwargs["api_key"].startswith("AQ.")
+    assert model.startswith("gemini")
+    assert _use_gemini_native(kwargs, model)
+
+
+def test_gemini_aiza_key_selects_google_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("LLM_BASE_URL", raising=False)
     monkeypatch.delenv("LLM_MODEL", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)

@@ -69,9 +69,9 @@ the user’s text profile.
 ## Cold-start with an LLM
 
 `src/models/cold_start.py`. New users often typed what they like and dislike
-at signup. We prompt an OpenAI-compatible chat model (`gpt-4o-mini` by
-default; Gemini keys auto-select `gemini-2.0-flash` via Google's OpenAI
-endpoint; override with `LLM_MODEL` / `LLM_BASE_URL`) to emit JSON:
+at signup. We prompt an LLM (`gpt-4o-mini` by default; Gemini `AQ.` / `AIza`
+keys auto-select `gemini-3.6-flash` via Google's generateContent API;
+override with `LLM_MODEL` / `LLM_BASE_URL`) to emit JSON:
 `liked_genres`, `disliked_genres`, `liked_titles`, `disliked_titles`, `notes`.
 A deterministic scorer then marks the catalog (+genre overlap, −disliked
 genres, large bonus/penalty for named titles, weak popularity prior). We
@@ -81,7 +81,7 @@ list only**, so it cannot invent movie ids.
 The same JSON schema is produced by a heuristic extractor if no `api.key` /
 `OPENAI_API_KEY` / `GEMINI_API_KEY` is set, so training and tests still run.
 The graded path is the LLM: put a key in `api.key` (gitignored) as in I1.
-Gemini is allowed; keys starting with `AIza` use Google's compatible API.
+Gemini is allowed; keys starting with `AIza` or `AQ.` use Google's native API.
 
 ## What we would serve later
 

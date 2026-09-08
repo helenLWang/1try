@@ -90,9 +90,21 @@ TFIDF_MIN_DF = 2
 # ---------------------------------------------------------------------------
 LLM_MODEL = os.environ.get("LLM_MODEL", "gpt-4o-mini")
 LLM_BASE_URL = os.environ.get("LLM_BASE_URL")  # optional, e.g. OpenRouter
-# Google Gemini via the OpenAI-compatible endpoint (I1 explicitly allows Gemini).
+# Google Gemini. New AI Studio keys start with `AQ.` and need the native
+# generateContent API (`x-goog-api-key`). Older `AIza` keys still work there too.
 GEMINI_OPENAI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai/"
-DEFAULT_GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
+GEMINI_NATIVE_BASE = "https://generativelanguage.googleapis.com/v1beta"
+DEFAULT_GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
+GEMINI_FALLBACK_MODELS = tuple(
+    m.strip()
+    for m in os.environ.get(
+        "GEMINI_FALLBACK_MODELS",
+        "gemini-flash-latest,gemini-3.5-flash-lite",
+    ).split(",")
+    if m.strip()
+)
 LLM_TEMPERATURE = 0.2
+LLM_MAX_OUTPUT_TOKENS = int(os.environ.get("LLM_MAX_OUTPUT_TOKENS", "2048"))
+LLM_MAX_RETRIES = 4
 LLM_MAX_CANDIDATES = 80
 COLD_START_TOP_K = 20

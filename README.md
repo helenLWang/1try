@@ -55,9 +55,9 @@ LLM key (gitignored). OpenAI and Google Gemini both work (same as I1):
 echo 'YOUR_KEY' > api.key
 # OpenAI:
 #   export OPENAI_API_KEY='sk-...'
-# Gemini (key usually starts with AIza; auto-detected):
-#   export GEMINI_API_KEY='AIza...'
-#   # or: echo 'AIza...' > api.key
+# Gemini (key usually starts with AIza or AQ.; auto-detected, uses native Gemini API):
+#   export GEMINI_API_KEY='AQ....'
+#   # or: echo 'AQ....' > api.key
 # OpenRouter / Groq / Azure-compatible:
 export LLM_BASE_URL='https://openrouter.ai/api/v1'
 export LLM_MODEL='gpt-4o-mini'

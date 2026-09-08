@@ -11,8 +11,8 @@ The LLM is required for the assignment. If no API key is present, a
 deterministic extractor that uses the same JSON schema is used so the rest
 of the pipeline still runs (tests, offline matcher metrics). Graders should
 put a key in `api.key`, `OPENAI_API_KEY`, or `GEMINI_API_KEY` to exercise
-the real LLM path. Gemini keys (typically `AIza…`) auto-select Google's
-OpenAI-compatible endpoint.
+the real LLM path. Gemini keys (`AIza…` or `AQ.…`) auto-select Google's
+native generateContent API.
 """
 
 from __future__ import annotations
@@ -20,6 +20,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import time
 from typing import Any
 
 import pandas as pd
@@ -28,9 +29,13 @@ from src.config import (
     API_KEY_FILE,
     COLD_START_TOP_K,
     DEFAULT_GEMINI_MODEL,
+    GEMINI_FALLBACK_MODELS,
+    GEMINI_NATIVE_BASE,
     GEMINI_OPENAI_BASE,
     LLM_BASE_URL,
     LLM_MAX_CANDIDATES,
+    LLM_MAX_OUTPUT_TOKENS,
+    LLM_MAX_RETRIES,
     LLM_MODEL,
     LLM_TEMPERATURE,
 )
@@ -89,15 +94,16 @@ def load_api_key() -> str | None:
 
 
 def _looks_like_gemini_key(key: str) -> bool:
-    return key.startswith("AIza")
+    # Legacy Google keys (`AIza…`) and AI Studio auth keys (`AQ.…`).
+    return key.startswith("AIza") or key.startswith("AQ.")
 
 
 def llm_client_settings() -> tuple[dict[str, Any], str]:
     """OpenAI-SDK kwargs and model name, including Gemini auto-detect.
 
-    I1 allows OpenAI or Google Gemini. Gemini keys usually start with `AIza`
-    and talk to the OpenAI-compatible Google endpoint unless `LLM_BASE_URL`
-    is set explicitly. A dedicated `GEMINI_API_KEY` wins over `OPENAI_API_KEY`
+    I1 allows OpenAI or Google Gemini. Gemini keys (`AIza…` or `AQ.…`) use
+    Google's native generateContent API unless `LLM_BASE_URL` is set to a
+    non-Google host. A dedicated `GEMINI_API_KEY` wins over `OPENAI_API_KEY`
     so both can exist in the environment without mixing hosts.
     """
     env_base = os.environ.get("LLM_BASE_URL") or LLM_BASE_URL
@@ -129,6 +135,87 @@ def llm_client_settings() -> tuple[dict[str, Any], str]:
     else:
         model = env_model
     return kwargs, model
+
+
+def _use_gemini_native(kwargs: dict[str, Any], model: str) -> bool:
+    key = str(kwargs.get("api_key") or "")
+    env_base = os.environ.get("LLM_BASE_URL") or LLM_BASE_URL or ""
+    if env_base and "generativelanguage.googleapis.com" not in env_base:
+        return False
+    if key.startswith("AQ."):
+        return True
+    if _looks_like_gemini_key(key) or model.lower().startswith("gemini"):
+        return True
+    base = str(kwargs.get("base_url") or "")
+    return "generativelanguage.googleapis.com" in base
+
+
+def _gemini_native_complete(api_key: str, model: str, system: str, user: str) -> str:
+    """Chat completion via Gemini generateContent (required for `AQ.` keys)."""
+    import requests
+
+    models_to_try = [model.removeprefix("models/")]
+    for fallback in GEMINI_FALLBACK_MODELS:
+        if fallback not in models_to_try:
+            models_to_try.append(fallback)
+    payload = {
+        "systemInstruction": {"parts": [{"text": system}]},
+        "contents": [{"role": "user", "parts": [{"text": user}]}],
+        "generationConfig": {
+            "temperature": LLM_TEMPERATURE,
+            "responseMimeType": "application/json",
+            "maxOutputTokens": LLM_MAX_OUTPUT_TOKENS,
+        },
+    }
+    headers = {"Content-Type": "application/json", "x-goog-api-key": api_key}
+    last_error = "Gemini request failed"
+    for candidate in models_to_try:
+        url = f"{GEMINI_NATIVE_BASE}/models/{candidate}:generateContent"
+        for attempt in range(LLM_MAX_RETRIES):
+            try:
+                response = requests.post(url, headers=headers, json=payload, timeout=60)
+            except requests.RequestException as exc:
+                last_error = f"Gemini network error: {type(exc).__name__}"
+                time.sleep(1.5 * (attempt + 1))
+                continue
+            if response.status_code == 503:
+                last_error = f"Gemini HTTP 503 on {candidate}"
+                break
+            if response.status_code == 429:
+                last_error = f"Gemini HTTP 429 on {candidate}"
+                time.sleep(min(8, 2 ** attempt))
+                continue
+            if response.status_code >= 400:
+                last_error = f"Gemini HTTP {response.status_code} on {candidate}: {response.text[:200]}"
+                break
+            data = response.json()
+            parts = (
+                ((data.get("candidates") or [{}])[0].get("content") or {}).get("parts") or []
+            )
+            text = "".join(part.get("text") or "" for part in parts)
+            if text.strip():
+                return text
+            last_error = f"Gemini returned empty text from {candidate}"
+            time.sleep(1.0 * (attempt + 1))
+    raise RuntimeError(last_error)
+
+
+def _llm_complete(system: str, user: str) -> str:
+    kwargs, model = llm_client_settings()
+    if _use_gemini_native(kwargs, model):
+        return _gemini_native_complete(kwargs["api_key"], model, system, user)
+    from openai import OpenAI
+
+    client = OpenAI(**kwargs)
+    completion = client.chat.completions.create(
+        model=model,
+        temperature=LLM_TEMPERATURE,
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+        ],
+    )
+    return completion.choices[0].message.content or "{}"
 
 
 def _normalize_genre(token: str) -> str | None:
@@ -241,26 +328,11 @@ def _parse_json_blob(text: str) -> dict[str, Any]:
 
 
 def llm_extract(likes: str, dislikes: str) -> dict[str, Any]:
-    """Call an OpenAI-compatible chat model to structure the self-description."""
-    from openai import OpenAI
-
-    kwargs, model = llm_client_settings()
-    client = OpenAI(**kwargs)
-    completion = client.chat.completions.create(
-        model=model,
-        temperature=LLM_TEMPERATURE,
-        messages=[
-            {"role": "system", "content": "You output JSON only."},
-            {
-                "role": "user",
-                "content": EXTRACT_PROMPT.format(
-                    likes=likes or "(none)",
-                    dislikes=dislikes or "(none)",
-                ),
-            },
-        ],
+    """Call Gemini or an OpenAI-compatible chat model to structure the self-description."""
+    content = _llm_complete(
+        "You output JSON only.",
+        EXTRACT_PROMPT.format(likes=likes or "(none)", dislikes=dislikes or "(none)"),
     )
-    content = completion.choices[0].message.content or "{}"
     data = _parse_json_blob(content)
     data["source"] = "llm"
     data["raw"] = content
@@ -285,7 +357,12 @@ def llm_extract(likes: str, dislikes: str) -> dict[str, Any]:
 
 def extract_preferences(likes: str, dislikes: str, prefer_llm: bool = True) -> dict[str, Any]:
     if prefer_llm and load_api_key():
-        return llm_extract(likes, dislikes)
+        try:
+            return llm_extract(likes, dislikes)
+        except Exception as exc:  # noqa: BLE001 — keep recommending if the API flakes
+            data = heuristic_extract(likes, dislikes)
+            data["llm_error"] = type(exc).__name__
+            return data
     return heuristic_extract(likes, dislikes)
 
 
@@ -356,41 +433,30 @@ def llm_rerank(
     """Ask the LLM to pick ids from a short candidate list. None on failure."""
     if not load_api_key() or candidates.empty:
         return None
-    from openai import OpenAI
-
-    kwargs, model = llm_client_settings()
     catalog_lines = []
     for row in candidates.head(LLM_MAX_CANDIDATES).itertuples(index=False):
         catalog_lines.append(f"{row.movie_id} | {row.title} | {row.score:.2f}")
     try:
-        client = OpenAI(**kwargs)
-        completion = client.chat.completions.create(
-            model=model,
-            temperature=LLM_TEMPERATURE,
-            messages=[
-                {"role": "system", "content": "You output JSON only."},
-                {
-                    "role": "user",
-                    "content": RERANK_PROMPT.format(
-                        likes=likes or "(none)",
-                        dislikes=dislikes or "(none)",
-                        prefs=json.dumps(
-                            {k: prefs.get(k) for k in (
-                                "liked_genres",
-                                "disliked_genres",
-                                "liked_titles",
-                                "disliked_titles",
-                                "notes",
-                            )},
-                            ensure_ascii=False,
-                        ),
-                        k=k,
-                        catalog="\n".join(catalog_lines),
-                    ),
-                },
-            ],
+        content = _llm_complete(
+            "You output JSON only.",
+            RERANK_PROMPT.format(
+                likes=likes or "(none)",
+                dislikes=dislikes or "(none)",
+                prefs=json.dumps(
+                    {key: prefs.get(key) for key in (
+                        "liked_genres",
+                        "disliked_genres",
+                        "liked_titles",
+                        "disliked_titles",
+                        "notes",
+                    )},
+                    ensure_ascii=False,
+                ),
+                k=k,
+                catalog="\n".join(catalog_lines),
+            ),
         )
-        data = _parse_json_blob(completion.choices[0].message.content or "{}")
+        data = _parse_json_blob(content)
         ids = [str(x) for x in data.get("movie_ids") or []]
         allowed = set(candidates["movie_id"].astype(str))
         filtered = [mid for mid in ids if mid in allowed]
