@@ -1,12 +1,14 @@
-"""Collaborative filtering via biased Truncated SVD.
+"""Collaborative filtering via item–item cosine similarity.
 
-We build a user × movie matrix of (explicit + implicit) scores, subtract a
-simple bias model (global + user + item means), then factorize the residual
-matrix. Recommendations are the reconstructed scores, excluding movies the
-user already interacted with.
+We build a user × movie matrix of (explicit + implicit) scores and rank unseen
+movies by how similar they are (co-watched / co-rated) to movies the user
+already consumed. This uses only the interaction matrix — no genres or plots —
+so it is substantively different from content-based TF-IDF.
 
-This is substantively different from content-based filtering: it never looks
-at genres or overviews, only at who interacted with what.
+Item–item cosine is a better fit for this stream than a large SVD: most users
+in a collected window have only one or two movies, so a 50-factor SVD mostly
+reconstructs noise. Similarity of item columns still lets a user who watched
+Star Wars get other movies that Star Wars viewers also watched.
 """
 
 from __future__ import annotations
@@ -16,9 +18,9 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 from scipy import sparse
-from sklearn.decomposition import TruncatedSVD
+from sklearn.preprocessing import normalize
 
-from src.config import CF_MIN_MOVIE_INTERACTIONS, CF_MIN_USER_INTERACTIONS, CF_N_COMPONENTS, RANDOM_SEED
+from src.config import CF_MIN_MOVIE_INTERACTIONS, CF_MIN_USER_INTERACTIONS, RANDOM_SEED
 
 
 @dataclass
@@ -29,11 +31,11 @@ class _Maps:
 
 
 class CollaborativeSVD:
-    """Matrix-factorization recommender (Truncated SVD on biased residuals)."""
+    """Item–item collaborative filter (class name kept for train.py imports)."""
 
     def __init__(
         self,
-        n_components: int = CF_N_COMPONENTS,
+        n_components: int = 50,  # unused; kept so train logs stay stable
         min_user: int = CF_MIN_USER_INTERACTIONS,
         min_movie: int = CF_MIN_MOVIE_INTERACTIONS,
         random_state: int = RANDOM_SEED,
@@ -43,11 +45,8 @@ class CollaborativeSVD:
         self.min_movie = min_movie
         self.random_state = random_state
         self.maps: _Maps | None = None
-        self.global_mean: float = 0.0
-        self.user_bias: np.ndarray | None = None
-        self.item_bias: np.ndarray | None = None
-        self.user_factors: np.ndarray | None = None
-        self.item_factors: np.ndarray | None = None  # (n_movies, n_components)
+        self.item_vectors = None  # (n_movies, n_users) L2-normalized columns as rows
+        self.user_rows: dict[int, np.ndarray] = {}
         self.seen: dict[int, set[str]] = {}
         self.popularity_order: list[str] = []
 
@@ -61,7 +60,7 @@ class CollaborativeSVD:
             & interactions["movie_id"].isin(keep_movies)
         ]
         if filtered.empty:
-            raise ValueError("Not enough interactions to fit collaborative SVD.")
+            raise ValueError("Not enough interactions to fit collaborative filtering.")
 
         users = sorted(filtered["user_id"].unique().tolist())
         movies = sorted(filtered["movie_id"].astype(str).unique().tolist())
@@ -73,63 +72,45 @@ class CollaborativeSVD:
         rows = filtered["user_id"].map(user_to_idx).to_numpy()
         cols = filtered["movie_id"].astype(str).map(movie_to_idx).to_numpy()
         values = filtered["rating"].to_numpy(dtype=np.float32)
-
         matrix = sparse.csr_matrix(
             (values, (rows, cols)), shape=(n_users, n_movies), dtype=np.float32
         )
-        self.global_mean = float(values.mean())
+        # Item vectors: L2-normalized movie columns, stored as rows for matmul.
+        self.item_vectors = normalize(matrix.T.tocsr())
 
-        # Means over observed entries only.
-        user_sum = np.array(matrix.sum(axis=1)).ravel()
-        user_n = np.diff(matrix.indptr)
-        item_sum = np.array(matrix.sum(axis=0)).ravel()
-        item_n = np.diff(matrix.tocsc().indptr)
-        self.user_bias = user_sum / np.maximum(user_n, 1) - self.global_mean
-        self.item_bias = item_sum / np.maximum(item_n, 1) - self.global_mean
-
-        # Residual = rating - global - user_bias - item_bias
-        residual_values = (
-            values
-            - self.global_mean
-            - self.user_bias[rows]
-            - self.item_bias[cols]
-        )
-        residual = sparse.csr_matrix(
-            (residual_values.astype(np.float32), (rows, cols)),
-            shape=(n_users, n_movies),
-        )
-
-        n_comp = min(self.n_components, n_users - 1, n_movies - 1)
-        n_comp = max(n_comp, 1)
-        svd = TruncatedSVD(n_components=n_comp, random_state=self.random_state)
-        # user_factors: (n_users, k), item_factors: (n_movies, k)
-        self.user_factors = svd.fit_transform(residual).astype(np.float32)
-        self.item_factors = svd.components_.T.astype(np.float32)
+        for user_id, group in filtered.groupby("user_id"):
+            vec = np.zeros(n_movies, dtype=np.float32)
+            for movie_id, rating in zip(
+                group["movie_id"].astype(str), group["rating"]
+            ):
+                vec[movie_to_idx[movie_id]] = float(rating)
+            self.user_rows[int(user_id)] = vec
 
         self.seen = {
             int(user_id): set(group["movie_id"].astype(str))
             for user_id, group in interactions.groupby("user_id")
         }
-        pop = (
+        self.popularity_order = (
             interactions.groupby("movie_id")
             .size()
             .sort_values(ascending=False)
             .index.astype(str)
             .tolist()
         )
-        self.popularity_order = pop
-        self.n_components = n_comp
+        self.n_components = min(self.n_components, n_movies, n_users)
         return self
 
     def _scores_for_user(self, user_id: int) -> np.ndarray | None:
-        if self.maps is None or self.user_factors is None or self.item_factors is None:
+        if self.maps is None or self.item_vectors is None:
             raise RuntimeError("Model is not fitted.")
-        idx = self.maps.user_to_idx.get(int(user_id))
-        if idx is None:
+        history = self.user_rows.get(int(user_id))
+        if history is None:
             return None
-        latent = self.user_factors[idx]
-        scores = self.item_factors @ latent
-        scores = scores + self.global_mean + self.user_bias[idx] + self.item_bias
+        # scores_i = sum_j sim(i, j) * r_uj  with sim = cosine of item columns
+        # item_vectors is (n_movies, n_users); G = item_vectors @ item_vectors.T
+        # too big to store: compute (item_vectors @ (item_vectors.T @ history))
+        projected = self.item_vectors.T.dot(history)  # (n_users,)
+        scores = np.asarray(self.item_vectors.dot(projected)).ravel()
         return scores
 
     def recommend(
@@ -141,7 +122,6 @@ class CollaborativeSVD:
         banned = set(seen or self.seen.get(int(user_id), set()))
         scores = self._scores_for_user(user_id)
         if scores is None:
-            # Cold-ish user for CF: fall back to popularity (caller may swap in LLM).
             return [m for m in self.popularity_order if m not in banned][:k]
 
         n_take = min(len(scores), k + len(banned) + 50)

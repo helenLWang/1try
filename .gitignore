@@ -13,6 +13,7 @@ data/*.parquet
 data/*.pkl
 data/*.joblib
 !data/sample/
+!data/collection_meta.json
 
 artifacts/models/
 artifacts/*.pkl

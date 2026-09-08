@@ -1,0 +1,31 @@
+{
+  "events_scanned": 5000000,
+  "watch_events": 4963917,
+  "rate_events": 32400,
+  "create_account_events": 3680,
+  "other_events": 3,
+  "ratings_out_of_range": 0,
+  "unique_users_in_stream": 45655,
+  "unique_movies_in_stream": 14583,
+  "unique_watch_pairs": 57002,
+  "elapsed_s": 255.07,
+  "topic": "movielog1",
+  "bootstrap": "localhost:9092",
+  "recent": true,
+  "available_topic_messages": 371877392,
+  "begin_offsets": {
+    "0": 0,
+    "1": 0
+  },
+  "end_offsets": {
+    "0": 185938697,
+    "1": 185938695
+  },
+  "n_ratings_written": 32400,
+  "n_watches_written": 57002,
+  "n_movies_fetched": 14583,
+  "n_users_fetched": 45655,
+  "n_users_with_likes": 31938,
+  "collected_at": "2026-09-08T14:23:27.491365+00:00",
+  "metadata_api": "http://128.2.220.123:8080"
+}

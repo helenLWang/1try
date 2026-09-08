@@ -165,7 +165,8 @@ def time_split(
         if n < min_interactions:
             train_parts.append(group)
             continue
-        n_test = max(1, int(round(n * hold_fraction)))
+        # Sparse logs: leave-one-out until the user has a longer history.
+        n_test = 1 if n < 5 else max(1, int(round(n * hold_fraction)))
         n_test = min(n_test, n - 1)  # keep at least one train row
         train_parts.append(group.iloc[:-n_test])
         test_parts.append(group.iloc[-n_test:])

@@ -6,11 +6,13 @@ the course metadata API. Code pointers are relative to the repository root.
 ## Data we collect
 
 `python -m src.collect` reads topic `movielog1` through the SSH tunnel
-(`localhost:9092`). By default it consumes about 5 million **recent** messages
-rather than the full retained log (hundreds of millions of lines). That is
-enough ratings and watch pairs for a laptop SVD, and it matches how a
-production job would train on a sliding window. Offsets, event counts, and
-timestamps are written to `data/collection_meta.json`.
+(`localhost:9092`). The retained log is huge (hundreds of millions of lines)
+but a **single tail slice is only a few hours of traffic**, so almost every
+user has one movie. By default we therefore read about 5 million messages
+from **12 slices spaced across the retained offsets**. That is enough ratings
+and watch pairs for a laptop model, and it matches how a production job would
+train on a sliding set of windows rather than one afternoon. Offsets, event
+counts, and timestamps are written to `data/collection_meta.json`.
 
 We parse three record types in `src/parse.py`:
 
@@ -33,34 +35,36 @@ an implicit score `5 + 4 * min(max_minute / runtime, 1)` (runtime defaults to
 the last timestamp. The learning matrix is this merged `interactions` table,
 not raw Kafka lines.
 
-## Approach 1: collaborative filtering (Truncated SVD)
+## Approach 1: collaborative filtering (item–item cosine)
 
-`src/models/collaborative.py`. We keep users/movies with ≥5 interactions,
-build a sparse user × movie matrix, subtract a bias model (global mean + user
-mean + item mean), and factorize the **residuals** with sklearn
-`TruncatedSVD` (50 components, seed 42). A recommendation is the reconstructed
-score vector with already-seen movies masked, top 20. Users who never appear
-in the factorized matrix fall back to popularity inside this class; the CLI
-`auto` mode sends them to the LLM cold-start instead.
+`src/models/collaborative.py`. We keep users/movies with ≥2 interactions,
+build a sparse user × movie matrix, L2-normalize each movie's user vector, and
+score unseen movies by cosine similarity to the movies that user already
+consumed (`S @ r_u` without materializing `S`). Already-seen movies are
+masked; users who never enter the matrix fall back to popularity.
 
-We chose SVD because it is the standard collaborative baseline for explicit
-plus implicit scores, trains in seconds on CPU, and uses **only** who
-interacted with what. It cannot recommend a movie nobody in the window has
-touched, and it fails for brand-new users — that is the cold-start hole.
+We chose item–item CF rather than a large SVD because this stream is sparse
+in any collected window (most users have one or two movies). Factorizing
+residuals with 50 latent dimensions mostly reconstructs noise; co-watch
+similarity still transfers “people who watched X also watched Y”. It cannot
+recommend a movie nobody in the window has touched, and it fails for
+brand-new users — that is the cold-start hole.
 
 ## Approach 2: content-based TF-IDF
 
-`src/models/content.py`. Each movie is a document: title, genres (repeated so
-they outweigh plot words), tagline, overview, language. A `TfidfVectorizer`
+`src/models/content.py`. Each movie is a document of **genres (repeated),
+tagline, and overview** — titles are omitted so rare proper nouns do not
+collapse neighbors to sequels that share a place name. A `TfidfVectorizer`
 (4000 features, 1–2 grams, English stops) yields L2-normalized vectors. A
 user profile is the rating-weighted average of movies they already consumed.
-We rank by cosine similarity and again mask seen ids.
+We rank by 85% cosine + 15% popularity so ties are not obscure catalog noise,
+and mask seen ids.
 
-This is substantively different from SVD: two users with disjoint histories
-can still get similar lists if they watched the same genres, and a long-tail
-title with a rich overview can surface even with little collaborative support.
-It cannot pick up “people like you also liked X” when X is unlike the user’s
-text profile.
+This is substantively different from item–item CF: two users with disjoint
+histories can still get similar lists if they watched the same genres, and a
+long-tail title with a rich overview can surface with little collaborative
+support. It cannot pick up “people like you also liked X” when X is unlike
+the user’s text profile.
 
 ## Cold-start with an LLM
 
@@ -80,7 +84,7 @@ the LLM: put a key in `api.key` (gitignored) as in I1.
 ## What we would serve later
 
 `python -m src.recommend --user-id <id> --model auto` is the function the team
-project can wrap. We recommend deploying **collaborative SVD for users with
-history**, and the **LLM + catalog scorer for users without history**. Content
-TF-IDF is the fallback if SVD quality drops on niche users. No service is
-deployed for I2.
+project can wrap. We recommend deploying **item–item CF (with a popularity
+fallback) for users with history**, and the **LLM + catalog scorer for users
+without history**. Content TF-IDF is useful when CF has too little overlap.
+No service is deployed for I2.

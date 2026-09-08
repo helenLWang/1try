@@ -19,16 +19,21 @@ from src.config import TFIDF_MAX_FEATURES, TFIDF_MIN_DF, TFIDF_NGRAM
 
 
 def movie_document(row: pd.Series) -> str:
+    """Build a metadata document. Titles are omitted on purpose.
+
+    Rare title tokens (place names, character names) otherwise dominate TF-IDF
+    and the model recommends sequels that share a proper noun instead of
+    similar genres/plots.
+    """
     genres = row.get("genres") or []
     if isinstance(genres, list):
         genre_text = " ".join(str(g) for g in genres)
     else:
         genre_text = str(genres)
     parts = [
-        str(row.get("title") or ""),
-        str(row.get("original_title") or ""),
         genre_text,
-        genre_text,  # duplicate genres so they outweigh plot words a bit
+        genre_text,
+        genre_text,
         str(row.get("tagline") or ""),
         str(row.get("overview") or ""),
         str(row.get("original_language") or ""),
@@ -51,10 +56,11 @@ class ContentTfidfRecommender:
         )
         self.movie_ids: list[str] = []
         self.movie_matrix = None
-        self.user_profiles: dict[int, np.ndarray] = {}
+        self.user_items: dict[int, list[tuple[int, float]]] = {}
         self.seen: dict[int, set[str]] = {}
         self.popularity_order: list[str] = []
         self._id_to_row: dict[str, int] = {}
+        self.pop_scores: np.ndarray | None = None
 
     def fit(
         self,
@@ -87,6 +93,13 @@ class ContentTfidfRecommender:
             .index.astype(str)
             .tolist()
         )
+        counts = interactions.groupby("movie_id").size()
+        pop = np.array(
+            [np.log1p(float(counts.get(mid, 0))) for mid in self.movie_ids],
+            dtype=np.float32,
+        )
+        pop_max = float(pop.max()) if len(pop) else 1.0
+        self.pop_scores = pop / pop_max if pop_max else pop
 
         # Weighted average of item vectors (sparse × weights → dense profile).
         for user_id, group in interactions.groupby("user_id"):
@@ -104,10 +117,9 @@ class ContentTfidfRecommender:
                 continue
             weight_arr = np.asarray(weights, dtype=np.float32)
             weight_arr = weight_arr / weight_arr.sum()
-            profile = self.movie_matrix[idxs].T.dot(weight_arr)
-            # movie_matrix is (n_movies, n_terms); [idxs] -> (n, n_terms)
-            # .T.dot(weights) -> (n_terms,)
-            self.user_profiles[int(user_id)] = np.asarray(profile).ravel()
+            self.user_items[int(user_id)] = [
+                (int(i), float(w)) for i, w in zip(idxs, weight_arr)
+            ]
         return self
 
     def recommend(
@@ -117,17 +129,25 @@ class ContentTfidfRecommender:
         seen: set[str] | None = None,
     ) -> list[str]:
         banned = set(seen or self.seen.get(int(user_id), set()))
-        profile = self.user_profiles.get(int(user_id))
-        if profile is None or self.movie_matrix is None:
+        items = self.user_items.get(int(user_id))
+        if not items or self.movie_matrix is None:
             return [m for m in self.popularity_order if m not in banned][:k]
+
+        idxs, weights = zip(*items)
+        profile = np.asarray(
+            self.movie_matrix[list(idxs)].T.dot(np.asarray(weights, dtype=np.float32))
+        ).ravel()
 
         # Cosine similarity: catalog rows are L2-normalized; normalize profile.
         norm = np.linalg.norm(profile)
         if norm == 0:
             return [m for m in self.popularity_order if m not in banned][:k]
         profile = profile / norm
-        sims = self.movie_matrix.dot(profile)
-        sims = np.asarray(sims).ravel()
+        sims = np.asarray(self.movie_matrix.dot(profile)).ravel()
+        if self.pop_scores is not None and len(self.pop_scores) == len(sims):
+            # 85% metadata similarity, 15% popularity so ties are not obscure
+            # catalog noise. Still a content model: other users' *pairs* are unused.
+            sims = 0.85 * sims + 0.15 * self.pop_scores
 
         extra = min(len(sims), max(k + len(banned) + 50, 1))
         if extra >= len(sims):

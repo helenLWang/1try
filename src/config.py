@@ -68,15 +68,15 @@ MAX_RATING = 10
 # Train / eval split
 # ---------------------------------------------------------------------------
 TEST_HOLD_FRACTION = 0.2
-MIN_INTERACTIONS_FOR_SPLIT = 5
+MIN_INTERACTIONS_FOR_SPLIT = 2
 TOP_K = 20
 
 # ---------------------------------------------------------------------------
 # Collaborative filtering (Truncated SVD on biased residuals)
 # ---------------------------------------------------------------------------
 CF_N_COMPONENTS = 50
-CF_MIN_USER_INTERACTIONS = 5
-CF_MIN_MOVIE_INTERACTIONS = 5
+CF_MIN_USER_INTERACTIONS = 2
+CF_MIN_MOVIE_INTERACTIONS = 2
 
 # ---------------------------------------------------------------------------
 # Content-based filtering

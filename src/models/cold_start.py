@@ -122,6 +122,8 @@ def heuristic_extract(likes: str, dislikes: str) -> dict[str, Any]:
         "disliked_titles": [],
         "notes": "heuristic_extractor",
         "source": "heuristic",
+        "raw_likes": likes or "",
+        "raw_dislikes": dislikes or "",
     }
 
 
@@ -234,6 +236,8 @@ def llm_extract(likes: str, dislikes: str) -> dict[str, Any]:
     ]
     data["liked_titles"] = [str(x) for x in data.get("liked_titles") or []]
     data["disliked_titles"] = [str(x) for x in data.get("disliked_titles") or []]
+    data["raw_likes"] = likes
+    data["raw_dislikes"] = dislikes
     return data
 
 
@@ -257,6 +261,8 @@ def score_catalog(
     disliked_genres = {g.lower() for g in prefs.get("disliked_genres") or []}
     liked_titles = [t.lower() for t in prefs.get("liked_titles") or []]
     disliked_titles = [t.lower() for t in prefs.get("disliked_titles") or []]
+    raw_likes = (prefs.get("raw_likes") or "").lower()
+    raw_dislikes = (prefs.get("raw_dislikes") or "").lower()
 
     rows = []
     pop_max = max(popularity.values()) if popularity else 1.0
@@ -277,6 +283,20 @@ def score_catalog(
         for named in disliked_titles:
             if named and (named in title_l or title_l in named):
                 score -= 8.0
+        # Also match catalog titles the user typed in free text (LLM and heuristic).
+        if title and len(title) >= 5 and title_l in raw_likes:
+            score += 8.0
+        if title and len(title) >= 5 and title_l in raw_dislikes:
+            score -= 8.0
+        tokens = [
+            w
+            for w in re.findall(r"[a-z0-9]+", title_l)
+            if w not in {"the", "a", "an", "of", "and", "in", "to", "part"} and len(w) >= 6
+        ]
+        if tokens and any(tok in raw_likes for tok in tokens):
+            score += 5.0
+        if tokens and any(tok in raw_dislikes for tok in tokens):
+            score -= 5.0
         # Tiny popularity prior so ties do not become random catalog order.
         score += 0.15 * (popularity.get(movie_id, 0.0) / pop_max)
         rows.append((movie_id, title, score))
