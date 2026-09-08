@@ -1,0 +1,39 @@
+# Secrets — never commit credentials
+api.key
+.env
+.env.*
+*.pem
+id_rsa*
+
+# Large data and trained models (assignment: do not commit files > 5 MB)
+data/*.csv
+data/*.json
+data/*.jsonl
+data/*.parquet
+data/*.pkl
+data/*.joblib
+!data/sample/
+!data/collection_meta.json
+
+artifacts/models/
+artifacts/*.pkl
+artifacts/*.joblib
+artifacts/*.npz
+artifacts/cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.env/
+.Python
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
