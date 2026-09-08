@@ -511,7 +511,13 @@ class ColdStartRecommender:
         ranked = score_catalog(prefs, self.movies, self.popularity)
         banned = seen or set()
         ranked = ranked[~ranked["movie_id"].isin(banned)]
-        llm_ids = llm_rerank(likes or "", dislikes or "", prefs, ranked, k) if self.prefer_llm else None
+        llm_ids = None
+        if self.prefer_llm and os.environ.get("I2_COLD_START_RERANK", "1") not in {
+            "0",
+            "false",
+            "False",
+        }:
+            llm_ids = llm_rerank(likes or "", dislikes or "", prefs, ranked, k)
         if llm_ids:
             extra = [m for m in ranked["movie_id"].tolist() if m not in llm_ids]
             return (llm_ids + extra)[:k]

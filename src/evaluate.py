@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import time
 from collections import defaultdict
 
@@ -145,38 +146,65 @@ def evaluate_cold_start(
     llm_rows = []
     pop_rows = []
     examples = []
+    n_llm_ok = 0
+    n_fallback = 0
+    rerank = os.environ.get("I2_COLD_START_RERANK", "1") not in {"0", "false", "False"}
+    print(
+        f"cold-start eval n={len(eligible)} prefer_llm={prefer_llm} "
+        f"key={bool(load_api_key())} rerank={rerank} "
+        f"GEMINI_MODEL={os.environ.get('GEMINI_MODEL') or ''}",
+        flush=True,
+    )
     t0 = time.time()
-    for user_id in eligible:
+    for i, user_id in enumerate(eligible, start=1):
         relevant = truth.loc[user_id]
         recs = cold.recommend(user_id, k=k, seen=empty_seen)
         pop_recs = pop.recommend(user_id, k=k, seen=empty_seen)
         llm_rows.append(metrics_for_ranking(recs, relevant, k))
         pop_rows.append(metrics_for_ranking(pop_recs, relevant, k))
+        source = (cold.last_prefs or {}).get("source")
+        if source == "llm":
+            n_llm_ok += 1
+        else:
+            n_fallback += 1
+        if i == 1 or i % 5 == 0 or i == len(eligible):
+            print(
+                f"cold-start {i}/{len(eligible)} "
+                f"elapsed={time.time() - t0:.0f}s "
+                f"source={source} llm_ok={n_llm_ok} fallback={n_fallback}",
+                flush=True,
+            )
         if len(examples) < 5:
             profile = described[described["user_id"] == user_id].iloc[0]
+            prefs = dict(cold.last_prefs or {})
+            prefs.pop("raw", None)
             examples.append(
                 {
                     "user_id": int(user_id),
                     "likes": str(profile["self_description_likes"])[:240],
                     "dislikes": str(profile.get("self_description_dislikes") or "")[:160],
-                    "prefs": cold.last_prefs,
+                    "prefs": prefs,
                     "recommended": recs[:8],
                     "held_liked": sorted(relevant)[:8],
                 }
             )
-    used_llm = bool(load_api_key()) and prefer_llm
+    used_llm = n_llm_ok > 0
     return {
         "k": k,
         "n_users": len(eligible),
         "used_llm_api": used_llm,
         "extractor": "llm" if used_llm else "heuristic_schema_compatible",
+        "n_llm_extracts": n_llm_ok,
+        "n_heuristic_fallback": n_fallback,
+        "rerank": rerank,
         "cold_start": _mean_metrics(llm_rows),
         "popularity_baseline": _mean_metrics(pop_rows),
         "elapsed_s": round(time.time() - t0, 2),
         "examples": examples,
         "note": (
             "Ground truth is movies this user actually scored >= 7. "
-            "History is hidden; only the signup self-description is used."
+            "History is hidden; only the signup self-description is used. "
+            "When I2_COLD_START_RERANK=0, ranking uses LLM extract + catalog scorer."
         ),
     }
 
@@ -218,6 +246,10 @@ def run_evaluation(max_users: int, k: int, cold_start_users: int, prefer_llm: bo
         "n_eval_users_cap": max_users,
         "ranking": ranking,
         "cold_start": cold,
+        "llm": {
+            "used_llm_api": bool(cold.get("used_llm_api")),
+            "model_env": os.environ.get("GEMINI_MODEL") or os.environ.get("LLM_MODEL"),
+        },
         "recommended_for_deployment": best_name,
         "deployment_rationale": (
             f"{best_name} has the higher NDCG@{k} on the chronological hold-out "
