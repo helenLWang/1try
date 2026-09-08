@@ -1,0 +1,16 @@
+# Core
+numpy>=1.24
+pandas>=2.0
+scipy>=1.11
+scikit-learn>=1.3
+joblib>=1.3
+pytest>=7.0
+requests>=2.31
+tqdm>=4.66
+python-dateutil>=2.8
+
+# Kafka consumer (NG fork is maintained for Python 3.12)
+kafka-python-ng>=2.2.2
+
+# LLM cold-start (OpenAI-compatible APIs: OpenAI, Gemini, OpenRouter, Groq, ...)
+openai>=1.40.0
