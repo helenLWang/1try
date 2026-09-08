@@ -90,6 +90,9 @@ TFIDF_MIN_DF = 2
 # ---------------------------------------------------------------------------
 LLM_MODEL = os.environ.get("LLM_MODEL", "gpt-4o-mini")
 LLM_BASE_URL = os.environ.get("LLM_BASE_URL")  # optional, e.g. OpenRouter
+# Google Gemini via the OpenAI-compatible endpoint (I1 explicitly allows Gemini).
+GEMINI_OPENAI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai/"
+DEFAULT_GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
 LLM_TEMPERATURE = 0.2
 LLM_MAX_CANDIDATES = 80
 COLD_START_TOP_K = 20

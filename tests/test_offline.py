@@ -2,8 +2,9 @@
 
 from src.parse import CreateAccountEvent, RateEvent, WatchEvent, parse_line
 from src.evaluate import metrics_for_ranking, ndcg_at_k
-from src.models.cold_start import heuristic_extract, score_catalog
+from src.models.cold_start import heuristic_extract, llm_client_settings, score_catalog
 import pandas as pd
+import pytest
 
 
 def test_parse_watch_rate_create() -> None:
@@ -56,3 +57,27 @@ def test_heuristic_genre_extract_and_score() -> None:
     ranked = score_catalog(prefs, movies, popularity={"star+wars+1977": 10, "scream+1996": 9, "fargo+1996": 8})
     assert ranked.iloc[0]["movie_id"] == "star+wars+1977"
     assert ranked.iloc[-1]["movie_id"] == "scream+1996"
+
+
+def test_gemini_key_selects_google_endpoint(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("LLM_BASE_URL", raising=False)
+    monkeypatch.delenv("LLM_MODEL", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("LLM_API_KEY", raising=False)
+    monkeypatch.delenv("GOOGLE_API_KEY", raising=False)
+    monkeypatch.setenv("GEMINI_API_KEY", "AIzaSyDummyTestKey")
+    kwargs, model = llm_client_settings()
+    assert "generativelanguage.googleapis.com" in kwargs["base_url"]
+    assert kwargs["api_key"] == "AIzaSyDummyTestKey"
+    assert model.startswith("gemini")
+
+
+def test_openai_key_keeps_default_host(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("LLM_BASE_URL", raising=False)
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    monkeypatch.delenv("GOOGLE_API_KEY", raising=False)
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test-not-gemini")
+    kwargs, model = llm_client_settings()
+    assert "base_url" not in kwargs
+    assert kwargs["api_key"] == "sk-test-not-gemini"
+    assert not model.startswith("gemini")

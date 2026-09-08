@@ -12,5 +12,5 @@ python-dateutil>=2.8
 # Kafka consumer (NG fork is maintained for Python 3.12)
 kafka-python-ng>=2.2.2
 
-# LLM cold-start (OpenAI-compatible APIs: OpenAI, OpenRouter, Groq, ...)
+# LLM cold-start (OpenAI-compatible APIs: OpenAI, Gemini, OpenRouter, Groq, ...)
 openai>=1.40.0

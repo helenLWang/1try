@@ -10,7 +10,9 @@ New users have no watch/rating history. Many of them filled in
 The LLM is required for the assignment. If no API key is present, a
 deterministic extractor that uses the same JSON schema is used so the rest
 of the pipeline still runs (tests, offline matcher metrics). Graders should
-put a key in `api.key` or `OPENAI_API_KEY` to exercise the real LLM path.
+put a key in `api.key`, `OPENAI_API_KEY`, or `GEMINI_API_KEY` to exercise
+the real LLM path. Gemini keys (typically `AIza…`) auto-select Google's
+OpenAI-compatible endpoint.
 """
 
 from __future__ import annotations
@@ -25,6 +27,8 @@ import pandas as pd
 from src.config import (
     API_KEY_FILE,
     COLD_START_TOP_K,
+    DEFAULT_GEMINI_MODEL,
+    GEMINI_OPENAI_BASE,
     LLM_BASE_URL,
     LLM_MAX_CANDIDATES,
     LLM_MODEL,
@@ -73,14 +77,58 @@ CANONICAL_GENRES = [
 
 
 def load_api_key() -> str | None:
-    env = os.environ.get("OPENAI_API_KEY") or os.environ.get("LLM_API_KEY")
-    if env:
-        return env.strip()
+    for name in ("OPENAI_API_KEY", "LLM_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY"):
+        env = os.environ.get(name)
+        if env and env.strip():
+            return env.strip()
     if API_KEY_FILE.exists():
         text = API_KEY_FILE.read_text(encoding="utf-8").strip()
         if text:
             return text.splitlines()[0].strip()
     return None
+
+
+def _looks_like_gemini_key(key: str) -> bool:
+    return key.startswith("AIza")
+
+
+def llm_client_settings() -> tuple[dict[str, Any], str]:
+    """OpenAI-SDK kwargs and model name, including Gemini auto-detect.
+
+    I1 allows OpenAI or Google Gemini. Gemini keys usually start with `AIza`
+    and talk to the OpenAI-compatible Google endpoint unless `LLM_BASE_URL`
+    is set explicitly. A dedicated `GEMINI_API_KEY` wins over `OPENAI_API_KEY`
+    so both can exist in the environment without mixing hosts.
+    """
+    env_base = os.environ.get("LLM_BASE_URL") or LLM_BASE_URL
+    env_model = os.environ.get("LLM_MODEL") or LLM_MODEL
+    gemini_env = (
+        os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY") or ""
+    ).strip()
+    api_key = gemini_env or load_api_key()
+    if not api_key:
+        raise RuntimeError(
+            "No LLM API key. Create api.key or set OPENAI_API_KEY / GEMINI_API_KEY."
+        )
+
+    kwargs: dict[str, Any] = {"api_key": api_key}
+    wants_gemini = (
+        bool(gemini_env)
+        or _looks_like_gemini_key(api_key)
+        or env_model.lower().startswith("gemini")
+    )
+
+    if env_base:
+        kwargs["base_url"] = env_base
+        model = env_model
+        if wants_gemini and not env_model.lower().startswith("gemini"):
+            model = DEFAULT_GEMINI_MODEL
+    elif wants_gemini:
+        kwargs["base_url"] = GEMINI_OPENAI_BASE
+        model = env_model if env_model.lower().startswith("gemini") else DEFAULT_GEMINI_MODEL
+    else:
+        model = env_model
+    return kwargs, model
 
 
 def _normalize_genre(token: str) -> str | None:
@@ -196,16 +244,10 @@ def llm_extract(likes: str, dislikes: str) -> dict[str, Any]:
     """Call an OpenAI-compatible chat model to structure the self-description."""
     from openai import OpenAI
 
-    api_key = load_api_key()
-    if not api_key:
-        raise RuntimeError("No LLM API key. Create api.key or set OPENAI_API_KEY.")
-
-    kwargs: dict[str, Any] = {"api_key": api_key}
-    if LLM_BASE_URL:
-        kwargs["base_url"] = LLM_BASE_URL
+    kwargs, model = llm_client_settings()
     client = OpenAI(**kwargs)
     completion = client.chat.completions.create(
-        model=LLM_MODEL,
+        model=model,
         temperature=LLM_TEMPERATURE,
         messages=[
             {"role": "system", "content": "You output JSON only."},
@@ -312,21 +354,18 @@ def llm_rerank(
     k: int,
 ) -> list[str] | None:
     """Ask the LLM to pick ids from a short candidate list. None on failure."""
-    api_key = load_api_key()
-    if not api_key or candidates.empty:
+    if not load_api_key() or candidates.empty:
         return None
     from openai import OpenAI
 
-    kwargs: dict[str, Any] = {"api_key": api_key}
-    if LLM_BASE_URL:
-        kwargs["base_url"] = LLM_BASE_URL
+    kwargs, model = llm_client_settings()
     catalog_lines = []
     for row in candidates.head(LLM_MAX_CANDIDATES).itertuples(index=False):
         catalog_lines.append(f"{row.movie_id} | {row.title} | {row.score:.2f}")
     try:
         client = OpenAI(**kwargs)
         completion = client.chat.completions.create(
-            model=LLM_MODEL,
+            model=model,
             temperature=LLM_TEMPERATURE,
             messages=[
                 {"role": "system", "content": "You output JSON only."},

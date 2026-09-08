@@ -22,9 +22,9 @@ deploy an HTTP service.
 - Python 3.10+
 - Access to the course server `128.2.220.123` (CMU network or CMU VPN)
 - An SSH client for the Kafka tunnel
-- An OpenAI-compatible API key to run the LLM cold-start path (course staff
-  should use their own key, as in I1). Collaborative/content training does
-  not need a key.
+- An OpenAI **or Gemini** API key to run the LLM cold-start path (I1 allows
+  both; course staff should use their own key). Collaborative/content
+  training does not need a key.
 
 ### Kafka tunnel
 
@@ -49,11 +49,15 @@ pip install -r requirements.txt
 chmod +x scripts/start_kafka_tunnel.sh
 ```
 
-LLM key (gitignored):
+LLM key (gitignored). OpenAI and Google Gemini both work (same as I1):
 
 ```bash
 echo 'YOUR_KEY' > api.key
-# or: export OPENAI_API_KEY='YOUR_KEY'
+# OpenAI:
+#   export OPENAI_API_KEY='sk-...'
+# Gemini (key usually starts with AIza; auto-detected):
+#   export GEMINI_API_KEY='AIza...'
+#   # or: echo 'AIza...' > api.key
 # OpenRouter / Groq / Azure-compatible:
 export LLM_BASE_URL='https://openrouter.ai/api/v1'
 export LLM_MODEL='gpt-4o-mini'
