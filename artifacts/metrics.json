@@ -11,7 +11,7 @@
       "precision": 0.004750000000000001,
       "recall": 0.08791666666666666,
       "ndcg": 0.034947272125832,
-      "elapsed_s": 0.13,
+      "elapsed_s": 0.12,
       "k": 20
     },
     "content": {
@@ -36,14 +36,17 @@
   "cold_start": {
     "k": 20,
     "n_users": 40,
-    "used_llm_api": false,
-    "extractor": "heuristic_schema_compatible",
+    "used_llm_api": true,
+    "extractor": "llm",
+    "n_llm_extracts": 38,
+    "n_heuristic_fallback": 2,
+    "rerank": false,
     "cold_start": {
       "n_users": 40,
-      "hit_rate": 0.075,
-      "precision": 0.0037500000000000007,
-      "recall": 0.02857142857142857,
-      "ndcg": 0.013173429818269355
+      "hit_rate": 0.05,
+      "precision": 0.0025,
+      "recall": 0.01607142857142857,
+      "ndcg": 0.017185731641699148
     },
     "popularity_baseline": {
       "n_users": 40,
@@ -52,7 +55,7 @@
       "recall": 0.1244047619047619,
       "ndcg": 0.06818727864422622
     },
-    "elapsed_s": 3.22,
+    "elapsed_s": 131.32,
     "examples": [
       {
         "user_id": 9375,
@@ -60,27 +63,40 @@
         "dislikes": "I generally do not select comedies of a low quality or science fiction films with poor reception, such as 'Down Periscope' and 'The Island of Dr. Moreau'.",
         "prefs": {
           "liked_genres": [
-            "Crime"
+            "Drama",
+            "Crime",
+            "Romance",
+            "Comedy",
+            "Science Fiction",
+            "Mystery"
           ],
           "disliked_genres": [
+            "Comedy",
             "Science Fiction"
           ],
-          "liked_titles": [],
-          "disliked_titles": [],
-          "notes": "heuristic_extractor",
-          "source": "heuristic",
+          "liked_titles": [
+            "The Godfather",
+            "The English Patient",
+            "Twelve Monkeys"
+          ],
+          "disliked_titles": [
+            "Down Periscope",
+            "The Island of Dr. Moreau"
+          ],
+          "notes": "The user enjoys highly-rated dramas, crime films, romances, and romantic comedies, while avoiding poorly received comedies and sci-fi films.",
+          "source": "llm",
           "raw_likes": "My preferences lean towards highly-rated dramatic, crime, and romantic films. Examples of highly-rated films I appreciate include 'The Godfather', 'The English Patient', and 'Twelve Monkeys'. I also enjoy popular romantic comedies.",
           "raw_dislikes": "I generally do not select comedies of a low quality or science fiction films with poor reception, such as 'Down Periscope' and 'The Island of Dr. Moreau'."
         },
         "recommended": [
           "the+godfather+1972",
-          "twelve+2010",
           "the+english+patient+1996",
+          "twelve+2010",
           "twelve+monkeys+1995",
-          "roman+2006",
+          "g+2002",
           "the+godfather+part+ii+1974",
-          "dear+zachary+a+letter+to+a+son+about+his+father+2008",
-          "the+godfather+part+iii+1990"
+          "the+godfather+part+iii+1990",
+          "her+2013"
         ],
         "held_liked": [
           "austin+powers+international+man+of+mystery+1997",
@@ -106,22 +122,28 @@
           "disliked_genres": [
             "Horror"
           ],
-          "liked_titles": [],
-          "disliked_titles": [],
-          "notes": "heuristic_extractor",
-          "source": "heuristic",
+          "liked_titles": [
+            "Gone with the Wind",
+            "Sound of Music",
+            "Close Encounters"
+          ],
+          "disliked_titles": [
+            "Blair Witch Project"
+          ],
+          "notes": "The user enjoys classic dramas, historical films, musicals, and mild science fiction, but strictly dislikes horror.",
+          "source": "llm",
           "raw_likes": "For movies, I like drama and history. 'Gone with the Wind' is great. Also musicals like 'Sound of Music'. Science fiction is okay too, like 'Close Encounters'.",
           "raw_dislikes": "I do not like horror movies. Movies like 'Blair Witch Project' are not for me."
         },
         "recommended": [
           "gone+with+the+wind+1939",
           "the+wind+1928",
+          "o+2001",
           "close+encounters+of+the+third+kind+1977",
-          "the+history+of+future+folk+2012",
-          "high+school+musical+2+2007",
-          "american+history+x+1998",
-          "amadeus+1984",
-          "stranger+than+fiction+2006"
+          "the+sound+of+music+1965",
+          "m+1931",
+          "m+1951",
+          "wind+1992"
         ],
         "held_liked": [
           "erin+brockovich+2000",
@@ -134,26 +156,39 @@
         "dislikes": "What I usually skip? Anything super corny or predictable, like those Police Academy sequels or Twister. If a movie's just kinda 'meh' or a bad follow-up to some",
         "prefs": {
           "liked_genres": [
-            "Action",
+            "Adventure",
+            "Crime",
+            "Drama",
+            "History",
+            "Science Fiction",
             "War"
           ],
-          "disliked_genres": [],
-          "liked_titles": [],
-          "disliked_titles": [],
-          "notes": "heuristic_extractor",
-          "source": "heuristic",
+          "disliked_genres": [
+            "Comedy"
+          ],
+          "liked_titles": [
+            "Star Wars",
+            "Pulp Fiction",
+            "Forrest Gump"
+          ],
+          "disliked_titles": [
+            "Police Academy",
+            "Twister"
+          ],
+          "notes": "The user enjoys critically acclaimed blockbusters, historical dramas, and war films while avoiding corny comedies and predictable disaster movies.",
+          "source": "llm",
           "raw_likes": "So, yeah, I'm into the big hitters, you know? Like, the ones everyone talks about and are actually good. Star Wars, Pulp Fiction, Forrest Gump \u2013 totally my jam. Also dig historical stuff and war movies, the kind that are actually engaging, not just random action.",
           "raw_dislikes": "What I usually skip? Anything super corny or predictable, like those Police Academy sequels or Twister. If a movie's just kinda 'meh' or a bad follow-up to something great, I'm probably not gonna bother."
         },
         "recommended": [
+          "star+wars+1977",
           "pulp+fiction+1994",
           "forrest+gump+1994",
-          "star+wars+1977",
-          "the+one+2001",
-          "the+big+hit+1998",
-          "stand+by+for+action+1942",
-          "missing+in+action+2+the+beginning+1985",
-          "last+action+hero+1993"
+          "star+wars+episode+i+-+the+phantom+menace+1999",
+          "star+wars+episode+ii+-+attack+of+the+clones+2002",
+          "star+wars+episode+iii+-+revenge+of+the+sith+2005",
+          "r+2010",
+          "star+wars+the+clone+wars+2008"
         ],
         "held_liked": [
           "star+wars+1977",
@@ -166,18 +201,19 @@
         "dislikes": "Sci-fi animation.",
         "prefs": {
           "liked_genres": [
-            "Animation",
             "Family",
+            "Comedy",
+            "Animation",
             "Fantasy"
           ],
           "disliked_genres": [
-            "Animation",
-            "Science Fiction"
+            "Science Fiction",
+            "Animation"
           ],
           "liked_titles": [],
           "disliked_titles": [],
-          "notes": "heuristic_extractor",
-          "source": "heuristic",
+          "notes": "The user enjoys family-friendly comedies, animation, and fantasy, but dislikes animated science fiction.",
+          "source": "llm",
           "raw_likes": "Family comedies, animation, fantasy.",
           "raw_dislikes": "Sci-fi animation."
         },
@@ -185,11 +221,11 @@
           "addams+family+values+1993",
           "addams+family+reunion+1998",
           "the+family+man+2000",
-          "swiss+family+robinson+1960",
           "the+addams+family+1991",
-          "the+adventures+of+the+wilderness+family+1975",
           "a+muppet+family+christmas+1987",
-          "the+one+and+only_+genuine_+original+family+band+1968"
+          "les+tuche+2011",
+          "the+princess+bride+1987",
+          "babe+1995"
         ],
         "held_liked": [
           "a+goofy+movie+1995",
@@ -205,25 +241,32 @@
         "dislikes": "dont like slow drams or boring stuff.",
         "prefs": {
           "liked_genres": [
+            "Action",
+            "Thriller",
             "Science Fiction"
           ],
-          "disliked_genres": [],
-          "liked_titles": [],
+          "disliked_genres": [
+            "Drama"
+          ],
+          "liked_titles": [
+            "The Fugitive",
+            "Terminator 2: Judgment Day"
+          ],
           "disliked_titles": [],
-          "notes": "heuristic_extractor",
-          "source": "heuristic",
+          "notes": "The user prefers popular, fast-paced action, thriller, and sci-fi movies while disliking slow dramas.",
+          "source": "llm",
           "raw_likes": "i like acton and thirller movis sci-fi to. the populr ones like fugitive and t2.",
           "raw_dislikes": "dont like slow drams or boring stuff."
         },
         "recommended": [
+          "terminator+2+judgment+day+1991",
           "the+fugitive+1993",
-          "i+am+a+fugitive+from+a+chain+gang+1932",
-          "fugitive+pieces+2007",
-          "the+fugitive+kind+1960",
-          "little+fugitive+1953",
+          "g+2002",
           "zatichi+the+fugitive+1963",
-          "they+made+me+a+fugitive+1947",
-          "the+fugitive+1947"
+          "the+fugitive+kind+1960",
+          "the+fugitive+1947",
+          "it+1927",
+          "aliens+1986"
         ],
         "held_liked": [
           "american+psycho+2000",
@@ -236,7 +279,11 @@
         ]
       }
     ],
-    "note": "Ground truth is movies this user actually scored >= 7. History is hidden; only the signup self-description is used."
+    "note": "Ground truth is movies this user actually scored >= 7. History is hidden; only the signup self-description is used. When I2_COLD_START_RERANK=0, ranking uses LLM extract + catalog scorer."
+  },
+  "llm": {
+    "used_llm_api": true,
+    "model_env": "gemini-3.5-flash-lite"
   },
   "recommended_for_deployment": "collaborative",
   "deployment_rationale": "collaborative has the higher NDCG@20 on the chronological hold-out among the two personalized approaches."
