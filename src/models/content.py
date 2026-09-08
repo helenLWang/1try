@@ -1,11 +1,13 @@
 """Content-based filtering with TF-IDF movie documents.
 
-Each movie is a bag of words from title, genres, tagline, and overview.
-A user's profile is the score-weighted average of the movies they already
-interacted with. Recommendations are nearest movies in that TF-IDF space.
+Each movie is a bag of words from genres, tagline, and overview (titles are
+omitted so rare proper nouns do not dominate). A user's profile is the
+score-weighted average of movies they already interacted with.
+Recommendations are nearest movies in that TF-IDF space, mixed with a small
+popularity prior.
 
-This never uses other users' behavior, so it is substantively different from
-collaborative filtering and can recommend long-tail titles that CF ignores.
+This never uses other users' pairwise behavior, so it is substantively
+different from collaborative filtering.
 """
 
 from __future__ import annotations

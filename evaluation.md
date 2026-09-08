@@ -31,4 +31,13 @@ We score 400 random test users (seed 42). Popularity (`count × mean score`) is 
 
 **Demonstration.** The scorer surfaces titles the user named: user 9375 → *The Godfather* / *The English Patient* / *Twelve Monkeys*; user 12502 → *Gone with the Wind* / *Close Encounters*; user 12943 → *Star Wars*, *Pulp Fiction*, *Forrest Gump* (and *Star Wars* was in that user’s held likes). Signup prose is not the same as later high ratings (e.g. Godfather fan whose held likes include *Happy Gilmore*), so popularity wins accidental overlap. Qualitative match to the text is the intended small-scale check.
 
-**Repeat.** Tunnel, collect, `python -m src.evaluate`. Add `api.key` for the LLM; `--no-llm` forces the heuristic.
+**Repeat.** Start the tunnel, then:
+
+```bash
+python -m src.collect --max-events 5000000 --windows 12
+python -m src.train
+python -m src.evaluate --max-users 400 --cold-start-users 40
+```
+
+Put a key in `api.key` so cold-start uses the LLM; add `--no-llm` to force
+the heuristic extractor.

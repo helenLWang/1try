@@ -30,8 +30,8 @@ class _Maps:
     idx_to_movie: list[str]
 
 
-class CollaborativeSVD:
-    """Item–item collaborative filter (class name kept for train.py imports)."""
+class CollaborativeItemCF:
+    """Item–item collaborative filter."""
 
     def __init__(
         self,
@@ -50,7 +50,7 @@ class CollaborativeSVD:
         self.seen: dict[int, set[str]] = {}
         self.popularity_order: list[str] = []
 
-    def fit(self, interactions: pd.DataFrame) -> "CollaborativeSVD":
+    def fit(self, interactions: pd.DataFrame) -> "CollaborativeItemCF":
         user_counts = interactions.groupby("user_id").size()
         movie_counts = interactions.groupby("movie_id").size()
         keep_users = set(user_counts[user_counts >= self.min_user].index)
@@ -153,3 +153,7 @@ class CollaborativeSVD:
                 if len(out) >= k:
                     break
         return out
+
+
+# Alias kept so older pickles / imports still resolve.
+CollaborativeSVD = CollaborativeItemCF

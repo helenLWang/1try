@@ -20,7 +20,7 @@
       "precision": 0.0005,
       "recall": 0.008333333333333333,
       "ndcg": 0.0033915764696034025,
-      "elapsed_s": 0.23,
+      "elapsed_s": 0.22,
       "k": 20
     },
     "popularity": {
@@ -52,7 +52,7 @@
       "recall": 0.1244047619047619,
       "ndcg": 0.06818727864422622
     },
-    "elapsed_s": 3.23,
+    "elapsed_s": 3.22,
     "examples": [
       {
         "user_id": 9375,

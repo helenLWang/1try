@@ -28,7 +28,7 @@ from src.config import (
     TRAIN_LOG_PATH,
 )
 from src.dataset import build_interactions, load_movies, load_users, time_split
-from src.models.collaborative import CollaborativeSVD
+from src.models.collaborative import CollaborativeItemCF
 from src.models.content import ContentTfidfRecommender
 from src.models.popularity import PopularityRecommender
 from src.models.cold_start import ColdStartRecommender
@@ -61,7 +61,7 @@ def train(full_data: bool = False) -> dict:
             interactions, TEST_HOLD_FRACTION, MIN_INTERACTIONS_FOR_SPLIT
         )
 
-    cf = CollaborativeSVD().fit(train_df)
+    cf = CollaborativeItemCF().fit(train_df)
     content = ContentTfidfRecommender().fit(train_df, movies)
     popularity = PopularityRecommender().fit(train_df)
     cold = ColdStartRecommender(prefer_llm=True).fit(train_df, movies, users)

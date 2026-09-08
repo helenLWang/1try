@@ -10,7 +10,7 @@
   "test_hold_fraction": 0.2,
   "min_interactions_for_split": 2,
   "top_k": 20,
-  "fitted_at": "2026-09-08T15:11:48.413684+00:00",
+  "fitted_at": "2026-09-08T18:29:55.462797+00:00",
   "model_path": "/workspace/artifacts/models/recommenders.joblib",
   "n_train_rows": 99708,
   "n_test_rows": 22408,
@@ -20,6 +20,6 @@
   "n_cf_movies": 5338,
   "n_content_movies": 17404,
   "n_users_with_self_desc": 62775,
-  "elapsed_s": 39.35,
+  "elapsed_s": 35.39,
   "full_data": false
 }

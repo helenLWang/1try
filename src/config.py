@@ -72,9 +72,9 @@ MIN_INTERACTIONS_FOR_SPLIT = 2
 TOP_K = 20
 
 # ---------------------------------------------------------------------------
-# Collaborative filtering (Truncated SVD on biased residuals)
+# Collaborative filtering (item–item cosine)
 # ---------------------------------------------------------------------------
-CF_N_COMPONENTS = 50
+CF_N_COMPONENTS = 50  # recorded in train_log only; item–item CF does not use it
 CF_MIN_USER_INTERACTIONS = 2
 CF_MIN_MOVIE_INTERACTIONS = 2
 

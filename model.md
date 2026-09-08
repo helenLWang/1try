@@ -11,7 +11,8 @@ but a **single tail slice is only a few hours of traffic**, so almost every
 user has one movie. By default we therefore read about 5 million messages
 from **12 slices spaced across the retained offsets** (each slice also has a
 45-second time budget so a cold Kafka segment cannot stall the job). The
-evaluation run scanned 4.94M lines spanning 2026-07-17 through 2026-09-08.
+evaluation run scanned 4.94M lines spanning 2026-07-17 through 2026-09-08
+(counts and offsets: `data/collection_meta.json`).
 
 We parse three record types in `src/parse.py`:
 

@@ -31,7 +31,7 @@ def recommend(
 
     name = model_name.lower()
     if name == "auto":
-        # Existing users with a CF latent vector use SVD; everyone else uses
+        # Existing users in the CF matrix use item–item CF; everyone else uses
         # the LLM cold-start (or popularity if they also have no description).
         if cf.maps and int(user_id) in cf.maps.user_to_idx:
             name = "collaborative"
