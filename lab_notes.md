@@ -1,2 +1,3 @@
 # Lab 3 notes
-Author: feature-b
+Authors: feature-a and feature-b
+Resolved by keeping both branch authors after the same-line conflict.
