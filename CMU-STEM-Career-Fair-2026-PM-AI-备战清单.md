@@ -2,8 +2,61 @@
 
 > **求职目标：** PM / APM / TPM、AI Product/Strategy、Digital Transformation **实习生**  
 > **活动：** STEM Career Fair 2026（Handshake 公开 163 家）  
-> **实测日期：** 2026-09-13  
-> **数据源：** Handshake 展商 JSON、Greenhouse / Ashby / Lever / BambooHR 职位 API、官网 JD HTTP 状态、DOL H-1B LCA 公开记录（MyVisaJobs / Ellis / bluedoor）
+> **实测日期：** 2026-09-13；**场次按 2026-09-15 当天 Handshake 刷新**  
+> **数据源：** Handshake 展商 JSON（`attending_career_fair_sessions`）、Greenhouse / Ashby / Lever / BambooHR、官网 JD、DOL H-1B LCA
+
+---
+
+## 第一天（9/15 STEM Plus，12:00–18:00）——用实测 A 表卡场次
+
+Handshake 场次 ID `74615`。**不要用 `career_fair_sessions_count=3` 猜天数**，那一列几乎全是 3，和实际出席对不上。
+
+第一天 STEM Plus 共 **76 家**，大量是土木/制造/国防/半导体工艺，不是 PM/AI 目标。下面只用上次实测过关的名单来卡。
+
+### 结论：A 表 7 家里，第一天只有 Eudia
+
+| 实测 A 表公司 | 第一天在不在 | Handshake 场次 | 历史上能 sponsor？ | 今天怎么走 |
+|---|---|---|---|---|
+| **Eudia** | **在（只来第一天）** | D1 | 能。Cicero/Eudia FY25 约 16 份 LCA，含 Technical PM / AI Engineer | **今天唯一必排队。** Product Intern + AI Engineer Intern 都还在。 |
+| Databricks | **不在** | D2 + D3 | 能（大规模） | 明天/后天 |
+| C3 AI | **不在** | D2 | 能 | 明天 |
+| Mujin | **不在** | D2 | 能 | 明天 |
+| Formlabs | **不在** | D2 | 能 | 明天 |
+| Phonic | **不在** | D2 | 很薄 | 明天 |
+| Simbe Robotics | **不在** | D2 | 能（量小） | 明天。9/13 缓存曾误显示 D1，**9/15 刷新是 D2**。 |
+
+### 第一天还值得停一下（历史上会 sponsor，但不是「现在就能投的 Product intern」）
+
+| 公司 | 场次 | Handshake | 实测 | 建议 |
+|---|---|---|---|---|
+| **BCG X** | D1 + D2 | OPT=True，*willing to sponsor* | 美国 2027 FDE intern 直链没打开；欧洲帖多为 filled。BCG 历史上大量 H-1B | 问美国 FDE intern 还开不开；简历可留，别当成已开帖。 |
+| **Expedia Group** | 只 D1 | OPT=True，*willing to sponsor* | 2027 PM intern 没打开；H-1B 大户 | 问 PM intern 窗口。 |
+| **Klaviyo** | D1 + D2 | OPT=True，*willing to sponsor* | 公开板 intern=0；有全职 PM/AI | 问 2027 intern 何时上板。 |
+| **AppLovin** | 只 D1 | OPT=True，*willing to sponsor* | 2027 intern **只在新加坡** | 除非接受新加坡，否则当工程/海外岗。 |
+
+### 第一天看起来像、但不要当 sponsor 目标
+
+Handshake 可能写 *willing to sponsor*，**JD 否决**：
+
+| 公司 | 场次 | 为什么剔除 |
+|---|---|---|
+| **Capital One** | 只 D1 | Product intern JD：**不支持 CPT/OPT/H-1B** |
+| **PwC Advisory** | 只 D1 | 校园政策：**不招现在或将来需要 H-1B lottery 的 entry-level** |
+| **MathWorks** | 只 D1 | intern JD：须 unrestricted work auth，不提供签证赞助 |
+| **P&G** | 只 D1 | IT Product Manager intern JD：Immigration Sponsorship is not available；Handshake 不收 OPT |
+| **Accenture** | 只 D1 | Handshake 不收 OPT；NA 校园 JD 现在或将来不赞助 |
+| **Epic** | D1 + D2 | Handshake 不收 OPT |
+| **Parker Hannifin** | 只 D1 | Digital & IT LDA；Handshake 不收 OPT |
+| **GE Vernova** | D1 + D2 | Handshake 不收 OPT |
+
+### 第一天现场顺序（PM/AI intern + 能 sponsor）
+
+1. **Eudia**（唯一过三道门）  
+2. **BCG X**（问美国循环）  
+3. **Expedia / Klaviyo**（问 2027 intern 开放日）  
+4. 其余第一天展台：不是这个目标，别耗排队时间
+
+Databricks、C3、Mujin、Formlabs、Simbe、Phonic、Google、Stripe、Brain Co：**今天都不在。**
 
 ---
 
