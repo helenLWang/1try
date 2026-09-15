@@ -7,56 +7,54 @@
 
 ---
 
-## 第一天（9/15 STEM Plus，12:00–18:00）——用实测 A 表卡场次
+## 第一天（9/15 STEM Plus，12:00–18:00）——放宽后再交叉检查
 
-Handshake 场次 ID `74615`。**不要用 `career_fair_sessions_count=3` 猜天数**，那一列几乎全是 3，和实际出席对不上。
+口径改成：**只要有 AI / Digital / Transformation / Product / Business 岗（实习或全职都算）+ 历史上能 sponsor**，就值得去。不再只用「美国 Product intern 帖 HTTP 200」。
 
-第一天 STEM Plus 共 **76 家**，大量是土木/制造/国防/半导体工艺，不是 PM/AI 目标。下面只用上次实测过关的名单来卡。
+Handshake 场次 ID `74615`。第一天共 **76 家**。土木/制造/国防/半导体工艺仍占多数，那些不算。
 
-### 结论：A 表 7 家里，第一天只有 Eudia
+### 结论：值得去 **6 家**（5 家主攻 + 1 家顺路确认签证）
 
-| 实测 A 表公司 | 第一天在不在 | Handshake 场次 | 历史上能 sponsor？ | 今天怎么走 |
-|---|---|---|---|---|
-| **Eudia** | **在（只来第一天）** | D1 | 能。Cicero/Eudia FY25 约 16 份 LCA，含 Technical PM / AI Engineer | **今天唯一必排队。** Product Intern + AI Engineer Intern 都还在。 |
-| Databricks | **不在** | D2 + D3 | 能（大规模） | 明天/后天 |
-| C3 AI | **不在** | D2 | 能 | 明天 |
-| Mujin | **不在** | D2 | 能 | 明天 |
-| Formlabs | **不在** | D2 | 能 | 明天 |
-| Phonic | **不在** | D2 | 很薄 | 明天 |
-| Simbe Robotics | **不在** | D2 | 能（量小） | 明天。9/13 缓存曾误显示 D1，**9/15 刷新是 D2**。 |
+上次说「只有 Eudia」是把标准收成「现在就能投的美国 Product intern」。按现在的口径，**不是 1 家。**
 
-### 第一天还值得停一下（历史上会 sponsor，但不是「现在就能投的 Product intern」）
+| # | 公司 | 场次 | 对口岗位（实测） | Sponsor | 今天怎么走 |
+|---|---|---|---|---|---|
+| 1 | **Eudia** | 只 D1 | **Product Intern**、**AI Engineer Intern** 都在；还有 FT Product Manager、FDE、Business Lead | 能。Cicero/Eudia FY25 约 16 份 LCA，含 Technical PM / AI Engineer。Handshake *willing to sponsor* | **第一优先级。** https://job-boards.greenhouse.io/eudia/jobs/4379570009 |
+| 2 | **BCG X** | D1 + D2 | Handshake：**Forward Deployed AI Scientist / Engineer**（Job + Internship） | 能。BCG 历史上大量 H-1B。Handshake OPT=True，*willing to sponsor* | **第二优先级。** Digital/AI transformation 本场最对口的咨询台。美国 intern 直链不稳定，展台问美国循环。 |
+| 3 | **Expedia Group Early Careers** | 只 D1 | 产品公司校招；往年有 PM intern；官网 Emerging Talent 含 Product Management 轨 | 能。Handshake *willing to sponsor*；Expedia 有 H-1B（含 PM） | **第三。** 问 2027 PM / digital intern 窗口，留简历。 |
+| 4 | **Klaviyo** | D1 + D2 | Handshake 挂 SWE / **AI Engineer / ML Engineer**（实习类型）。Greenhouse 现有大量美国 **PM**（含 AI Analytics、ML Platform）和 Applied AI 全职 | 能。FY25 约 48 份 LCA，累计约 159–183 | **第四。** intern 帖此刻没挂，但 AI/Product 岗和 sponsor 都成立。问校园 intern。 |
+| 5 | **AppLovin** | 只 D1 | Greenhouse 现有 **Product Management Intern 2027（新加坡）**、ML intern（新加坡）；美国有 Growth Analyst（Palo Alto）、BD Associate（NY/LA）、ML Engineer（Palo Alto） | 能。约 147 份 LCA，含 Product Manager / APM | **第五。** 问有没有美国 PM intern；不接受新加坡也可以投美国 Growth/BD/ML，或留简历。 |
+| 6 | **Avis Budget Group** | 只 D1 | Handshake 明文：**IT Product Intern、Transformation Engineer Intern、Commercial Strategy intern、Data Analytics intern**。官网有 FT Product Manager / Business Transformation | Handshake 只勾了 **收 OPT/CPT**，没勾 willing to sponsor。公司有过 H-1B（含 Data Scientist Intern LCA） | **顺路。** 岗位极对口，转正 sponsor 必须口头确认。 |
 
-| 公司 | 场次 | Handshake | 实测 | 建议 |
-|---|---|---|---|---|
-| **BCG X** | D1 + D2 | OPT=True，*willing to sponsor* | 美国 2027 FDE intern 直链没打开；欧洲帖多为 filled。BCG 历史上大量 H-1B | 问美国 FDE intern 还开不开；简历可留，别当成已开帖。 |
-| **Expedia Group** | 只 D1 | OPT=True，*willing to sponsor* | 2027 PM intern 没打开；H-1B 大户 | 问 PM intern 窗口。 |
-| **Klaviyo** | D1 + D2 | OPT=True，*willing to sponsor* | 公开板 intern=0；有全职 PM/AI | 问 2027 intern 何时上板。 |
-| **AppLovin** | 只 D1 | OPT=True，*willing to sponsor* | 2027 intern **只在新加坡** | 除非接受新加坡，否则当工程/海外岗。 |
+### 第一天现场顺序
 
-### 第一天看起来像、但不要当 sponsor 目标
+1. Eudia  
+2. BCG X  
+3. Expedia  
+4. Klaviyo  
+5. AppLovin  
+6. Avis（先问：CPT 实习转全职会不会交 H-1B）
 
-Handshake 可能写 *willing to sponsor*，**JD 否决**：
+这 6 家跑完，第一天 PM/AI/Digital/Business + sponsor 的目标就够了。Databricks / C3 / Mujin / Formlabs / Simbe / Google / Stripe：**今天都不在。**
 
-| 公司 | 场次 | 为什么剔除 |
+### 岗位对口、但按 sponsor 仍不要排队
+
+这些**不是没有 Digital/Product 岗**，是签证过不了。
+
+| 公司 | 对口岗位 | 为什么不去 |
 |---|---|---|
-| **Capital One** | 只 D1 | Product intern JD：**不支持 CPT/OPT/H-1B** |
-| **PwC Advisory** | 只 D1 | 校园政策：**不招现在或将来需要 H-1B lottery 的 entry-level** |
-| **MathWorks** | 只 D1 | intern JD：须 unrestricted work auth，不提供签证赞助 |
-| **P&G** | 只 D1 | IT Product Manager intern JD：Immigration Sponsorship is not available；Handshake 不收 OPT |
-| **Accenture** | 只 D1 | Handshake 不收 OPT；NA 校园 JD 现在或将来不赞助 |
-| **Epic** | D1 + D2 | Handshake 不收 OPT |
-| **Parker Hannifin** | 只 D1 | Digital & IT LDA；Handshake 不收 OPT |
-| **GE Vernova** | D1 + D2 | Handshake 不收 OPT |
-
-### 第一天现场顺序（PM/AI intern + 能 sponsor）
-
-1. **Eudia**（唯一过三道门）  
-2. **BCG X**（问美国循环）  
-3. **Expedia / Klaviyo**（问 2027 intern 开放日）  
-4. 其余第一天展台：不是这个目标，别耗排队时间
-
-Databricks、C3、Mujin、Formlabs、Simbe、Phonic、Google、Stripe、Brain Co：**今天都不在。**
+| **Capital One** | APM / Product intern | JD：**不支持 CPT/OPT/H-1B**。Handshake 标 sponsor 是假信号。 |
+| **PwC Advisory** | Advisory intern（数字化/咨询） | 校园政策：**不招现在或将来需要 H-1B lottery 的人**。 |
+| **P&G** | IT Project & Product Manager、Digital Marketing Technology、Data & AI Engineering | Handshake 不收 OPT；JD：Immigration Sponsorship is not available。 |
+| **Merck** | **2027 Digital Transformation intern、IT Emerging Talent intern 是真的** | 校园 JD：须公民/绿卡或 **现在或将来都不需要 sponsorship**；VISA Sponsorship = No。 |
+| **Accenture** | Digital / AI 咨询 | Handshake 不收 OPT；NA 校园 JD 不赞助。 |
+| **Epic** | Project Manager | Handshake 不收 OPT。 |
+| **MathWorks** | 产品开发向 intern | Handshake 写 willing to sponsor，JD 要 unrestricted work auth。 |
+| **Parker Hannifin** | Digital & IT LDA | Handshake 不收 OPT。 |
+| **GE Vernova** | Digital intern | Handshake 不收 OPT。 |
+| **McMaster-Carr** | Management Track（business） | Handshake 不收 OPT。 |
+| **Chartwell / Wonder** | Consultant / Growth Analytics intern | Handshake 不收 OPT。 |
+| **Huaqin** | AI Engineer 海外校招 | 中国/海外岗，不是美国 H-1B。 |
 
 ---
 
@@ -111,7 +109,8 @@ AI intern：C3 DS、Eudia AI Eng、Formlabs AI Software、Phonic ML Research、S
 | **Gecko Robotics** | Internship；FDE / SWE / Mech / EE | 能找到的 intern 帖是 **Summer 2025 已关闭**。Lever slug 未扫到在招 intern。公司有 H-1B（含 FDE、ML、PM）。 |
 | **Instalily** | 未标 intern 类型；职称含 Strategic AI Partner | 在招 intern 是 **GTM-Operations Intern, Events**（活动运营）+ Toronto Co-op。Strategic Partner / Associate 是全职。不算 AI/Product intern。 |
 | **Persona / SingleStore** | 标了 Internship | Ashby/Greenhouse **intern = 0**。Handshake 空职称或只写 SWE intern，官网对不上。 |
-| **GM / Merck** | 标了 intern；Merck 收 OPT | 岗位栏 `None`。未能打开 Digital Product intern 直链。不要凭 Handshake 类型去排队。 |
+| **GM** | 标了 intern | 岗位栏 `None`。Digital Product intern 未证实。GM 是 D3。 |
+| **Merck** | 标了 intern；收 OPT/CPT | **2027 Digital Transformation / IT intern 是真的**，但校园 JD **不赞助签证**。第一天在，不要当 sponsor 目标。 |
 
 ---
 
@@ -122,7 +121,7 @@ AI intern：C3 DS、Eudia AI Eng、Formlabs AI Software、Phonic ML Research、S
 | **Stripe** | [SWE Intern US（SF/Seattle/NYC）HTTP 200](https://stripe.com/jobs/listing/software-engineer-intern-summer-or-winter/8128745) | 工程实习。Greenhouse 未见 Product intern。H-1B 大户。 |
 | **The Trade Desk** | Greenhouse intern 帖 [HTTP 200](https://job-boards.greenhouse.io/thetradedesk/jobs/5187605007)（careers 子域那条 404） | **2027 NA Software Engineering Internship**，不是 PM intern。 |
 | **Whatnot** | Handshake：SWE Intern / New Grad | 未在公开职位 API 扫到 PM intern。 |
-| **AppLovin** | 2027 Backend/Mobile intern **仅新加坡** | 不是美国岗。 |
+| **AppLovin** | 2027 **PM intern + ML intern 在新加坡**；美国有 Growth Analyst / BD / ML 全职 | 美国实习帖不是 PM；公司本身算第一天值得去（见文首）。 |
 | **Toast** | SWE Intern **仅都柏林** | 不是美国岗。Handshake 仍写 SWE Intern，容易误判。 |
 
 ---
@@ -161,11 +160,10 @@ AI intern：C3 DS、Eudia AI Eng、Formlabs AI Software、Phonic ML Research、S
 
 ## 展台怎么走（按证据，不是按 28 家主表）
 
-- **必排队（能投 + 对口）：** Databricks、Eudia。C3 问 DS intern 转 Product/FDE 的路径。  
-- **对口但学期/地点要自己接受：** Mujin（春季、佐治亚）、Formlabs（冬春、波士顿）、Simbe（CV intern，9/21 前投 Handshake）。  
-- **问「2027 帖哪天开」，不要假装已开：** Google、Plaid、Glean、Klaviyo、Expedia、T-Mobile、Rocket、Brain Co、BCG X。  
-- **不要为 PM intern 排长队：** Stripe / Trade Desk / Whatnot / AppLovin / Toast（只有工程实习或海外实习）。  
-- **签证口头练一下即可、不要投：** Capital One、ZS、PwC、P&G、IBM、Red Ventures。
+- **D1 今天：** 主攻 **Eudia、BCG X、Expedia、Klaviyo、AppLovin**；顺路 **Avis**（先问 H-1B）。Capital One / PwC / P&G / Merck / Accenture 岗位对口但不 sponsor。Databricks 今天不在。  
+- **D2 明天：** Databricks、C3、Mujin、Formlabs、Simbe、Phonic、Brain Co、Stripe、Glean、ZS（JD 不赞助）、Gecko。  
+- **D3 后天：** Databricks 还在；Google、Intuit、Plaid、T-Mobile、Toast、Whatnot/Trade Desk 不在 D3（Whatnot/TTD 是 D2）。  
+- **不要为 PM intern 排长队：** Stripe / Trade Desk / Whatnot / AppLovin / Toast（只有工程实习或海外实习）。
 
 ---
 
@@ -185,7 +183,8 @@ AI intern：C3 DS、Eudia AI Eng、Formlabs AI Software、Phonic ML Research、S
 | 主表约 28 家都有匹配实习 | 多数是 Handshake 类型/历史管道，**官网没有对应 intern 帖** |
 | ZS / PwC 可走 F-1 | 校园 JD：**这条实习不赞助 / 不招需要 H-1B lottery 的人** |
 | Brain Co、Klaviyo、Glean、Plaid 在招 intern | Brain Co / Klaviyo / Glean / Plaid 公开板 **intern = 0** |
-| Stripe / Toast / AppLovin / Trade Desk 算 Product intern | 只有 **SWE intern**，Toast/AppLovin 还不是美国岗 |
+| Stripe / Toast / Trade Desk 算 Product intern | 只有 **SWE intern**；Toast 还不是美国岗 |
+| 第一天只有 Eudia | 放宽到 AI/Digital/Product/Business + sponsor 后是 **6 家**（Eudia、BCG X、Expedia、Klaviyo、AppLovin、Avis） |
 | T-Mobile / Rocket / Expedia 可投 PM intern | 实习枢纽无开放角色，或 careers 无法打开 2027 帖 |
 
 实习几乎从不直接 sponsor H-1B。上表「能 sponsor」= **公司历史上交过 LCA，且这条实习 JD 没把 F-1 转正路堵死。**
