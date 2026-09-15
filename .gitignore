@@ -1,0 +1,10 @@
+.env
+api.key
+*.pem
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+workspace/llm_raw/

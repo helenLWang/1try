@@ -1,0 +1,70 @@
+{
+  "approved": true,
+  "instructions": "Candidate ranking only. The four items in key_results.md were chosen by a human and are not automatically the top four of this list.",
+  "ranking": [
+    {
+      "req_id": "R-S02-1",
+      "severity": 5,
+      "plausibility": 5,
+      "easy_to_miss": 5,
+      "surprising": true,
+      "rationale": "Mission REQ; dies on connectivity even if the model is perfect."
+    },
+    {
+      "req_id": "R-S09-1",
+      "severity": 5,
+      "plausibility": 4,
+      "easy_to_miss": 5,
+      "surprising": true,
+      "rationale": "Recall-first design causes police contact with the wrong child."
+    },
+    {
+      "req_id": "R-S08-1",
+      "severity": 4,
+      "plausibility": 5,
+      "easy_to_miss": 5,
+      "surprising": true,
+      "rationale": "One-to-one matching still builds a biometric pipeline over bystanders."
+    },
+    {
+      "req_id": "R-S01-6",
+      "severity": 4,
+      "plausibility": 4,
+      "easy_to_miss": 5,
+      "surprising": true,
+      "rationale": "Unsettled authorization turns search-ids into a location oracle."
+    },
+    {
+      "req_id": "R-S02-5",
+      "severity": 5,
+      "plausibility": 5,
+      "easy_to_miss": 4,
+      "surprising": true,
+      "rationale": "Adult face stack is the wrong domain for missing children."
+    },
+    {
+      "req_id": "R-S04-4",
+      "severity": 4,
+      "plausibility": 4,
+      "easy_to_miss": 4,
+      "surprising": false,
+      "rationale": "Purpose creep once the camera network exists."
+    },
+    {
+      "req_id": "R-S11-1",
+      "severity": 3,
+      "plausibility": 4,
+      "easy_to_miss": 5,
+      "surprising": true,
+      "rationale": "Edge kiosks become checkpoints unless frozen as offload-only."
+    },
+    {
+      "req_id": "R-S01-3",
+      "severity": 5,
+      "plausibility": 3,
+      "easy_to_miss": 3,
+      "surprising": false,
+      "rationale": "Driver prompts are an OEM-killer; easier to notice than connectivity."
+    }
+  ]
+}

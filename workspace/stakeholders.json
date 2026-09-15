@@ -1,0 +1,115 @@
+{
+  "approved": true,
+  "instructions": "Human-reviewed list used for the submitted report.",
+  "system": "ChildFind Dashcam Search",
+  "stakeholders": [
+    {
+      "id": "S01",
+      "name": "Dashcam owner / driver",
+      "kind": "direct",
+      "description": "Person who bought or was given the dashcam and whose car generates footage.",
+      "why_included": "They control power, pairing, opt-in, and are the first privacy surface.",
+      "power": "medium",
+      "vulnerability": "medium"
+    },
+    {
+      "id": "S02",
+      "name": "Missing child (search subject)",
+      "kind": "indirect",
+      "description": "The child the authorized search is trying to locate.",
+      "why_included": "The system's stated beneficiary; harms to them are the point of safety analysis.",
+      "power": "low",
+      "vulnerability": "high"
+    },
+    {
+      "id": "S03",
+      "name": "Parent / guardian of the missing child",
+      "kind": "indirect",
+      "description": "Family coordinating with the non-profit and authorities.",
+      "why_included": "They live with false hope, delays, and leakage of family information.",
+      "power": "medium",
+      "vulnerability": "high"
+    },
+    {
+      "id": "S04",
+      "name": "Law enforcement / coordinating authorities",
+      "kind": "direct",
+      "description": "Officers and dispatchers who issue searches and act on sightings.",
+      "why_included": "They are the actuator that turns a report into a real-world intervention.",
+      "power": "high",
+      "vulnerability": "medium"
+    },
+    {
+      "id": "S05",
+      "name": "Child-safety non-profit",
+      "kind": "direct",
+      "description": "Partner that coordinates searches and public trust around child recovery.",
+      "why_included": "They hold the mission and the photo pipeline; a scandal ends the feature.",
+      "power": "high",
+      "vulnerability": "medium"
+    },
+    {
+      "id": "S06",
+      "name": "Automotive OEM",
+      "kind": "direct",
+      "description": "Car manufacturer that may factory-install the dashcam.",
+      "why_included": "OEM contracts are the company's growth path and a vehicle-safety liability path.",
+      "power": "high",
+      "vulnerability": "low"
+    },
+    {
+      "id": "S07",
+      "name": "Person-recognition contractor",
+      "kind": "direct",
+      "description": "Vendor that supplies and helps fine-tune the person/face recognition stack.",
+      "why_included": "Their model is the ML component; their cloud/on-device choices change the threat model.",
+      "power": "medium",
+      "vulnerability": "low"
+    },
+    {
+      "id": "S08",
+      "name": "Bystander / other road user",
+      "kind": "indirect",
+      "description": "Pedestrians, other drivers, and passengers whose faces appear in footage.",
+      "why_included": "Most faces the model will ever see are not missing children; they bear biometric risk.",
+      "power": "low",
+      "vulnerability": "high"
+    },
+    {
+      "id": "S09",
+      "name": "Innocent lookalike child and caregiver",
+      "kind": "indirect",
+      "description": "A child or adult who resembles the search photo, and the adult with them.",
+      "why_included": "False positives cause police contact, which is a different harm than a miss.",
+      "power": "low",
+      "vulnerability": "high"
+    },
+    {
+      "id": "S10",
+      "name": "Privacy regulator / data-protection authority",
+      "kind": "indirect",
+      "description": "Agency enforcing biometric, children's-data, and purpose-limitation rules.",
+      "why_included": "Unlawful processing can shut the product down regardless of detection accuracy.",
+      "power": "high",
+      "vulnerability": "low"
+    },
+    {
+      "id": "S11",
+      "name": "Gas-station / edge-kiosk partner",
+      "kind": "direct",
+      "description": "Business hosting drop-off or inference hardware that management wants to explore.",
+      "why_included": "The scenario explicitly invites edge computing; it creates a new surveillance place.",
+      "power": "medium",
+      "vulnerability": "medium"
+    },
+    {
+      "id": "S12",
+      "name": "Rideshare / fleet driver",
+      "kind": "direct",
+      "description": "Driver whose vehicle is a workplace and who may be required to keep the dashcam on.",
+      "why_included": "Passengers did not buy the dashcam; employment pressure changes opt-in assumptions.",
+      "power": "low",
+      "vulnerability": "high"
+    }
+  ]
+}

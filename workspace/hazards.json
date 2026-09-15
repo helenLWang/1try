@@ -1,0 +1,783 @@
+{
+  "approved": true,
+  "instructions": "Human-reviewed losses/REQs. Wording tightened to world-level REQs.",
+  "analyses": [
+    {
+      "stakeholder_id": "S01",
+      "values": [
+        "privacy of their own driving record",
+        "affordable operation",
+        "undistracted driving",
+        "agency over the device"
+      ],
+      "goals": [
+        {
+          "id": "G-S01-1",
+          "text": "Keep the dashcam useful as accident evidence without turning the car into a public search node",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S01-2",
+          "text": "Avoid surprise cost, crash risk, or legal blowback from ChildFind",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S01-1",
+          "goal_id": "G-S01-1",
+          "loss": "The owner's everyday driving video and face embeddings are retained or reused after an authorized search ends.",
+          "req_id": "R-S01-1",
+          "req": "After an authorized search expires, people and vehicles recorded by the owner's dashcam are not identifiable from anything retained for ChildFind.",
+          "harm_note": "Primary product promise of the dashcam is private evidence, not a biometric database."
+        },
+        {
+          "id": "L-S01-2",
+          "goal_id": "G-S01-2",
+          "loss": "The owner receives an unexpected cellular bill because ChildFind uploaded video through their phone.",
+          "req_id": "R-S01-2",
+          "req": "The owner is not billed for cellular data used by ChildFind beyond a limit they accepted in advance.",
+          "harm_note": "Data-charge fear is named in the scenario and will drive silent opt-out."
+        },
+        {
+          "id": "L-S01-3",
+          "goal_id": "G-S01-2",
+          "loss": "A ChildFind match notification distracts the driver and contributes to a crash.",
+          "req_id": "R-S01-3",
+          "req": "While the vehicle is moving, the driver is not prompted to inspect a possible-match image.",
+          "harm_note": "Driving safety dominates child-search UX; a crash makes the feature indefensible to OEMs."
+        },
+        {
+          "id": "L-S01-4",
+          "goal_id": "G-S01-2",
+          "loss": "After a child is found near the owner's route, the owner is blamed or sued for not reporting.",
+          "req_id": "R-S01-4",
+          "req": "An owner who had the device powered and enrolled is not treated as having a personal duty to have noticed the child.",
+          "harm_note": "Legal duty-to-rescue confusion will chill adoption."
+        },
+        {
+          "id": "L-S01-5",
+          "goal_id": "G-S01-1",
+          "loss": "Always-on matching drains the battery or fills storage so the dashcam is dead when a crash happens.",
+          "req_id": "R-S01-5",
+          "req": "The dashcam continues to record a crash loop even when a ChildFind search is active.",
+          "harm_note": "The product's original job is crash evidence; cannibalizing it is an organizational own-goal."
+        },
+        {
+          "id": "L-S01-6",
+          "goal_id": "G-S01-1",
+          "loss": "Someone uses a fake 'missing child' enrollment to reconstruct the owner's routine from sighting metadata.",
+          "req_id": "R-S01-6",
+          "req": "A person who is not the subject of a bona fide, authority-backed search cannot obtain a trail of where the owner's car has been.",
+          "harm_note": "The search channel is a location oracle if authorization is weak."
+        }
+      ]
+    },
+    {
+      "stakeholder_id": "S02",
+      "values": [
+        "physical safety",
+        "speed of recovery",
+        "dignity after recovery"
+      ],
+      "goals": [
+        {
+          "id": "G-S02-1",
+          "text": "Be found while still in the area where a participating camera saw them",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S02-2",
+          "text": "Not be further harmed by how the search is conducted or publicized",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S02-1",
+          "goal_id": "G-S02-1",
+          "loss": "The child remains missing even though they walked through a participating camera's view.",
+          "req_id": "R-S02-1",
+          "req": "If a missing child is physically visible in the field of view of a participating dashcam during an authorized search, the coordinating law-enforcement unit learns of that co-location while the child is still in the same local area.",
+          "harm_note": "This is the core mission requirement; it depends on the ML model and on radios the dashcam does not have."
+        },
+        {
+          "id": "L-S02-2",
+          "goal_id": "G-S02-2",
+          "loss": "A public or in-app alert warns an abductor, who relocates the child before officers arrive.",
+          "req_id": "R-S02-2",
+          "req": "An abductor traveling with the child does not receive a real-time notice that a nearby camera just matched the child.",
+          "harm_note": "Faster reports help authorities only if they are not also faster reports to the offender."
+        },
+        {
+          "id": "L-S02-3",
+          "goal_id": "G-S02-2",
+          "loss": "The recovered child is filmed, identified, and the still circulates on social media.",
+          "req_id": "R-S02-3",
+          "req": "After recovery, the child's face from ChildFind stills is not available to the general public.",
+          "harm_note": "Rescue can become a second victimization."
+        },
+        {
+          "id": "L-S02-4",
+          "goal_id": "G-S02-1",
+          "loss": "Search resources chase a lookalike while the actual child is moved elsewhere.",
+          "req_id": "R-S02-4",
+          "req": "A false sighting does not cause the only available officers in the true vicinity to leave that vicinity.",
+          "harm_note": "False positives are not a victimless precision metric; they steal time from the child."
+        },
+        {
+          "id": "L-S02-5",
+          "goal_id": "G-S02-1",
+          "loss": "The child is in view but disguised or too young for an adult-tuned face model, so no one looks at the frame.",
+          "req_id": "R-S02-5",
+          "req": "A missing young child who is visibly present and unoccluded in a participating camera's view is not overlooked solely because they are a small child rather than an adult.",
+          "harm_note": "Contractor expertise in distorted/low-light adult faces is the wrong domain."
+        },
+        {
+          "id": "L-S02-6",
+          "goal_id": "G-S02-2",
+          "loss": "The child's last known location is published so precisely that a dangerous guardian finds them first.",
+          "req_id": "R-S02-6",
+          "req": "A person who is a threat to the child does not obtain a live, meter-accurate location from ChildFind.",
+          "harm_note": "Custody and domestic-violence cases are common in missing-child reports."
+        }
+      ]
+    },
+    {
+      "stakeholder_id": "S03",
+      "values": [
+        "hope grounded in truth",
+        "speed",
+        "family privacy"
+      ],
+      "goals": [
+        {
+          "id": "G-S03-1",
+          "text": "Get timely, truthful information that helps recover the child",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S03-2",
+          "text": "Not have the family's other children or address exposed by the search",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S03-1",
+          "goal_id": "G-S03-1",
+          "loss": "Parents are told of 'possible sightings' that are not their child, then crash emotionally and stop trusting later true reports.",
+          "req_id": "R-S03-1",
+          "req": "Parents are not notified of a sighting unless the coordinating unit has judged it worth acting on.",
+          "harm_note": "Unfiltered model output is not a family communication channel."
+        },
+        {
+          "id": "L-S03-2",
+          "goal_id": "G-S03-1",
+          "loss": "A real nearby sighting sits in a queue while parents are told 'no new information'.",
+          "req_id": "R-S03-2",
+          "req": "When a sighting is judged actionable, the parents (or their designated liaison) hear about it before the information is stale.",
+          "harm_note": "Delay is a different failure from silence after a miss."
+        },
+        {
+          "id": "L-S03-3",
+          "goal_id": "G-S03-2",
+          "loss": "The search packet includes a home address and photos of siblings that then leak.",
+          "req_id": "R-S03-3",
+          "req": "Home address and images of children who are not the missing child do not leave the coordinating unit's custody.",
+          "harm_note": "Search packets are over-broad because intake copies the whole case file."
+        },
+        {
+          "id": "L-S03-4",
+          "goal_id": "G-S03-2",
+          "loss": "A sibling or the searching parent is matched as the 'abductor' or as the child and is detained.",
+          "req_id": "R-S03-4",
+          "req": "Family members who are with the missing child's siblings in public are not detained solely because a ChildFind score fired on a related face.",
+          "harm_note": "Related faces are a known failure mode of face systems."
+        },
+        {
+          "id": "L-S03-5",
+          "goal_id": "G-S03-1",
+          "loss": "The search is quietly ended because the non-profit is flooded, and parents are not told the network is no longer looking.",
+          "req_id": "R-S03-5",
+          "req": "Parents know whether participating cameras are still being asked to search for their child.",
+          "harm_note": "Operational degradation must be visible to the people who think a net is out there."
+        }
+      ]
+    },
+    {
+      "stakeholder_id": "S04",
+      "values": [
+        "effective recovery",
+        "lawful process",
+        "scarce officer time"
+      ],
+      "goals": [
+        {
+          "id": "G-S04-1",
+          "text": "Receive sightings that are timely, located, and worth sending a unit",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S04-2",
+          "text": "Not create an unlawful or indefensible search record",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S04-1",
+          "goal_id": "G-S04-1",
+          "loss": "Dispatch burns a shift on false pins and has no unit left for a later true pin.",
+          "req_id": "R-S04-1",
+          "req": "A ChildFind notice does not cause officers to abandon a higher-priority last-known area without a human decision.",
+          "harm_note": "The model must not be allowed to steer cars by itself."
+        },
+        {
+          "id": "L-S04-2",
+          "goal_id": "G-S04-1",
+          "loss": "A true sighting arrives hours later, after the child has left the area.",
+          "req_id": "R-S04-2",
+          "req": "When a participating camera had the child in view, dispatch has the notice while a search of that area can still succeed.",
+          "harm_note": "Connectivity, not just accuracy, sets whether 'faster is more useful' is true."
+        },
+        {
+          "id": "L-S04-3",
+          "goal_id": "G-S04-2",
+          "loss": "A stop or search based on ChildFind is thrown out, and the case is damaged.",
+          "req_id": "R-S04-3",
+          "req": "Officers acting on a ChildFind notice can show a lawful, purpose-limited, time-bounded authorization for that search-id.",
+          "harm_note": "Legal details are unsettled; the machine must still leave a paper trail."
+        },
+        {
+          "id": "L-S04-4",
+          "goal_id": "G-S04-2",
+          "loss": "The same pipeline is reused for shoplifting, immigration, or protest monitoring.",
+          "req_id": "R-S04-4",
+          "req": "Person matching on consumer dashcams is not applied to a purpose other than an authorized missing-child search.",
+          "harm_note": "Once the camera network exists, other agencies will ask."
+        },
+        {
+          "id": "L-S04-5",
+          "goal_id": "G-S04-1",
+          "loss": "Operators ignore the inbox because yesterday it was 400 low-quality stills.",
+          "req_id": "R-S04-5",
+          "req": "The coordinating unit's ChildFind inbox remains usable on a typical search day (on the order of the national Amber rate, not a continuous firehose).",
+          "harm_note": "Human attention is part of the environment the REQ depends on."
+        },
+        {
+          "id": "L-S04-6",
+          "goal_id": "G-S04-1",
+          "loss": "Traditional canvassing stops because 'the cameras would have seen them'.",
+          "req_id": "R-S04-6",
+          "req": "Investigators continue non-camera search activity even while ChildFind is active.",
+          "harm_note": "Automation complacency is an environmental/organizational failure."
+        }
+      ]
+    },
+    {
+      "stakeholder_id": "S05",
+      "values": [
+        "mission success",
+        "public trust",
+        "volunteer sustainability"
+      ],
+      "goals": [
+        {
+          "id": "G-S05-1",
+          "text": "Increase recoveries without becoming a surveillance brand",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S05-2",
+          "text": "Keep volunteers and donors engaged",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S05-1",
+          "goal_id": "G-S05-1",
+          "loss": "A privacy scandal ends the partnership and the search capability with it.",
+          "req_id": "R-S05-1",
+          "req": "Bystanders and families do not experience a ChildFind privacy incident that becomes public during the partnership.",
+          "harm_note": "Trust is the non-profit's actual capital."
+        },
+        {
+          "id": "L-S05-2",
+          "goal_id": "G-S05-2",
+          "loss": "Donors leave after a high-profile miss that is blamed on the non-profit 'using AI'.",
+          "req_id": "R-S05-2",
+          "req": "The public description of a miss does not claim that cameras covered a place they did not.",
+          "harm_note": "Overclaiming coverage is how AI partnerships die."
+        },
+        {
+          "id": "L-S05-3",
+          "goal_id": "G-S05-2",
+          "loss": "Volunteer reviewers quit because the queue is mostly not-the-child stills.",
+          "req_id": "R-S05-3",
+          "req": "Volunteer review load stays within a published per-search budget the non-profit accepted.",
+          "harm_note": "Human review is a mitigation for model errors; it can become the new hazard."
+        },
+        {
+          "id": "L-S05-4",
+          "goal_id": "G-S05-1",
+          "loss": "The company uses the non-profit's name to sell dashcams, then ships a weaker privacy mode than the partnership described.",
+          "req_id": "R-S05-4",
+          "req": "Devices advertised under the partnership actually run the same matching and retention rules the non-profit signed.",
+          "harm_note": "SKU fragmentation is how ethics agreements die."
+        },
+        {
+          "id": "L-S05-5",
+          "goal_id": "G-S05-1",
+          "loss": "Search photos of children circulate in volunteer Slack, press, or the contractor's demo reel.",
+          "req_id": "R-S05-5",
+          "req": "A child's search photo is not available to people outside the authorized search roles.",
+          "harm_note": "Distribution, not collection, is where most leaks happen."
+        }
+      ]
+    },
+    {
+      "stakeholder_id": "S06",
+      "values": [
+        "brand safety",
+        "vehicle safety regulation",
+        "warranty cost"
+      ],
+      "goals": [
+        {
+          "id": "G-S06-1",
+          "text": "Offer ChildFind as a differentiator without creating a recall",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S06-2",
+          "text": "Not be seen as shipping a mass-surveillance car",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S06-1",
+          "goal_id": "G-S06-1",
+          "loss": "A crash is attributed to a ChildFind prompt or to compute starving the vehicle electrical system.",
+          "req_id": "R-S06-1",
+          "req": "ChildFind does not present driving-relevant alerts to the driver and does not take the vehicle electrical system below the OEM's reserved budget.",
+          "harm_note": "NHTSA will not care that the ML model was accurate."
+        },
+        {
+          "id": "L-S06-2",
+          "goal_id": "G-S06-2",
+          "loss": "Press describes the car as a rolling face-recognition network; OEM cancels the SKU.",
+          "req_id": "R-S06-2",
+          "req": "Uninvolved people photographed by the car are not identified by name or persistent id as part of ChildFind.",
+          "harm_note": "OEM brand risk is mostly about bystanders, not about missing children."
+        },
+        {
+          "id": "L-S06-3",
+          "goal_id": "G-S06-1",
+          "loss": "Warranty returns spike because ChildFind overheats or bricks low-end units.",
+          "req_id": "R-S06-3",
+          "req": "Low-end hardware either performs matching within thermal limits or reports itself as non-participating rather than failing.",
+          "harm_note": "Heterogeneous compute is in the scenario."
+        },
+        {
+          "id": "L-S06-4",
+          "goal_id": "G-S06-1",
+          "loss": "A regulator treats always-on interior/cabin matching as illegal surveillance in the car.",
+          "req_id": "R-S06-4",
+          "req": "Cabin-facing cameras, if present, are not used to match passengers for ChildFind.",
+          "harm_note": "Many 'dashcams' are dual-channel."
+        },
+        {
+          "id": "L-S06-5",
+          "goal_id": "G-S06-2",
+          "loss": "Dealers cannot explain the feature, so they disable it, leaving advertised coverage fictional.",
+          "req_id": "R-S06-5",
+          "req": "A car advertised as ChildFind-capable is actually enrolled or is labeled at sale as not enrolled.",
+          "harm_note": "Channel fiction shows up as empty density maps."
+        }
+      ]
+    },
+    {
+      "stakeholder_id": "S07",
+      "values": [
+        "model IP",
+        "reputational accuracy",
+        "limited downstream liability"
+      ],
+      "goals": [
+        {
+          "id": "G-S07-1",
+          "text": "Deliver a usable person-recognition stack without absorbing the manufacturer's product risk",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S07-2",
+          "text": "Keep training data and weights from leaking via on-device deployment",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S07-1",
+          "goal_id": "G-S07-2",
+          "loss": "On-device weights are extracted from a consumer dashcam and republished.",
+          "req_id": "R-S07-1",
+          "req": "A person who buys a dashcam does not obtain a working copy of the contractor's production model weights.",
+          "harm_note": "Offline deployment is explicitly on the table in the scenario."
+        },
+        {
+          "id": "L-S07-2",
+          "goal_id": "G-S07-1",
+          "loss": "Public audits show large error gaps on children or on darker skin, and the contractor is named.",
+          "req_id": "R-S07-2",
+          "req": "Disparities in whether a visible missing child is reported are not systematically associated with the child's age band or skin tone in deployed searches.",
+          "harm_note": "This is a world-level fairness requirement, not 'equal F1 on a benchmark'."
+        },
+        {
+          "id": "L-S07-3",
+          "goal_id": "G-S07-1",
+          "loss": "Latency or downtime of a cloud Rekognition-like path misses the useful window.",
+          "req_id": "R-S07-3",
+          "req": "A sighting is not lost solely because a cloud inference endpoint was slow or unreachable.",
+          "harm_note": "The dashcam is already offline; adding a cloud round-trip stacks two radios."
+        },
+        {
+          "id": "L-S07-4",
+          "goal_id": "G-S07-2",
+          "loss": "Fine-tuning uses photos the contractor had no license to train on, and a lawsuit lands on both companies.",
+          "req_id": "R-S07-4",
+          "req": "A child's photo provided for a live search is not used to train or advertise a model.",
+          "harm_note": "Live searches are the most sensitive data the contractor will ever see."
+        },
+        {
+          "id": "L-S07-5",
+          "goal_id": "G-S07-1",
+          "loss": "The contractor is subpoenaed as the 'face recognition company' for every ChildFind case.",
+          "req_id": "R-S07-5",
+          "req": "The contractor does not receive a copy of every production video frame, only what the manufacturer must send to meet a specified inference path.",
+          "harm_note": "Data minimization is also liability minimization."
+        }
+      ]
+    },
+    {
+      "stakeholder_id": "S08",
+      "values": [
+        "anonymity in public space",
+        "purpose limitation",
+        "no secondary use"
+      ],
+      "goals": [
+        {
+          "id": "G-S08-1",
+          "text": "Move through streets without being biometrically identified by a consumer camera network",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S08-2",
+          "text": "Not have an image from a sensitive place reused later",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S08-1",
+          "goal_id": "G-S08-1",
+          "loss": "A bystander's face is embedded and kept so they can be re-identified after the search ends.",
+          "req_id": "R-S08-1",
+          "req": "A person who is not the subject of an authorized search is not assigned a persistent identity from ChildFind processing.",
+          "harm_note": "This is the mass-surveillance requirement hiding inside a child-safety feature."
+        },
+        {
+          "id": "L-S08-2",
+          "goal_id": "G-S08-2",
+          "loss": "A still of a bystander at a clinic, shelter, or protest is later reused in another investigation.",
+          "req_id": "R-S08-2",
+          "req": "ChildFind stills are not available to reuse for a purpose other than the originating missing-child search.",
+          "harm_note": "Secondary use is how dashcams become police databases."
+        },
+        {
+          "id": "L-S08-3",
+          "goal_id": "G-S08-1",
+          "loss": "People avoid streets, schools, or clinics known to be dense with enrolled cars.",
+          "req_id": "R-S08-3",
+          "req": "The public is not given a live map of which cars are currently matching faces.",
+          "harm_note": "Transparency can itself become a chilling-effect channel."
+        },
+        {
+          "id": "L-S08-4",
+          "goal_id": "G-S08-2",
+          "loss": "A child bystander's face is enrolled into a gallery 'to improve child recall' without a parent.",
+          "req_id": "R-S08-4",
+          "req": "Children who are not the missing child are not added to any biometric gallery from dashcam footage.",
+          "harm_note": "The obvious ML fix (more child faces) is itself a harm."
+        },
+        {
+          "id": "L-S08-5",
+          "goal_id": "G-S08-1",
+          "loss": "An employer, landlord, or immigration officer obtains a still showing where a bystander was.",
+          "req_id": "R-S08-5",
+          "req": "A ChildFind still of a bystander is not obtainable by a private party who wants to know where that person was.",
+          "harm_note": "The threat is not only the state."
+        },
+        {
+          "id": "L-S08-6",
+          "goal_id": "G-S08-1",
+          "loss": "A bystander is stopped because they were next to a possible match in the same frame.",
+          "req_id": "R-S08-6",
+          "req": "Presence in the same video frame as a possible match does not by itself cause a bystander to be treated as a suspect companion.",
+          "harm_note": "Association is a world harm the model does not even 'predict' explicitly."
+        }
+      ]
+    },
+    {
+      "stakeholder_id": "S09",
+      "values": [
+        "freedom from mistaken police contact",
+        "reputation",
+        "caregiver liberty"
+      ],
+      "goals": [
+        {
+          "id": "G-S09-1",
+          "text": "Go about daily life without being treated as the missing child or their abductor",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S09-2",
+          "text": "Have a way to end a false identification quickly",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S09-1",
+          "goal_id": "G-S09-1",
+          "loss": "Police stop a lookalike child in public based on a ChildFind pin.",
+          "req_id": "R-S09-1",
+          "req": "A child who is not the missing child is not stopped by police solely because a dashcam produced a possible-match notice.",
+          "harm_note": "False-positive harm is the one developers underweight when they optimize recall."
+        },
+        {
+          "id": "L-S09-2",
+          "goal_id": "G-S09-1",
+          "loss": "The caregiver is arrested as an abductor because they are walking with a lookalike.",
+          "req_id": "R-S09-2",
+          "req": "An adult accompanying a child who is not missing is not arrested solely on a ChildFind possible-match.",
+          "harm_note": "The 'abductor' inference is a world action with no supporting SPEC unless we invent one."
+        },
+        {
+          "id": "L-S09-3",
+          "goal_id": "G-S09-1",
+          "loss": "A school or store goes into lockdown because a public app showed a nearby match.",
+          "req_id": "R-S09-3",
+          "req": "Schools and businesses do not receive automated ChildFind match alerts about children on their premises.",
+          "harm_note": "The blast radius of a FP includes institutions."
+        },
+        {
+          "id": "L-S09-4",
+          "goal_id": "G-S09-2",
+          "loss": "A lookalike's photo remains associated with the case online after the true child is found.",
+          "req_id": "R-S09-4",
+          "req": "Once a possible-match is judged to be the wrong child, that still is not kept as part of a public or family-visible case story.",
+          "harm_note": "Correction has to be as operational as detection."
+        },
+        {
+          "id": "L-S09-5",
+          "goal_id": "G-S09-1",
+          "loss": "The lookalike child becomes afraid of cameras and of going outside.",
+          "req_id": "R-S09-5",
+          "req": "A mistaken ChildFind contact is followed by a clear, child-appropriate explanation that they are not in trouble and were not the missing child.",
+          "harm_note": "Dignity after a FP is a world requirement on operators, not on the model."
+        }
+      ]
+    },
+    {
+      "stakeholder_id": "S10",
+      "values": [
+        "lawful biometric processing",
+        "children's data protection",
+        "purpose limitation and auditability"
+      ],
+      "goals": [
+        {
+          "id": "G-S10-1",
+          "text": "Biometric processing of the public has a legal basis, limits, and a way to challenge it",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S10-2",
+          "text": "Children's data is treated as a special category, not as 'just another face'",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S10-1",
+          "goal_id": "G-S10-1",
+          "loss": "The network performs biometric processing of the general public without a valid legal basis.",
+          "req_id": "R-S10-1",
+          "req": "Faces of people who are not the search subject are not biometrically processed except as a transient comparison during an authorized, time-bounded search.",
+          "harm_note": "If this REQ fails, the feature is illegal even when it finds children."
+        },
+        {
+          "id": "L-S10-2",
+          "goal_id": "G-S10-2",
+          "loss": "Children's images move across borders to a contractor region without safeguards.",
+          "req_id": "R-S10-2",
+          "req": "A child's search photo and any matching still remain in the jurisdiction the case was opened in, unless a recorded transfer mechanism applies.",
+          "harm_note": "Rekognition-like infrastructure is often multi-region by default."
+        },
+        {
+          "id": "L-S10-3",
+          "goal_id": "G-S10-1",
+          "loss": "Accident-evidence recordings are silently joined to a police biometric store.",
+          "req_id": "R-S10-3",
+          "req": "Crash-loop recordings made for accident evidence are not searchable as a biometric database.",
+          "harm_note": "Purpose limitation between the two product jobs."
+        },
+        {
+          "id": "L-S10-4",
+          "goal_id": "G-S10-1",
+          "loss": "A subject cannot find out whether they were matched, or get deletion, because the system is opaque.",
+          "req_id": "R-S10-4",
+          "req": "A person who was the subject of a ChildFind still can have that still deleted through a defined request path once the search has closed, and can learn whether a still existed.",
+          "harm_note": "Opaque ML systems fail access/deletion rights."
+        },
+        {
+          "id": "L-S10-5",
+          "goal_id": "G-S10-2",
+          "loss": "A precedent is set that any emotional child-safety story justifies biometric scanning of a city.",
+          "req_id": "R-S10-5",
+          "req": "Each search remains individually authorized, time-bounded, and geographically bounded rather than becoming a standing scan of all enrolled cameras.",
+          "harm_note": "The 1-alert/day statistic is a design gift; ignore it and you get always-on scanning."
+        }
+      ]
+    },
+    {
+      "stakeholder_id": "S11",
+      "values": [
+        "customer goodwill",
+        "limited liability",
+        "predictable operating cost"
+      ],
+      "goals": [
+        {
+          "id": "G-S11-1",
+          "text": "Host an edge drop-off without becoming a police checkpoint",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S11-2",
+          "text": "Not pay unbounded bandwidth or eat a lawsuit",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S11-1",
+          "goal_id": "G-S11-1",
+          "loss": "Customers treat the station as a surveillance site and stop coming.",
+          "req_id": "R-S11-1",
+          "req": "Drivers using the station are not shown, and do not have to pass, a face-matching checkpoint to buy fuel.",
+          "harm_note": "Edge computing excitement in the scenario is a product risk, not a free lunch."
+        },
+        {
+          "id": "L-S11-2",
+          "goal_id": "G-S11-2",
+          "loss": "A child was at the pump and not reported; the station is sued for hosting the system.",
+          "req_id": "R-S11-2",
+          "req": "Hosting an offload kiosk is not treated as a promise that everyone on the forecourt will be matched.",
+          "harm_note": "Coverage fiction again, now at a place."
+        },
+        {
+          "id": "L-S11-3",
+          "goal_id": "G-S11-1",
+          "loss": "Someone uses the kiosk network to pull faces of all customers.",
+          "req_id": "R-S11-3",
+          "req": "The partner network cannot be queried for people who did not just offload an enrolled dashcam queue.",
+          "harm_note": "A new shared phenomenon (the kiosk) is a new attack surface."
+        },
+        {
+          "id": "L-S11-4",
+          "goal_id": "G-S11-2",
+          "loss": "The kiosk is stolen or smashed and stored blobs are taken.",
+          "req_id": "R-S11-4",
+          "req": "Theft of a kiosk does not disclose identifiable stills or search photos.",
+          "harm_note": "Physical security of edge is not like cloud security."
+        },
+        {
+          "id": "L-S11-5",
+          "goal_id": "G-S11-2",
+          "loss": "Bandwidth bills from video offload exceed the partnership's value.",
+          "req_id": "R-S11-5",
+          "req": "The partner is not asked to carry raw video, only small encrypted reports within a contracted byte budget.",
+          "harm_note": "If the design needs full video at the edge, the partnership dies or becomes extractive."
+        }
+      ]
+    },
+    {
+      "stakeholder_id": "S12",
+      "values": [
+        "income",
+        "passenger privacy",
+        "not being punished for opting out"
+      ],
+      "goals": [
+        {
+          "id": "G-S12-1",
+          "text": "Keep driving for a living without turning passengers into search subjects",
+          "relates_to_values": []
+        },
+        {
+          "id": "G-S12-2",
+          "text": "Not be deactivated for refusing ChildFind",
+          "relates_to_values": []
+        }
+      ],
+      "items": [
+        {
+          "id": "L-S12-1",
+          "goal_id": "G-S12-1",
+          "loss": "A passenger is matched or still-captured without knowing a search was running in the car they hired.",
+          "req_id": "R-S12-1",
+          "req": "A rideshare passenger is not biometrically compared to a missing-child photo unless they have been told a search is active in that vehicle and can decline the ride.",
+          "harm_note": "Employment dashcams break the consumer opt-in story."
+        },
+        {
+          "id": "L-S12-2",
+          "goal_id": "G-S12-2",
+          "loss": "The driver is deactivated or loses a bonus for turning ChildFind off.",
+          "req_id": "R-S12-2",
+          "req": "A driver who disables ChildFind does not automatically lose the ability to work.",
+          "harm_note": "Otherwise 'opt-in' is fiction."
+        },
+        {
+          "id": "L-S12-3",
+          "goal_id": "G-S12-1",
+          "loss": "A passenger gives a one-star review because a match prompt or LED made them feel watched.",
+          "req_id": "R-S12-3",
+          "req": "Passengers are not shown missing-child photos or match stills during a trip.",
+          "harm_note": "UX meant for volunteer drivers is wrong in a taxi."
+        },
+        {
+          "id": "L-S12-4",
+          "goal_id": "G-S12-1",
+          "loss": "Footage of a fare dispute is pulled because it happened to be in a ChildFind queue.",
+          "req_id": "R-S12-4",
+          "req": "A passenger–driver dispute is not investigated through ChildFind stills collected for a missing-child search.",
+          "harm_note": "Secondary use inside the same car."
+        },
+        {
+          "id": "L-S12-5",
+          "goal_id": "G-S12-2",
+          "loss": "The driver's personal phone plan is billed for fleet matching uploads.",
+          "req_id": "R-S12-5",
+          "req": "Cellular bytes used for ChildFind on a fleet vehicle are not charged to the driver's personal plan without their agreement.",
+          "harm_note": "Same data-cost REQ as S01, but the payer is different."
+        }
+      ]
+    }
+  ]
+}
