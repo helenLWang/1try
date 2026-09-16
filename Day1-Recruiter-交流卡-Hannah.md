@@ -177,3 +177,58 @@ MATLAB 软件产品，Handshake 写 willing to sponsor，**intern JD 要 unrestr
 5. **BCG X**（他们明天还在，今天人多可明天补）  
 
 其余 5 家：Capital One / Accenture / MathWorks / McMaster / L'Oréal **不要为签证空转。**
+
+---
+
+## 第二天（9/16 STEM Day 2，12:00–18:00）
+
+Handshake 当天约 **79 家**。口径不变：AI / Digital / Product / Business + 能 sponsor。按 Hannah 简历排。
+
+### 必去（按顺序）
+
+| # | 公司 | Sponsor | 为什么值得聊 | 怎么开口 |
+|---|---|---|---|---|
+| **1** | **Databricks** | 能（大规模 H-1B） | **本场最硬的 PM intern 还在：Summer 2027。** 也有 APM New Grad。她的 agent/PRD/实验故事对 Mosaic/Unity Catalog 产品化。D2+D3。 | *I shipped a PRD-review agent that cut research-to-prototype 50%, and I want to intern on product for agentic data platforms. I already applied / I will apply to PM Intern Summer 2027. How do booth resumes get into the PM intern queue?* 链接：https://www.databricks.com/company/careers/product/product-management-intern-summer-2027-6883068002 |
+| **2** | **C3 AI** | 能（FY25 ~100 LCA） | 企业 Agentic OS；**DS Intern 2027 已开**。没有 PM intern 帖，展台问 Product/FDE。EY 可审计 AI + DeepWisdom 上线，适合问 ontology / 治理。 | *I don’t just prompt models—I shipped features and made AI risk-review auditable. For C3, do DS interns ever rotate onto product, or should I target FDE?* |
+| **3** | **Brain Co.** | 能（少量 LCA；Handshake *willing to sponsor*） | Handshake：**AI Product Engineer**（实习+全职）。Ashby 上 intern 已下，全职还在。她是 PM+会做 agent 的人，这岗就是客户侧写 spec 再 build。 | *Your AI Product Engineer sits with the customer to write the spec and build from zero. That’s my EY + DeepWisdom mix. Are you hiring Summer 2027 interns, or only full-time?* |
+| **4** | **Glean** | 能 | 企业搜索/Work AI。Handshake 挂 SWE；2026 开过 PM intern。问 2027 PM intern。搜索/排序有 Qrent + Insight Solutions。 | *I built search-rank for a marketplace and a RAG assistant that explains scoring. Glean’s admin/agent product intern—when does 2027 open?* |
+| **5** | **Stripe** | 能 | 美国 **SWE intern 已开**，不是 PM intern。产品公司，往年有 PM intern。问校园 PM 循环。支付/Billing 和她的 monetization 分层能讲。 | *I defined Starter/Standard/Pro packaging on a B2B platform. Do you still hire PM interns alongside SWE intern, or is this year engineering-only?* |
+
+### 强烈建议（第一天没聊完就补；或第二志愿）
+
+| 公司 | 场次 | 备注 |
+|---|---|---|
+| **Klaviyo** | D1+D2 | 第一天没排到必补。增长/个性化匹配最高。 |
+| **BCG X** | D1+D2 | 第一天没排到必补。FDE AI。 |
+| **Instalily** | 只 D2 | Strategic AI Partner / Growth Analyst。Handshake *willing to sponsor*。问 intern vs 全职。别把 GTM Events intern 当产品岗。 |
+| **Gecko Robotics** | 只 D2 | Handshake：FDE intern 类型。2025 intern 已关。工业数字孪生。问 2027 FDE intern。 |
+| **The Trade Desk** | 只 D2 | **SWE intern 已开**（不是 PM）。她的 Ads ROAS 故事最能打。问有没有 PM intern。 |
+| **Whatnot** | 只 D2 | 直播电商 marketplace。Handshake SWE intern。用 Qrent/匹配故事问 PM intern。 |
+| **Rocket** | D2+D3 | 历史上有 Product intern 轨。问 2027 Product Development intern。 |
+| **T-Mobile** | D2+D3 | 实习枢纽目前无开放角色。问数字渠道 / eComm PM intern。 |
+| **Simbe** | 只 D2 | CV intern 仍在校园端招。偏工程，不是 PM。只有你愿意做 applied AI intern 再去。 |
+| **Persona** | 只 D2 | 开发者身份核验产品。公开板 intern=0。问 PM intern。 |
+
+### 看起来像、不要排
+
+| 公司 | 看起来像什么 | 为什么过 |
+|---|---|---|
+| **Red Ventures** | **2027 APM, AI 已开** | JD 不含 F-1 / OPT |
+| **ZS** | BTS / Digital intern 一串 | intern JD：**not eligible for visa sponsorship** |
+| **IBM** | **PM Intern 2027 是真的** | 校园 JD：现在或将来不赞助；Handshake 本场还不收 OPT |
+| **BNY** | **PM intern / Data Product Manager 研究生项目** | JD：不需要现在或将来的 employment visa sponsorship；且多数轨要本科 |
+| **Cisco / Epic / Lilly IT / Honeywell / Kef Robotics** | PM、Digital、AI | Handshake 不收 OPT，或 JD 不赞助 |
+| **Merck** | Digital Transformation intern | 校园岗不赞助转正 |
+| **Source Allies** | AI Engineer / Delivery Lead | Handshake 不收 OPT |
+
+### 第二天路线（6 小时）
+
+1. **Databricks**（最长队也要排）  
+2. **C3 AI**  
+3. **Brain Co.**  
+4. **Glean**  
+5. **Stripe**  
+6. 补第一天：**Klaviyo / BCG X**  
+7. 有余力：**Instalily → Trade Desk → Gecko / Whatnot**
+
+后天（D3）Databricks 还在；Google / Intuit / Plaid 是 D3，不要今天找他们。
