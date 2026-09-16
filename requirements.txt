@@ -1,0 +1,5 @@
+# Stdlib-only runtime. Optional extras if you prefer vendor SDKs instead of
+# the built-in OpenAI-compatible HTTP client:
+#   openai>=1.40.0
+#   anthropic>=0.34.0
+python-dotenv>=1.0.0
