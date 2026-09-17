@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zulip I1 · Unread Recap + Topic Title Improver</title>
+  <style>
+    :root {
+      --zulip-purple: #5f57e7;
+      --zulip-purple-dark: #3d3988;
+      --sidebar: #1e1a2b;
+      --sidebar-2: #2a2439;
+      --bg: #f8f6f4;
+      --card: #fff;
+      --ink: #1b1530;
+      --muted: #6b6478;
+      --line: #e6e1ea;
+      --ok: #0d9b6b;
+      --warn: #c47b17;
+      --err: #c23d3d;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      font-family: "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
+      color: var(--ink);
+      background: #efeaf6;
+    }
+    button, input { font: inherit; }
+    a { color: var(--zulip-purple); }
+
+    /* ---- login ---- */
+    #login {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(1200px 600px at 20% 0%, #d8d4ff, transparent),
+                  linear-gradient(160deg, #2a2439, #1e1a2b 60%);
+    }
+    .login-card {
+      width: min(420px, 92vw);
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px 28px 24px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.28);
+    }
+    .login-card h1 { margin: 0 0 6px; font-size: 22px; }
+    .login-card p { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+    label { display: block; font-size: 12px; font-weight: 600; margin: 12px 0 6px; }
+    input[type=email], input[type=password], input[type=text] {
+      width: 100%; padding: 10px 12px; border: 1px solid #d9d2e3; border-radius: 8px;
+    }
+    .primary {
+      background: var(--zulip-purple); color: #fff; border: 0; border-radius: 8px;
+      padding: 10px 14px; cursor: pointer; font-weight: 600;
+    }
+    .primary:hover { background: var(--zulip-purple-dark); }
+    .login-hint { margin-top: 14px; font-size: 12px; color: var(--muted); }
+
+    /* ---- shell ---- */
+    #app { display: none; height: 100%; grid-template-rows: auto 1fr; }
+    #app.show { display: grid; }
+    header.top {
+      display: flex; align-items: center; gap: 12px;
+      padding: 8px 14px; background: #fff; border-bottom: 1px solid var(--line);
+    }
+    .brand { font-weight: 800; color: var(--zulip-purple-dark); white-space: nowrap; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tab {
+      border: 1px solid var(--line); background: #fff; border-radius: 999px;
+      padding: 6px 12px; cursor: pointer; font-size: 13px;
+    }
+    .tab.active { background: var(--zulip-purple); color: #fff; border-color: transparent; }
+    .who { margin-left: auto; font-size: 13px; color: var(--muted); }
+
+    .panel { display: none; height: 100%; overflow: auto; }
+    .panel.active { display: block; }
+
+    /* ---- demo zulip ---- */
+    .zulip {
+      display: grid;
+      grid-template-columns: 232px 1fr 300px;
+      height: calc(100vh - 49px);
+      background: var(--bg);
+    }
+    .sb {
+      background: var(--sidebar); color: #efeaf8; padding: 14px 10px;
+      overflow: auto;
+    }
+    .sb h2 { font-size: 11px; letter-spacing: .08em; color: #b9b0cc; margin: 16px 8px 6px; }
+    .sb .user { display: flex; align-items: center; gap: 8px; padding: 6px 8px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #3dce8b; }
+    .nav-item, .chan {
+      display: block; width: 100%; text-align: left; background: transparent;
+      border: 0; color: inherit; padding: 7px 10px; border-radius: 6px; cursor: pointer;
+    }
+    .nav-item:hover, .chan:hover, .nav-item.active { background: #3b3450; }
+    .nav-item.recap { color: #d7d2ff; font-weight: 700; }
+    .main { display: grid; grid-template-rows: auto 1fr auto; min-width: 0; }
+    .topicbar {
+      background: #fff; border-bottom: 1px solid var(--line);
+      padding: 10px 16px; display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .topicbar strong { font-size: 16px; }
+    .msgs { padding: 12px 18px; overflow: auto; }
+    .msg { display: grid; grid-template-columns: 36px 1fr; gap: 10px; margin: 12px 0; }
+    .avatar {
+      width: 36px; height: 36px; border-radius: 8px; background: #c9b8f0;
+      display: grid; place-items: center; font-weight: 800; color: #3d3988;
+    }
+    .avatar.iago { background: #f3c9a4; color: #7a3d12; }
+    .meta { font-size: 12px; color: var(--muted); }
+    .compose-wrap { background: #fff; border-top: 1px solid var(--line); padding: 10px 14px 14px; }
+    .banner {
+      display: none; background: #fff7e6; border: 1px solid #f0d7a1; color: #6a4a10;
+      padding: 10px 12px; border-radius: 8px; margin-bottom: 8px;
+    }
+    .banner.show { display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+    .compose {
+      display: grid; grid-template-columns: 1fr auto; gap: 8px;
+    }
+    textarea {
+      width: 100%; min-height: 64px; resize: vertical; border: 1px solid #d9d2e3;
+      border-radius: 8px; padding: 8px 10px;
+    }
+    .coach {
+      background: #221c31; color: #efeaf8; padding: 14px 14px 18px; overflow: auto;
+    }
+    .coach h3 { margin: 0 0 8px; font-size: 14px; color: #d7d2ff; }
+    .coach ol { margin: 0 0 12px; padding-left: 18px; font-size: 13px; line-height: 1.45; }
+    .coach li { margin: 0 0 8px; }
+    .coach .now { background: #3b3450; padding: 8px; border-radius: 8px; }
+    .pill {
+      display: inline-block; font-size: 11px; padding: 2px 7px; border-radius: 999px;
+      background: #3b3450; color: #d7d2ff; margin-left: 4px;
+    }
+    .ghost { background: #ece6f4; color: var(--ink); border: 0; border-radius: 8px; padding: 8px 10px; cursor: pointer; }
+    .okbtn { background: var(--ok); color: #fff; border: 0; border-radius: 8px; padding: 8px 10px; cursor: pointer; font-weight: 700; }
+
+    /* overlay */
+    .overlay {
+      display: none; position: fixed; inset: 0; background: rgba(20,16,32,.45);
+      place-items: center; z-index: 20;
+    }
+    .overlay.show { display: grid; }
+    .modal {
+      width: min(640px, 92vw); max-height: 82vh; overflow: auto;
+      background: #fff; border-radius: 12px; box-shadow: 0 20px 80px rgba(0,0,0,.28);
+    }
+    .modal header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+    .modal .body { padding: 16px 18px 22px; }
+    .skel { height: 14px; background: linear-gradient(90deg,#eee,#f7f7f7,#eee); background-size: 200% 100%; animation: sh 1.1s infinite; border-radius: 6px; margin: 10px 0; }
+    @keyframes sh { to { background-position: -200% 0; } }
+    .section { border-bottom: 1px solid var(--line); padding: 10px 0; }
+    .jump { font-weight: 700; }
+
+    /* ---- code ---- */
+    .codepage { padding: 18px 22px 40px; max-width: 1100px; margin: 0 auto; }
+    .flow {
+      display: grid; gap: 8px; margin: 12px 0 22px;
+    }
+    .flow .box {
+      background: #fff; border: 1px solid var(--line); border-radius: 10px;
+      padding: 10px 12px; font-size: 13px;
+    }
+    .flow .box b { color: var(--zulip-purple-dark); }
+    .arrow { text-align: center; color: var(--muted); font-size: 18px; line-height: 1; }
+    pre, code { font-family: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace; }
+    pre {
+      background: #1e1a2b; color: #efeaf8; padding: 12px 14px; border-radius: 10px;
+      overflow: auto; font-size: 12.5px; line-height: 1.45;
+    }
+    .file {
+      background: #fff; border: 1px solid var(--line); border-radius: 12px;
+      margin: 14px 0; overflow: hidden;
+    }
+    .file summary {
+      cursor: pointer; padding: 12px 14px; font-weight: 700; background: #f4f0fa;
+    }
+    .file .inner { padding: 0 14px 14px; }
+    .note { font-size: 14px; color: var(--muted); }
+    table { border-collapse: collapse; width: 100%; background: #fff; }
+    th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; font-size: 13px; vertical-align: top; }
+    th { background: #f4f0fa; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 1100px) {
+      .zulip { grid-template-columns: 200px 1fr; }
+      .coach { display: none; }
+      .grid2 { grid-template-columns: 1fr; }
+    }
+    video { width: 100%; border-radius: 12px; background: #000; }
+    .errline { color: #ffb4b4; }
+  </style>
+</head>
+<body>
+  <section id="login">
+    <form class="login-card" id="login-form">
+      <h1>Zulip 开发环境</h1>
+      <p>投屏演示 · Hamlet 登录后走 Unread Recap 和 Topic Title Improver</p>
+      <label>Email</label>
+      <input type="email" id="email" value="hamlet@zulip.com" autocomplete="username" />
+      <label>Password</label>
+      <input type="password" id="password" value="abcd1234" autocomplete="current-password" />
+      <div style="margin-top:16px"><button class="primary" type="submit">Log in</button></div>
+      <p class="login-hint">账号：hamlet@zulip.com / abcd1234（课程开发用户）。第二个账号 iago@zulip.com 同密码，用来制造未读。</p>
+    </form>
+  </section>
+
+  <section id="app">
+    <header class="top">
+      <div class="brand">I1 讲解</div>
+      <nav class="tabs">
+        <button class="tab active" data-tab="demo">1. 现场演示</button>
+        <button class="tab" data-tab="code">2. 流程图 → 代码</button>
+        <button class="tab" data-tab="videos">3. 真机录像</button>
+        <button class="tab" data-tab="cheat">4. 投屏切文件</button>
+      </nav>
+      <div class="who" id="who">King Hamlet</div>
+    </header>
+
+    <div id="panel-demo" class="panel active">
+      <div class="zulip">
+        <aside class="sb">
+          <div class="user"><span class="dot"></span><strong id="who-side">King Hamlet</strong></div>
+          <button class="ghost" id="switch-user" style="width:100%;margin:8px 0 4px;background:#3b3450;color:#fff">切换到 Iago 发未读</button>
+          <h2>VIEWS</h2>
+          <button class="nav-item active" data-view="inbox">Inbox</button>
+          <button class="nav-item recap" id="btn-recap">Unread recap</button>
+          <h2>CHANNELS</h2>
+          <button class="chan" data-channel="Denmark" data-topic="Weekend plans"># Denmark · Weekend plans</button>
+          <button class="chan" data-channel="Verona" data-topic="CI blockers"># Verona · CI blockers</button>
+        </aside>
+        <section class="main">
+          <div class="topicbar">
+            <div>
+              <strong id="ch-name"># Denmark</strong>
+              <div class="meta" id="topic-name">Topic: Weekend plans</div>
+            </div>
+            <span class="meta" id="url-hash">#narrow/channel/1-Denmark/topic/Weekend.20plans</span>
+          </div>
+          <div class="msgs" id="msgs"></div>
+          <div class="compose-wrap">
+            <div class="banner" id="rename-banner">
+              <div>
+                This topic may have drifted. Suggested title:
+                <strong id="suggested">Postgres migration rollback plan</strong>
+                <div class="meta" id="banner-reason">Suggested from recent messages because no LLM API key is configured.</div>
+              </div>
+              <button class="okbtn" id="btn-rename">Rename topic</button>
+            </div>
+            <div class="compose">
+              <textarea id="composer" placeholder="Compose message to #Denmark > Weekend plans"></textarea>
+              <button class="primary" id="btn-send">Send</button>
+            </div>
+          </div>
+        </section>
+        <aside class="coach">
+          <h3>口播步骤（对着屏幕念）</h3>
+          <ol>
+            <li class="now" id="c1"><b>准备未读：</b>点「切换到 Iago」，在 Verona / CI blockers 发一条。再切回 Hamlet，左侧会出现未读。</li>
+            <li id="c2"><b>Unread recap：</b>点左侧 Unread recap。先出现弹窗框架和 “Generating recap…”，数据后到。</li>
+            <li id="c3"><b>摘要：</b>有 API key 是 LLM 写的；没 key 是规则分组。链接都在。</li>
+            <li id="c4"><b>Jump to message：</b>这个 href 不是模型编的，是后端用真实 message id 调 Zulip 的 URL encoder。</li>
+            <li id="c5"><b>改标题：</b>切到 Denmark / Weekend plans，连发 3 条数据库迁移的话。</li>
+            <li id="c6"><b>Rename topic：</b>提示条出现后点它。AI 只给建议，真正改名走 Zulip 已有的 move topic。</li>
+          </ol>
+          <p class="note" style="color:#cfc8e2">演示完切顶部「流程图 → 代码」。老师要看某一行，用「投屏切文件」表。</p>
+        </aside>
+      </div>
+    </div>
+
+    <div id="panel-code" class="panel">
+      <div class="codepage">
+        <h1>从用户看见的现象，对上那一行代码</h1>
+        <p class="note">讲解顺序：功能 1 Recap（必须讲清链接怎么造）→ 功能 2 改标题（必须讲清延迟/成本/可扩展）→ 风险。</p>
+
+        <h2>功能 1 · Unread Recap 流程图</h2>
+        <div class="flow">
+          <div class="box">左侧栏「Unread recap」<b> web/src/navigation_views.ts</b> · <code>recap.fragment = "recap"</code></div>
+          <div class="arrow">↓ 地址变成 <code>#recap</code></div>
+          <div class="box"><b>web/src/hashchange.ts</b> <code>if (base === "recap") message_recap.launch()</code></div>
+          <div class="arrow">↓ 先渲染骨架</div>
+          <div class="box"><b>web/src/message_recap.ts</b> 立刻 <code>render_message_recap_overlay()</code>，正文是 “Generating recap…”（<b>message_recap_overlay.hbs</b>）</div>
+          <div class="arrow">↓ 再异步请求</div>
+          <div class="box"><code>GET /json/messages/recap</code> → <b>zproject/urls.py</b> → <b>zerver/views/llm_features.py</b> <code>get_unread_message_recap</code></div>
+          <div class="arrow">↓</div>
+          <div class="box"><b>zerver/lib/message_recap.py</b> <code>generate_unread_recap</code>：最多 80 条未读；有 key 走 LiteLLM；没 key 走 <code>_fallback_recap</code></div>
+          <div class="arrow">↓ 模型只许返回 message_ids，服务器自己造链接</div>
+          <div class="box"><code>message_permalink()</code> 调用 Zulip 的 <code>stream_message_url(..., include_base_url=False)</code> → <code>#narrow/channel/&lt;id&gt;-&lt;name&gt;/topic/&lt;topic&gt;/near/&lt;id&gt;</code></div>
+          <div class="arrow">↓</div>
+          <div class="box"><b>web/templates/message_recap_body.hbs</b> <code>href="{{permalink}}"</code> 渲染 「Jump to message #id」</div>
+        </div>
+
+        <details class="file" open>
+          <summary>1. 侧栏入口 — web/src/navigation_views.ts</summary>
+          <div class="inner">
+            <p>老师看见左侧 VIEWS 里多了一项 Unread recap，就是这里 pin 进去的。点击后 hash 变成 <code>#recap</code>。</p>
+<pre>recap: {
+    fragment: "recap",
+    name: $t({defaultMessage: "Unread recap"}),
+    is_pinned: true,
+    ...
+}</pre>
+          </div>
+        </details>
+
+        <details class="file">
+          <summary>2. 路由 hash → 打开 overlay — web/src/hashchange.ts:549</summary>
+          <div class="inner">
+<pre>if (base === "recap") {
+    message_recap.launch();
+    return;
+}</pre>
+          </div>
+        </details>
+
+        <details class="file">
+          <summary>3. 先骨架、后数据 — web/src/message_recap.ts + overlay.hbs</summary>
+          <div class="inner">
+            <p>这就是演示第 3 步：弹窗框架立刻出现，摘要是后来的。骨架写死在模板里的 “Generating recap…”；<code>channel.get</code> 成功后再替换 <code>.recap-body</code>。</p>
+<pre>export function launch(): void {
+    $("#recap_overlay_container").html(render_message_recap_overlay());
+    overlays.open_overlay({ name: "recap", ... });
+
+    void channel.get({
+        url: "/json/messages/recap",
+        success(raw_data) {
+            const data = recap_schema.parse(raw_data);
+            $("#message_recap_overlay .recap-body").html(render_message_recap_body(data));
+        },
+        ...
+    });
+}</pre>
+<pre>&lt;div class="recap-body"&gt;
+    &lt;div class="recap-status"&gt;{{t "Generating recap…" }}&lt;/div&gt;
+&lt;/div&gt;</pre>
+          </div>
+        </details>
+
+        <details class="file">
+          <summary>4. REST 入口 — zproject/urls.py + zerver/views/llm_features.py</summary>
+          <div class="inner">
+<pre>rest_path("messages/recap", GET=(get_unread_message_recap, {"intentionally_undocumented"}))
+rest_path("messages/topic_title_suggest", POST=(topic_title_suggest_backend, ...))</pre>
+<pre>def get_unread_message_recap(request, user_profile):
+    recap = generate_unread_recap(user_profile)
+    return json_success(request, data=recap)</pre>
+            <p>鉴权走 Zulip 已有 REST 机制：必须是当前登录用户的未读，不能看别人的 inbox。</p>
+          </div>
+        </details>
+
+        <details class="file">
+          <summary>5. 核心逻辑 + 链接怎么造 — zerver/lib/message_recap.py</summary>
+          <div class="inner">
+            <p><b>老师一定会问链接。</b>背这段：模型只返回 <code>message_ids</code>。我用真实 Message 行调用 Zulip 自己的 encoder。测试里断言 permalink 含 <code>/near/&lt;id&gt;</code>。</p>
+<pre>def message_permalink(...):
+    return stream_message_url(
+        realm=user_profile.realm,
+        message={"id": message.id, "stream_id": stream.id, ...},
+        include_base_url=False,
+    )
+# → #narrow/channel/&lt;id&gt;-&lt;name&gt;/topic/&lt;topic&gt;/near/&lt;id&gt;</pre>
+<pre>if not llm_is_configured():
+    return _fallback_recap(...)   # 没 key：按频道/话题分组，链接照样生成
+
+# 有 key：prompt 里带 [id=113] (#Denmark > Release Friday) Iago: ...
+# 模型 JSON：{overview, sections:[{title, summary, message_ids}]}
+# 然后 for message_id in cited_ids: by_id.get(message_id) 才给 permalink</pre>
+          </div>
+        </details>
+
+        <details class="file">
+          <summary>6. Jump to message 模板 — web/templates/message_recap_body.hbs</summary>
+          <div class="inner">
+<pre>&lt;a class="recap-message-link" href="{{permalink}}"&gt;
+    {{t "Jump to message" }} #{{message_id}}
+&lt;/a&gt;</pre>
+          </div>
+        </details>
+
+        <h2>功能 2 · Topic Title Improver 流程图</h2>
+        <div class="flow">
+          <div class="box">用户发出一条 <b>频道</b> 消息（私信不检查）</div>
+          <div class="arrow">↓ 消息已经成功发出</div>
+          <div class="box"><b>web/src/compose.ts</b> <code>send_message_success</code> 立刻调 <code>topic_title_improver.check_after_send</code></div>
+          <div class="arrow">↓</div>
+          <div class="box"><code>POST /json/messages/topic_title_suggest</code> · body: <code>stream_id</code>, <code>topic</code></div>
+          <div class="arrow">↓</div>
+          <div class="box"><b>zerver/lib/topic_title_improver.py</b>：&lt;3 条或标题还匹配 → skip LLM；通用标题（hi/question/Weekend plans 太泛会触发）→ 建议新标题</div>
+          <div class="arrow">↓ drifted=true</div>
+          <div class="box">compose 上方 banner（<b>topic_title_suggestion.hbs</b>）「Rename topic」</div>
+          <div class="arrow">↓ 人点了才改</div>
+          <div class="box"><code>message_edit.move_topic_containing_message_to_stream(..., propagate_mode="change_all")</code> — Zulip 已有「移动话题」，不是我们自己 UPDATE 标题</div>
+        </div>
+
+        <details class="file">
+          <summary>7. 发送成功立刻检查 — web/src/compose.ts:132</summary>
+          <div class="inner">
+<pre>export function send_message_success(...) {
+    if (sent_message.type === "stream") {
+        topic_title_improver.check_after_send({
+            stream_id: sent_message.stream_id,
+            topic: sent_message.topic,
+            message_id: data.id,
+        });
+    }</pre>
+          </div>
+        </details>
+
+        <details class="file">
+          <summary>8. 延迟 / 成本 / 规模 — zerver/lib/topic_title_improver.py</summary>
+          <div class="inner">
+            <p>作业要求你必须讲清这三点。对着下面 5 条说：</p>
+            <ol>
+              <li><b>能不调就不调：</b><code>should_call_llm</code> — 少于 3 条，或标题词还在最近消息里，返回 <code>skipped_llm: true</code>。</li>
+              <li><b>Prompt 很小：</b>最多 20 条 × 约 280 字符，<code>max_tokens=180</code>。</li>
+              <li><b>缓存 45 秒：</b>key = <code>(stream_id, last_message_id, topic)</code>。</li>
+              <li><b>只打发送者：</b>没有 Tornado 广播，不会消息风暴。</li>
+              <li><b>失败不影响发送：</b>前端 <code>error() {}</code> 空处理；解析失败 <code>drifted: false</code>。</li>
+            </ol>
+<pre>MIN_MESSAGES_FOR_DRIFT = 3
+MAX_TOPIC_MESSAGES = 20
+CACHE_TTL_SECONDS = 45
+GENERIC_TITLES = {"hi", "question", "help", ...}
+
+if not llm_is_configured():
+    suggested = _heuristic_title(...)  # 没 key 的保底：从最长消息抽一句</pre>
+          </div>
+        </details>
+
+        <details class="file">
+          <summary>9. 点 Rename 走已有 move topic — web/src/topic_title_improver.ts:84</summary>
+          <div class="inner">
+<pre>message_edit.move_topic_containing_message_to_stream(
+    message_id, stream_id, suggested_title,
+    false, false, "change_all",
+);</pre>
+            <p>AI 只负责建议字符串。改名是 Zulip 产品里本来就有的「把这个话题下所有消息移到新标题」，需要人确认。</p>
+          </div>
+        </details>
+
+        <details class="file">
+          <summary>10. 密钥与 LiteLLM — zerver/lib/llm_client.py</summary>
+          <div class="inner">
+            <p><code>api.key</code> 在仓库根目录且 gitignore。优先级：环境变量 → 文件 → Zulip 的 <code>topic_summarization_api_key</code>。换 OpenAI / Gemini 不用改业务代码。</p>
+          </div>
+        </details>
+
+        <h2>风险（作业 reflection，约 1 分钟）</h2>
+        <ol>
+          <li><b>幻觉：</b>摘要可能编，所以每条配 Jump 链接让用户核对。</li>
+          <li><b>改标题危险：</b>全 realm 可见，所以绝不自动 rename。</li>
+          <li><b>隐私：</b>未读正文会发给第三方 LLM。</li>
+          <li><b>规模：</b>现在是请求时同步调用。生产应改成队列 + 已有的 AI 用量统计。</li>
+          <li><b>Prompt injection：</b>消息里可能写「忽略指令」；生产要隔离 prompt、锁输出 JSON。</li>
+        </ol>
+      </div>
+    </div>
+
+    <div id="panel-videos" class="panel">
+      <div class="codepage">
+        <h1>真机录像（./tools/run-dev · localhost:9991）</h1>
+        <p class="note">这是在已 provision 的 Zulip 开发环境里，用 Hamlet 登录后录的。本讲解页是投屏用的对照；老师若要看真实 webpack UI，播这两个文件。</p>
+        <div class="grid2">
+          <div>
+            <h2>Unread recap</h2>
+            <video controls src="videos/unread_recap.mp4"></video>
+          </div>
+          <div>
+            <h2>Topic title improver</h2>
+            <video controls src="videos/topic_title_improver.mp4"></video>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="panel-cheat" class="panel">
+      <div class="codepage">
+        <h1>老师说「看一下代码」时切这里</h1>
+        <p>Cursor / VS Code / GitHub 打开 <code>cmu-seai/f26-zulip-lew2</code>，按提问跳文件。本仓库 <code>office-hours/code/</code> 里是同样的摘录。</p>
+        <table>
+          <thead>
+            <tr><th>老师大概会说</th><th>打开这个文件</th><th>指哪一段</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>侧栏这项哪来的？</td><td><code>web/src/navigation_views.ts</code></td><td><code>recap: { fragment: "recap", name: "Unread recap" }</code></td></tr>
+            <tr><td>为什么先出框再出字？</td><td><code>web/src/message_recap.ts</code> + <code>message_recap_overlay.hbs</code></td><td><code>launch()</code> 先 overlay，再 <code>GET /json/messages/recap</code></td></tr>
+            <tr><td>接口在哪？</td><td><code>zproject/urls.py</code> · <code>zerver/views/llm_features.py</code></td><td><code>messages/recap</code> GET；<code>messages/topic_title_suggest</code> POST</td></tr>
+            <tr><td>Jump 链接会不会是 AI 编的？</td><td><code>zerver/lib/message_recap.py</code></td><td><code>message_permalink()</code> / <code>stream_message_url</code>；模型只有 <code>message_ids</code></td></tr>
+            <tr><td>没配密钥会怎样？</td><td>同上 <code>_fallback_recap</code>；标题侧 <code>_heuristic_title</code></td><td>系统仍可用，这是健壮性</td></tr>
+            <tr><td>为什么一发完就检查？</td><td><code>web/src/compose.ts</code></td><td><code>send_message_success</code></td></tr>
+            <tr><td>会不会又贵又慢？</td><td><code>zerver/lib/topic_title_improver.py</code></td><td>skip LLM、20 条、45s 缓存、只打发送者</td></tr>
+            <tr><td>点 Rename 改的是什么？</td><td><code>web/src/topic_title_improver.ts</code></td><td><code>move_topic_containing_message_to_stream(..., "change_all")</code></td></tr>
+            <tr><td>密钥进 git 了吗？</td><td><code>zerver/lib/llm_client.py</code> · <code>.gitignore</code></td><td><code>api.key</code> 被忽略；<code>get_llm_api_key()</code></td></tr>
+            <tr><td>测试怎么测 LLM？</td><td><code>zerver/tests/test_llm_features.py</code></td><td><code>mock.patch(litellm.completion)</code>；断言 <code>/near/&lt;id&gt;</code></td></tr>
+          </tbody>
+        </table>
+
+        <h2>6 分钟时间盒</h2>
+        <ol>
+          <li>开场两个功能（30 秒）</li>
+          <li>现场 Recap：骨架 → 摘要 → Jump（1.5 分钟）</li>
+          <li>代码：permalink 怎么造（1.5 分钟）</li>
+          <li>现场改标题 + Rename 是 move topic（1 分钟）</li>
+          <li>延迟成本扩展 + 风险（1.5 分钟）</li>
+        </ol>
+        <p>书面版：作业仓库根目录 <code>implementation.md</code>。真机命令：<code>vagrant ssh</code> → <code>cd /srv/zulip</code> → <code>./tools/run-dev</code> → http://localhost:9991 。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="overlay" id="recap-overlay">
+    <div class="modal">
+      <header>
+        <h2 style="margin:0;font-size:18px">Unread recap</h2>
+        <button class="ghost" id="close-recap">×</button>
+      </header>
+      <div class="body" id="recap-body">
+        <div class="skel" style="width:90%"></div>
+        <div class="skel" style="width:70%"></div>
+        <div class="skel" style="width:80%"></div>
+        <p class="note">Generating recap…</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="move-overlay">
+    <div class="modal">
+      <header>
+        <h2 style="margin:0;font-size:18px">Move topic</h2>
+        <button class="ghost" id="close-move">×</button>
+      </header>
+      <div class="body">
+        <p>这是 Zulip <b>已有</b> 的移动话题对话框（我们没有自己写改名 SQL）。</p>
+        <p>Channel: <b># Denmark</b><br />New topic: <b id="move-title">Postgres migration rollback plan</b><br />Propagate: <b>change_all</b></p>
+        <button class="primary" id="confirm-move">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+
+    const state = {
+      user: "hamlet",
+      channel: "Denmark",
+      topic: "Weekend plans",
+      unreadFromIago: false,
+      denmarkMsgs: [],
+      veronaMsgs: [
+        { user: "iago", text: "CI is red on main after the migration job; can someone take a look?" }
+      ],
+    };
+
+    const demoMsgs = [
+      "The Alembic revision on staging failed at 14:02 UTC.",
+      "We should freeze writes before retrying the Postgres migration.",
+      "Rollback plan: restore last night's snapshot, then re-run 0042_add_index."
+    ];
+
+    $("#login-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = $("#email").value.trim();
+      const pass = $("#password").value;
+      if (email !== "hamlet@zulip.com" || pass !== "abcd1234") {
+        alert("请用 hamlet@zulip.com / abcd1234（课程开发账号）");
+        return;
+      }
+      $("#login").style.display = "none";
+      $("#app").classList.add("show");
+      renderMsgs();
+    });
+
+    $$(".tab").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        $$(".tab").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        $$(".panel").forEach((p) => p.classList.remove("active"));
+        $("#panel-" + btn.dataset.tab).classList.add("active");
+      });
+    });
+
+    function setCoach(n) {
+      $$(".coach li").forEach((li) => li.classList.remove("now"));
+      const el = $("#c" + n);
+      if (el) el.classList.add("now");
+    }
+
+    function renderMsgs() {
+      const box = $("#msgs");
+      box.innerHTML = "";
+      const list = state.channel === "Denmark" ? state.denmarkMsgs : state.veronaMsgs;
+      if (!list.length) {
+        box.innerHTML = '<p class="note">这个话题还没有消息。按右侧步骤发 2～3 条。</p>';
+        return;
+      }
+      for (const m of list) {
+        const who = m.user === "iago" ? "Iago" : "King Hamlet";
+        const av = m.user === "iago" ? "I" : "H";
+        box.insertAdjacentHTML("beforeend", `
+          <div class="msg">
+            <div class="avatar ${m.user}">${av}</div>
+            <div>
+              <div class="meta"><b>${who}</b> · just now</div>
+              <div>${m.text}</div>
+            </div>
+          </div>`);
+      }
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function setChannel(ch, topic) {
+      state.channel = ch;
+      state.topic = topic;
+      $("#ch-name").textContent = "# " + ch;
+      $("#topic-name").textContent = "Topic: " + topic;
+      $("#url-hash").textContent = `#narrow/channel/${ch === "Denmark" ? "1" : "3"}-${ch}/topic/${encodeURIComponent(topic).replace(/%20/g, ".20")}`;
+      $("#composer").placeholder = `Compose message to #${ch} > ${topic}`;
+      $("#rename-banner").classList.remove("show");
+      renderMsgs();
+    }
+
+    $$(".chan").forEach((b) => b.addEventListener("click", () => setChannel(b.dataset.channel, b.dataset.topic)));
+
+    $("#switch-user").addEventListener("click", () => {
+      if (state.user === "hamlet") {
+        state.user = "iago";
+        $("#who").textContent = "Iago";
+        $("#who-side").textContent = "Iago";
+        $("#switch-user").textContent = "切回 Hamlet 看未读";
+        setChannel("Verona", "CI blockers");
+        setCoach(1);
+      } else {
+        state.user = "hamlet";
+        $("#who").textContent = "King Hamlet";
+        $("#who-side").textContent = "King Hamlet";
+        $("#switch-user").textContent = "切换到 Iago 发未读";
+        state.unreadFromIago = true;
+        setCoach(2);
+      }
+    });
+
+    $("#btn-send").addEventListener("click", send);
+    $("#composer").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) send();
+    });
+
+    function send() {
+      let text = $("#composer").value.trim();
+      if (!text) {
+        if (state.user === "iago") text = "CI is still red — migration job timed out.";
+        else text = demoMsgs[Math.min(state.denmarkMsgs.length, demoMsgs.length - 1)];
+      }
+      const msg = { user: state.user, text };
+      if (state.channel === "Denmark") {
+        state.denmarkMsgs.push(msg);
+        if (state.user === "hamlet" && state.denmarkMsgs.length >= 3 && /weekend/i.test(state.topic)) {
+          $("#rename-banner").classList.add("show");
+          setCoach(6);
+        } else {
+          setCoach(5);
+        }
+      } else {
+        state.veronaMsgs.push(msg);
+        if (state.user === "iago") state.unreadFromIago = true;
+        setCoach(1);
+      }
+      $("#composer").value = "";
+      renderMsgs();
+    }
+
+    $("#btn-recap").addEventListener("click", () => {
+      setCoach(2);
+      $("#url-hash").textContent = "#recap";
+      $("#recap-overlay").classList.add("show");
+      $("#recap-body").innerHTML = `
+        <div class="skel" style="width:90%"></div>
+        <div class="skel" style="width:70%"></div>
+        <div class="skel" style="width:80%"></div>
+        <p class="note">Generating recap…</p>`;
+      setTimeout(() => {
+        setCoach(3);
+        const hasUnread = state.unreadFromIago || state.veronaMsgs.length;
+        $("#recap-body").innerHTML = hasUnread ? `
+          <p>You have unread message(s) across Verona. Jump links go to the original messages.</p>
+          <p class="note">没有 API key 时走规则分组；配了密钥则这里会是 LLM 写的 2–4 句 overview。链接两种情况都由服务器生成。</p>
+          <div class="section">
+            <h3 style="margin:0 0 6px">#Verona > CI blockers</h3>
+            <p>1 unread message(s).</p>
+            <p><a class="jump" href="#" id="jump-104">Jump to message #104</a> <span class="note">Iago</span></p>
+          </div>` : `<p>You have no unread messages. 先用 Iago 发一条再回来。</p>`;
+        const jump = $("#jump-104");
+        if (jump) jump.addEventListener("click", (e) => {
+          e.preventDefault();
+          setCoach(4);
+          $("#recap-overlay").classList.remove("show");
+          setChannel("Verona", "CI blockers");
+          $("#url-hash").textContent = "#narrow/channel/3-Verona/topic/CI.20blockers/near/104";
+        });
+      }, 1100);
+    });
+
+    $("#close-recap").addEventListener("click", () => $("#recap-overlay").classList.remove("show"));
+    $("#btn-rename").addEventListener("click", () => {
+      $("#move-title").textContent = $("#suggested").textContent;
+      $("#move-overlay").classList.add("show");
+    });
+    $("#close-move").addEventListener("click", () => $("#move-overlay").classList.remove("show"));
+    $("#confirm-move").addEventListener("click", () => {
+      const t = $("#suggested").textContent;
+      state.topic = t;
+      $("#topic-name").textContent = "Topic: " + t;
+      $("#url-hash").textContent = "#narrow/channel/1-Denmark/topic/" + t.replace(/ /g, ".20");
+      $("#rename-banner").classList.remove("show");
+      $("#move-overlay").classList.remove("show");
+      state.denmarkMsgs.push({ user: "hamlet", text: "(topic moved from Weekend plans)" });
+      renderMsgs();
+    });
+  </script>
+</body>
+</html>
