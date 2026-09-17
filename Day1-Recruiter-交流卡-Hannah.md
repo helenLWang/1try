@@ -286,3 +286,5 @@ Handshake 当天约 **47 家**。口径不变：AI / Digital / Product / Busines
 6. 有余力、先问签证：**ServiceLink**；Toast 只问有没有美国 PM intern  
 
 **今天离开前网申：** Intuit PM Intern、Intuit TPM Intern、Google TPM Intern（10/9 前，越早越好）。APM intern 一开就投。
+
+**LinkedIn 学长学姐（优先 Heinz）：** 见 `Day3-PM-Intern-LinkedIn-Hannah.md`。先加 Manav Somani（MISM-BIDA × T-Mobile）、Meghna Kashyap（MISM × Intuit TPM intern）、Kareem Segizekov（CMU IS × Google APM intern）。Stripe / Plaid 公开档几乎没有近届 PM intern，不要硬找。
