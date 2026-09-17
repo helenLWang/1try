@@ -1,0 +1,13 @@
+    recap: {
+        fragment: "recap",
+        name: $t({defaultMessage: "Unread recap"}),
+        is_pinned: true,
+        icon: "zulip-icon-all-messages",
+        css_class_suffix: "recap",
+        tooltip_template_id: "recap-tooltip-template",
+        has_unread_count: false,
+        unread_count_type: "",
+        supports_masked_unread: false,
+        hidden_for_spectators: true,
+        menu_icon_class: "",
+        menu_aria_label: "",

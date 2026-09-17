@@ -1,0 +1,60 @@
+.recap-container {
+    max-width: 720px;
+
+    .recap-body {
+        padding: 0 28px 28px;
+        overflow-y: auto;
+    }
+
+    .recap-overview {
+        font-size: 1.05em;
+        line-height: 1.45;
+        margin: 0 0 1em;
+    }
+
+    .recap-note,
+    .recap-status {
+        color: var(--color-text-item);
+        margin: 0.75em 0;
+    }
+
+    .recap-error {
+        color: var(--color-failed-message-send-icon);
+    }
+
+    .recap-section {
+        margin: 1.25em 0;
+        padding-bottom: 0.75em;
+        border-bottom: 1px solid var(--color-border-modal);
+    }
+
+    .recap-section-title {
+        font-size: 1.1em;
+        margin: 0 0 0.4em;
+    }
+
+    .recap-references {
+        list-style: none;
+        padding: 0;
+        margin: 0.5em 0 0;
+    }
+
+    .recap-references li {
+        margin: 0.25em 0;
+    }
+
+    .recap-message-link {
+        font-weight: 600;
+    }
+
+    .recap-message-sender {
+        margin-left: 0.4em;
+        opacity: 0.8;
+    }
+}
+
+.topic-title-suggestion-reason {
+    display: block;
+    margin-top: 0.25em;
+    opacity: 0.85;
+}
