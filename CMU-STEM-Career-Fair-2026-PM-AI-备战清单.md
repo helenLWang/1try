@@ -35,7 +35,37 @@ Handshake 场次 ID `74615`。第一天共 **76 家**。土木/制造/国防/半
 5. AppLovin  
 6. Avis（先问：CPT 实习转全职会不会交 H-1B）
 
-这 6 家跑完，第一天 PM/AI/Digital/Business + sponsor 的目标就够了。Databricks / C3 / Mujin / Formlabs / Simbe / Google / Stripe：**今天都不在。**
+这 6 家跑完，第一天 PM/AI/Digital/Business + sponsor 的目标就够了。Databricks / C3 / Mujin / Formlabs / Simbe / Google / Stripe：**第一天都不在。**
+
+---
+
+## 第三天（9/17 STEM Day 3，12:00–18:00）——2026-09-17 重测
+
+Handshake 场次 ID `74617`。第三天共 **47 家**。口径同第一天：AI / Digital / Transformation / Product / Business + 历史上能 sponsor。
+
+### 结论：值得去 **5 家主攻 + 4 家顺路**；Intuit 已从「帖 404」改成「现在就能投」
+
+| # | 公司 | 场次 | 对口岗位（实测） | Sponsor | 今天怎么走 |
+|---|---|---|---|---|---|
+| 1 | **Google University Programs** | 只 D3 | **TPM Intern, BS/MS, Summer 2027 已开**（约 10/9 前，滚动）。**APM intern 仍未上板**（往年约 9 月底–10 月中，窗口约两周） | 能。Handshake OPT + *willing to sponsor*；H-1B 顶级 | **第一。** 问 APM intern 开放日；确认 TPM intern 队列。必须回校（她 2027.12 毕业合）。 |
+| 2 | **Intuit** | 只 D3 | **[PM Intern 2027](https://jobs.intuit.com/job/mountain-view/summer-2027-product-manager-intern/27595/100620927632) HTTP 200**；**[TPM Intern 2027](https://jobs.intuit.com/job/mountain-view/summer-2027-technical-program-manager-tpm-intern/27595/100620927664) HTTP 200**。Handshake 仍误写 SWE intern | 能。Handshake *willing*；H-1B 大户。JD 只要求**实习期间**合法工作（CPT），没写死将来不赞助 | **第二。** 当天投。部分校园帖 **10/2 截止**。 |
+| 3 | **Databricks** | D2+D3 | **PM Intern Summer 2027** 仍 HTTP 200。毕业学期 Fall 2027 / Spring 2028 | 能 | D2 没排到再去。 |
+| 4 | **Plaid** | 只 D3 | Handshake intern `TBD`。Ashby **intern=0**；全职 PM 含 AI Foundations | 能。Handshake *willing* | 问 2027 PM intern。 |
+| 5 | **Glean** | D2+D3 | Greenhouse **intern=0**；全职 Agent / AI Quality PM | 能 | D2 没排到再去。 |
+| 6 | **T-Mobile / Rocket** | D2+D3 | 2027 Product intern **未证实**；历史上有 eComm PM / Product Development intern | 能。Handshake *willing* | 顺路问窗口。 |
+| 7 | **ServiceLink** | 只 D3 | Handshake：AI Engineer/DS、Product Designer-AI、Enterprise AI Architect | Handshake 勾了 sponsor，但 **AI 设计师全职 JD 写死现在或将来不赞助** | **先问签证。** Pittsburgh 近。 |
+| 8 | **Toast** | 只 D3 | Handshake SWE intern；Greenhouse 公开 intern 仍是都柏林 | 只勾 OPT/CPT，没勾 willing；公司有过 PM H-1B | 只问美国 PM intern，不为爱尔兰 SWE 排队。 |
+
+### 第三天岗位对口、但按 sponsor 仍不要排队
+
+| 公司 | 对口岗位 | 为什么不去 |
+|---|---|---|
+| **GM** | 2027 intern 是真的 | 校园 JD：**不含 CPT/OPT/STEM OPT/H-1B**。Handshake *willing* 是假信号。 |
+| **BNY** | Data Product Manager / AI Strategy 研究生项目 | Handshake 不收 OPT；JD 不需要现在或将来的 employment visa。 |
+| **TCS** | AI Consultant / FDE / GenAI | Handshake 不收 OPT；本场只有全职。 |
+| **Revolut** | Graduate / Summer intern | 搬 **UK / EU / UAE**，不是美国 H-1B。 |
+
+Google / Intuit / Plaid：**只有第三天。** Avis / Eudia / Expedia / AppLovin 第三天不在。
 
 ### 岗位对口、但按 sponsor 仍不要排队
 
@@ -77,7 +107,9 @@ Handshake 的 `job_titles` 经常是 `None/TBD`，或把全职职称当成实习
 
 | 公司 | 实测岗位 | 直链（2026-09-13 打开） | H-1B 历史 | 备注 |
 |---|---|---|---|---|
-| **Databricks** | **Product Management Intern (Summer 2027)** | [岗位页 HTTP 200](https://www.databricks.com/company/careers/product/product-management-intern-summer-2027-6883068002) · Greenhouse `6883068002` | 大规模 sponsor（千级 LCA） | Handshake：OPT=True，*willing to sponsor*。JD 未见禁 F-1 条款。**本场最硬的 PM intern。** |
+| **Databricks** | **Product Management Intern (Summer 2027)** | [岗位页 HTTP 200](https://www.databricks.com/company/careers/product/product-management-intern-summer-2027-6883068002) · Greenhouse `6883068002` | 大规模 sponsor（千级 LCA） | Handshake：OPT=True，*willing to sponsor*。JD 未见禁 F-1 条款。**本场最硬的数据/AI 平台 PM intern。** |
+| **Intuit** | **PM Intern Summer 2027**；**TPM Intern Summer 2027**（要 master’s） | [PM HTTP 200](https://jobs.intuit.com/job/mountain-view/summer-2027-product-manager-intern/27595/100620927632) · [TPM HTTP 200](https://jobs.intuit.com/job/mountain-view/summer-2027-technical-program-manager-tpm-intern/27595/100620927664) | H-1B 大户 | **2026-09-17 重测才开。** JD：实习期间合法工作即可。Handshake 仍写 SWE intern，不准。部分校园循环约 10/2 截止。 |
+| **Google** | **TPM Intern, BS/MS, Summer 2027**（约 10/9 前）；APM intern 未上板 | Google Careers 搜 TPM Intern Summer 2027 | H-1B 顶级 | Handshake：OPT=True，*willing to sponsor*。必须回校。APM intern 不要假装已经能投。 |
 | **Eudia**（Cicero Technologies dba Eudia） | **Product Intern**（Palo Alto） | [Greenhouse HTTP 200](https://job-boards.greenhouse.io/eudia/jobs/4379570009) | FY25 约 16 份 LCA；累计约 17–28；含 Technical Product Manager / AI Engineer | Handshake：OPT=True，*willing to sponsor*。另有 [AI Engineer Intern](https://job-boards.greenhouse.io/eudia/jobs/4020078009)（HTTP 200）。 |
 | **C3 AI** | **Data Science Intern (Summer 2027)** | [c3.ai HTTP 200](https://c3.ai/job-description/8738918002?gh_jid=8738918002) | FY25 约 99–106 份 LCA；累计约 340 | 这是 **AI/DS intern**，**不是 PM intern**。同批还有 [SWE Intern](https://c3.ai/job-description/8739037002?gh_jid=8739037002)。展台可问有没有 Product intern，但官网此刻没有。 |
 | **Mujin** | **Intern - Product Development (Spring 2027)** | [BambooHR HTTP 200](https://mujin.bamboohr.com/careers/168) | FY23–26 约 25 份 LCA；累计约 35 | 内容偏 **视觉/PLC/硬件 POC**，不是典型软件 PM intern。同期还有 Software Development / Software Integration intern。地点 Suwanee, GA，学期是 **2027 春季**（1/12–4/24），不是暑假。 |
@@ -85,7 +117,7 @@ Handshake 的 `job_titles` 经常是 `None/TBD`，或把全职职称当成实习
 | **Phonic** | **Machine Learning Research Intern 2027** | [Ashby HTTP 200](https://jobs.ashbyhq.com/phonic/a6c8c3d2-250a-4c2f-8a20-e4667ca38e41) | 公开 LCA **很薄**（约 1–2 份旧记录，近年几乎没交） | Handshake 勾了 *willing to sponsor*，但历史 sponsor **弱**。这是研究 intern，不是产品 intern。 |
 | **Simbe Robotics** | **Computer Vision Intern（Spring & Summer 2027）** | MIT CAPD 仍在招（招到 **2026-09-21**）：[校园帖](https://capd.mit.edu/jobs/simbe-robotics-computer-vision-intern/)；Handshake 挂了 6 个 job_id | FY25 约 4 份 LCA；累计约 13 | **官网 Lever 公开板 16 个岗位里没有 intern**（只有全职 Applied AI）。置信度：校园/Handshake 在招，不是 Greenhouse 那种可直接 HTTP 200 的对外帖。 |
 
-**A 表里真正的 Product intern：Databricks、Eudia、Mujin（偏研发 POC）。**  
+**A 表里真正的 Product intern：Databricks、Intuit PM、Eudia、Mujin（偏研发 POC）。TPM intern：Intuit、Google。**  
 AI intern：C3 DS、Eudia AI Eng、Formlabs AI Software、Phonic ML Research、Simbe CV。
 
 ---
@@ -96,20 +128,20 @@ AI intern：C3 DS、Eudia AI Eng、Formlabs AI Software、Phonic ML Research、S
 
 | 公司 | Handshake 现状 | 实测 |
 |---|---|---|
-| **Google University Programs** | OPT=True，*willing to sponsor*；岗位栏 `None` | **2027 APM intern 尚未上板**。往年约 10 月初开、窗口约两周。全职 APM 对 F-1 历来更严；实习走 CPT。展台要问开放日，不要假装已经能投。 |
+| **Google University Programs** | OPT=True，*willing to sponsor*；岗位栏 `None` | **TPM Intern 2027 已开（约 10/9 前）**，已进 A 表。**APM intern 仍未上板**。往年约 9 月底–10 月中、窗口约两周。展台问开放日，不要假装 APM intern 已经能投。 |
 | **Brain Co.** | Job+Internship；职称 AI Product Engineer / AI-ML Engineer | Ashby **34 个岗位全是全职**（含 AI Product Engineer、Product Manager、Early Career ML）。Summer 2026 intern 帖已于 2026-02-27 下架。Handshake 把全职职称标成实习在招，**不准**。H-1B：BrainCo Technologies 在 SF 有少量 FY25–26 LCA。 |
 | **BCG X** | FDE AI Scientist/Engineer；OPT=True，*willing to sponsor* | 能搜到的 FDE intern 公开页多为 **欧洲且已 filled**。未能打开美国 2027 intern 直链。BCG 历史上大量 H-1B；实习通常 CPT。展台确认美国循环是否还开。 |
 | **Plaid** | Internship，`TBD` | Ashby **110 个岗位，intern = 0**。有一堆全职 PM（含 AI Foundations）。PM intern **历史上有，2027 帖未开**。 |
 | **Glean** | Job+Internship，Software Engineer | Greenhouse **118 个岗位，intern = 0**。2026 Admin Console PM intern 是旧循环。 |
 | **Klaviyo** | SWE / AI Engineer / ML Engineer | Greenhouse **137 个岗位，intern = 0**。有全职 PM（含 AI Analytics / ML Platform）。Handshake 职称 ≠ 在招 intern。 |
-| **Intuit** | 现在只写 **Software Engineering Intern** | 上一版 TPM Intern 链接 **HTTP 404**。官网 internship 搜索此刻只剩 Software Engineer 1，**没有 TPM/PM intern**。Intuit 本身是 H-1B 大户，帖没了就不能算。 |
+| **Intuit** | Handshake 仍写 SWE Intern | **已从 B 表挪到 A 表（9/17）。** Handshake 职称滞后。 |
 | **T-Mobile** | Internship，`None` | 实习枢纽页写明：**当前没有开放 intern 角色，季节性发布**。2026 eComm PM intern 是旧帖。 |
 | **Rocket** | Job+Internship，`None` | internships 页本次抓取失败/不稳定。2026 Product Development intern 已关；**2027 未证实**。 |
 | **Expedia Group** | Job+Internship，`None` | 官网 careers 返回 403，无法点开 2027 PM intern。公开聚合帖是 **2024 已关闭**。PM intern 管道历史上存在，**今天不能投**。 |
 | **Gecko Robotics** | Internship；FDE / SWE / Mech / EE | 能找到的 intern 帖是 **Summer 2025 已关闭**。Lever slug 未扫到在招 intern。公司有 H-1B（含 FDE、ML、PM）。 |
 | **Instalily** | 未标 intern 类型；职称含 Strategic AI Partner | 在招 intern 是 **GTM-Operations Intern, Events**（活动运营）+ Toronto Co-op。Strategic Partner / Associate 是全职。不算 AI/Product intern。 |
-| **Persona / SingleStore** | 标了 Internship | Ashby/Greenhouse **intern = 0**。Handshake 空职称或只写 SWE intern，官网对不上。 |
-| **GM** | 标了 intern | 岗位栏 `None`。Digital Product intern 未证实。GM 是 D3。 |
+| **Persona** | 标了 Internship | 公开板 intern=0。 |
+| **GM** | Handshake intern + *willing to sponsor* | **2027 intern 是真的，但校园 JD 不含 CPT/OPT/H-1B。** 见 D 表。 |
 | **Merck** | 标了 intern；收 OPT/CPT | **2027 Digital Transformation / IT intern 是真的**，但校园 JD **不赞助签证**。第一天在，不要当 sponsor 目标。 |
 
 ---
@@ -122,7 +154,8 @@ AI intern：C3 DS、Eudia AI Eng、Formlabs AI Software、Phonic ML Research、S
 | **The Trade Desk** | Greenhouse intern 帖 [HTTP 200](https://job-boards.greenhouse.io/thetradedesk/jobs/5187605007)（careers 子域那条 404） | **2027 NA Software Engineering Internship**，不是 PM intern。 |
 | **Whatnot** | Handshake：SWE Intern / New Grad | 未在公开职位 API 扫到 PM intern。 |
 | **AppLovin** | 2027 **PM intern + ML intern 在新加坡**；美国有 Growth Analyst / BD / ML 全职 | 美国实习帖不是 PM；公司本身算第一天值得去（见文首）。 |
-| **Toast** | SWE Intern **仅都柏林** | 不是美国岗。Handshake 仍写 SWE Intern，容易误判。 |
+| **SingleStore** | Greenhouse **SWE Intern HTTP 200** | 工程实习，不是 PM intern。H-1B 历史上有。 |
+| **Toast** | Greenhouse 公开 intern 仍是 **Software Engineering Intern · Dublin** | Handshake 写 SWE Intern。聚合站出现过 Boston Summer 2027 Engineering Intern，**公开板未扫到美国 intern。** 不是 PM intern。 |
 
 ---
 
@@ -138,6 +171,7 @@ AI intern：C3 DS、Eudia AI Eng、Formlabs AI Software、Phonic ML Research、S
 | **Red Ventures** | 2027 APM, AI | JD：不含 F-1 / OPT |
 | **P&G** | IT Project & Product Manager intern | JD：Immigration Sponsorship is not available |
 | **IBM** | PM Intern 2027 | Handshake 不收 OPT；多条 intern JD 现在或将来不赞助 |
+| **GM** | 2027 Summer intern（含 Customer Research / HID） | 校园 JD：**不含 CPT / OPT / STEM OPT / H-1B**。Handshake *willing to sponsor* 是假信号。 |
 | **Accenture / Cisco / Epic / TCS / MathWorks / Honeywell / GE Vernova** 等 | 见原剔除表 | Handshake 不收 OPT，或 JD 要求 unrestricted work auth |
 
 ---
@@ -147,14 +181,19 @@ AI intern：C3 DS、Eudia AI Eng、Formlabs AI Software、Phonic ML Research、S
 | # | 岗位 | 直链 |
 |---|---|---|
 | 1 | Databricks — Product Management Intern (Summer 2027) | https://www.databricks.com/company/careers/product/product-management-intern-summer-2027-6883068002 |
-| 2 | Eudia — Product Intern | https://job-boards.greenhouse.io/eudia/jobs/4379570009 |
-| 3 | Eudia — AI Engineer Intern | https://job-boards.greenhouse.io/eudia/jobs/4020078009 |
-| 4 | C3 AI — Data Science Intern (Summer 2027) | https://c3.ai/job-description/8738918002?gh_jid=8738918002 |
-| 5 | Mujin — Product Development Intern (Spring 2027) | https://mujin.bamboohr.com/careers/168 |
+| 2 | Intuit — Product Manager Intern (Summer 2027) | https://jobs.intuit.com/job/mountain-view/summer-2027-product-manager-intern/27595/100620927632 |
+| 3 | Intuit — TPM Intern (Summer 2027) | https://jobs.intuit.com/job/mountain-view/summer-2027-technical-program-manager-tpm-intern/27595/100620927664 |
+| 4 | Google — TPM Intern, BS/MS, Summer 2027 | Google Careers 搜该职称；约 **2026-10-09** 前，滚动 |
+| 5 | Eudia — Product Intern | https://job-boards.greenhouse.io/eudia/jobs/4379570009 |
+| 6 | Eudia — AI Engineer Intern | https://job-boards.greenhouse.io/eudia/jobs/4020078009 |
+| 7 | C3 AI — Data Science Intern (Summer 2027) | https://c3.ai/job-description/8738918002?gh_jid=8738918002 |
+| 8 | Mujin — Product Development Intern (Spring 2027) | https://mujin.bamboohr.com/careers/168 |
 
 紧接着：Formlabs AI Software Intern、Simbe CV intern（走 Handshake/校园帖，9/21 前）、Phonic ML Research Intern（sponsor 弱）。
 
-盯紧但今天不能投：Google APM intern（约 10 月初）、Plaid / Glean / Klaviyo / Expedia / T-Mobile / Rocket 的 2027 PM intern、Brain Co intern 是否重开、BCG X 美国 FDE intern。
+盯紧但今天不能投：Google **APM intern**（约 9 月底–10 月中）。Plaid / Glean / Klaviyo / Expedia / T-Mobile / Rocket 的 2027 PM intern 仍未上板。Brain Co intern 是否重开、BCG X 美国 FDE intern。
+
+**D3 当天就能投：** Google TPM Intern 2027（约 10/9 前）、Intuit [PM Intern 2027](https://jobs.intuit.com/job/mountain-view/summer-2027-product-manager-intern/27595/100620927632)、Intuit [TPM Intern 2027](https://jobs.intuit.com/job/mountain-view/summer-2027-technical-program-manager-tpm-intern/27595/100620927664)、Databricks PM Intern 2027。
 
 ---
 
@@ -162,8 +201,8 @@ AI intern：C3 DS、Eudia AI Eng、Formlabs AI Software、Phonic ML Research、S
 
 - **D1 今天：** 主攻 **Eudia、BCG X、Expedia、Klaviyo、AppLovin**；顺路 **Avis**（先问 H-1B）。Capital One / PwC / P&G / Merck / Accenture 岗位对口但不 sponsor。Databricks 今天不在。  
 - **D2 明天：** Databricks、C3、Mujin、Formlabs、Simbe、Phonic、Brain Co、Stripe、Glean、ZS（JD 不赞助）、Gecko。  
-- **D3 后天：** Databricks 还在；Google、Intuit、Plaid、T-Mobile、Toast、Whatnot/Trade Desk 不在 D3（Whatnot/TTD 是 D2）。  
-- **不要为 PM intern 排长队：** Stripe / Trade Desk / Whatnot / AppLovin / Toast（只有工程实习或海外实习）。
+- **D3 9/17：** 主攻 **Google（TPM intern 已开；问 APM intern 窗口）、Intuit（PM intern + TPM intern 已开）、Plaid**；D2 没排到再去 **Databricks / Glean / T-Mobile / Rocket**。ServiceLink 先问签证。Toast 不要为爱尔兰 SWE intern 排队。GM / BNY / TCS 岗位看起来像，JD 或 Handshake 把 F-1 转正堵死。  
+- **不要为 PM intern 排长队：** Stripe / Trade Desk / Whatnot / AppLovin / Toast / SingleStore（只有工程实习或海外实习）。
 
 ---
 
@@ -179,7 +218,7 @@ AI intern：C3 DS、Eudia AI Eng、Formlabs AI Software、Phonic ML Research、S
 
 | 上一版说法 | 实测 |
 |---|---|
-| Intuit 2027 TPM Intern 已开 | **404**；intern 搜索无 TPM/PM intern |
+| Intuit 2027 TPM Intern 已开（9/13 测） | 当时 **404**。**9/17 重测：PM Intern + TPM Intern 都 HTTP 200** |
 | 主表约 28 家都有匹配实习 | 多数是 Handshake 类型/历史管道，**官网没有对应 intern 帖** |
 | ZS / PwC 可走 F-1 | 校园 JD：**这条实习不赞助 / 不招需要 H-1B lottery 的人** |
 | Brain Co、Klaviyo、Glean、Plaid 在招 intern | Brain Co / Klaviyo / Glean / Plaid 公开板 **intern = 0** |

@@ -159,9 +159,9 @@ MATLAB 软件产品，Handshake 写 willing to sponsor，**intern JD 要 unrestr
 | 推荐带来的注册 | +8% | Klaviyo |
 | 供应商筛选 | 几周 → <1 分钟，20+ filter | **Expedia** / McMaster（若误聊） |
 | Qrent | 8 周 → 6；1100 用户 / 8000 clicks | Expedia |
-| EY 人工复核 | -70%；10M+ 月交易；仍可审计 | **Eudia / BCG X** |
-| PRD review agent | 调研到原型周期 -50% | Eudia / Klaviyo |
-| NielsenIQ 对接 | 2 周 → 5 天；预测误差 -10% | Expedia / Klaviyo |
+| EY 人工复核 | -70%；10M+ 月交易；仍可审计 | **Eudia / BCG X / Intuit / ServiceLink** |
+| PRD review agent | 调研到原型周期 -50% | Eudia / Klaviyo / **Databricks / Google TPM** |
+| NielsenIQ 对接 | 2 周 → 5 天；预测误差 -10% | Expedia / Klaviyo / **Plaid** |
 
 被问 *Are you authorized to work?* 统一答：  
 *I’m an F-1 student. Internships are on CPT. After my Dec 2027 graduation I would use OPT and would need H-1B for full-time. Does this role / conversion path support that?*
@@ -232,3 +232,57 @@ Handshake 当天约 **79 家**。口径不变：AI / Digital / Product / Busines
 7. 有余力：**Instalily → Trade Desk → Gecko / Whatnot**
 
 后天（D3）Databricks 还在；Google / Intuit / Plaid 是 D3，不要今天找他们。
+
+---
+
+## 第三天（9/17 STEM Day 3，12:00–18:00）
+
+Handshake 当天约 **47 家**。口径不变：AI / Digital / Product / Business + 能 sponsor。按 Hannah 简历排。  
+**今天才出现的台：Google、Intuit、Plaid、ServiceLink、Toast、SingleStore、GM。** Databricks / Glean / T-Mobile / Rocket 是 D2 补位。
+
+实测日期 **2026-09-17**：Intuit 的 PM intern / TPM intern **已经重新上板**（上一版 404 作废）。Google **TPM Intern 2027 已开**；**APM intern 仍未上板**。
+
+### 必去（按顺序）
+
+| # | 公司 | Sponsor | 为什么值得聊 | 怎么开口 |
+|---|---|---|---|---|
+| **1** | **Google University Programs** | 能（Handshake *willing to sponsor*；H-1B 顶级） | **只 D3。** **TPM Intern, BS/MS, Summer 2027 已开**，滚动审，**申请截止约 2026-10-09**。APM intern 往年约 9 月底–10 月中开、窗口约两周。她 2027.12 毕业，实习后还要回校，卡得上 penultimate year。Pittsburgh 也在地点列表里。 | *I’m targeting APM intern when it opens, and I already fit TPM Intern 2027: I shipped AI product and ran a B2B matching program end-to-end. When does APM intern go live, and do booth resumes get into the TPM intern queue?* 搜：Google Careers → Technical Program Manager Intern BS/MS Summer 2027 |
+| **2** | **Intuit** | 能（Handshake OPT + *willing*；H-1B 大户） | **只 D3，而且现在就能投。** [PM Intern Summer 2027](https://jobs.intuit.com/job/mountain-view/summer-2027-product-manager-intern/27595/100620927632) 和 [TPM Intern Summer 2027](https://jobs.intuit.com/job/mountain-view/summer-2027-technical-program-manager-tpm-intern/27595/100620927664) 都是 HTTP 200。JD 只要求实习期间有美国工作许可（CPT 即可），**没有写死将来不赞助**。TPM intern 明确要 master’s。ACCA + TurboTax/QuickBooks 是财务产品故事。校园帖有的 **10/2 截止**，今天必须投。 | *I shipped AI generation features with paid conversion +5.2%, and I made audit AI reviewable for Walmart. Intuit’s AI-first PM intern is the same loop. I already applied / I will apply today to PM Intern and TPM Intern. Does booth resume go to RPM in Mountain View?* |
+| **3** | **Databricks**（D2 没排到才去） | 能 | **PM Intern Summer 2027 仍 HTTP 200。** JD：Fall 2027 / Spring 2028 毕业 → 她 2027.12 刚好。本场最硬的数据/AI 平台 PM intern。 | 用第二天那套 PRD-agent 开场。链接：https://www.databricks.com/company/careers/product/product-management-intern-summer-2027-6883068002 |
+| **4** | **Plaid** | 能（Handshake *willing*；有 PM LCA） | **只 D3。** Handshake intern 职称 `TBD`。Ashby **110 岗 intern=0**，全职 PM 很多（含 AI Foundations、Internal AI）。历史上有 PM intern。她的 NielsenIQ API + B2B 匹配就是开发者金融基础设施语言。 | *I’ve integrated financial data APIs and shipped a B2B matching platform that cut screening from weeks to under a minute. Do you have a 2027 PM intern, or is campus only SWE this year?* |
+| **5** | **Glean**（D2 没排到才去） | 能 | 企业搜索 / Work AI。Greenhouse intern=0，全职有 Agent / AI Quality PM。Qrent 搜索排序 + RAG 最能打。 | 用第二天那套 search-rank 开场。 |
+
+### 强烈建议（第二志愿 / 顺路）
+
+| 公司 | 场次 | 备注 |
+|---|---|---|
+| **T-Mobile** | D2+D3 | Handshake intern 类型 + *willing*。2026 eComm PM intern 已关；2027 帖未证实。问数字渠道 / eComm / AI Product intern。用转化 + session 故事。 |
+| **Rocket** | D2+D3 | 历史上有 Product Development intern。2027 未证实。问 2027 Product intern。用匹配漏斗故事。 |
+| **ServiceLink** | 只 D3 | Handshake：**AI Engineer/DS、Product Designer-AI、Enterprise AI Architect**，实习类型，勾了 sponsor。Pittsburgh（Moon Twp）近。但 **Senior Product Designer, AI 全职 JD 写死现在或将来都不赞助**——Handshake 是假信号。历史上有 IT Product Manager LCA。先问 intern 和 H-1B，再排队。 |
+| **Toast** | 只 D3 | Handshake：SWE intern，**只收 OPT/CPT，没勾 willing to sponsor**。Greenhouse 公开 intern 仍是 **都柏林 SWE**。问有没有美国 PM intern；不要为爱尔兰工程岗排长队。公司有过 Senior PM H-1B。 |
+
+### 看起来像、不要排
+
+| 公司 | 看起来像什么 | 为什么过 |
+|---|---|---|
+| **GM** | Handshake intern + *willing to sponsor* | **2027 校园 intern JD 明确：不提供 immigration sponsorship，含 CPT/OPT/STEM OPT/H-1B。** Handshake 又是假信号。 |
+| **BNY** | AI/Data Strategy、Data Product Manager 研究生项目 | Handshake **不收 OPT**；校园 JD 不需要现在或将来的 employment visa；多数轨还卡本科年级。 |
+| **TCS Campus** | AI Consultant / FDE / GenAI 一串 | Handshake **不收 OPT**；本场只有全职，没有 intern 类型。 |
+| **Lilly IT** | Tech@Lilly intern | Handshake 不收 OPT。 |
+| **Kef Robotics** | Product Manager | Handshake 不收 OPT。 |
+| **Revolut** | Graduate / Summer intern | 岗位是 **搬去 UK / EU / UAE**，不是美国 H-1B。 |
+| **SingleStore** | SWE Intern 是真的 | 工程实习，不是 PM intern。 |
+| **CIA / Fed / MITRE / APL** | intern | 公民/清职，F-1 过不了。 |
+| **Citadel / Jane Street / Virtu / WorldQuant / SIG** | intern + sponsor | Quant / 交易 / SWE，不是 PM/APM 台。 |
+| **Calico** | ML intern | Alphabet 生物研究，不是产品实习。 |
+
+### 第三天路线（6 小时）
+
+1. **Google**（先问 APM intern 开放日，再确认 TPM Intern 队列；人最多也要排）  
+2. **Intuit**（现场投 / 确认已投 PM Intern + TPM Intern）  
+3. **Databricks**（第二天没聊完才去）  
+4. **Plaid**  
+5. 补第二天：**Glean → T-Mobile / Rocket**  
+6. 有余力、先问签证：**ServiceLink**；Toast 只问有没有美国 PM intern  
+
+**今天离开前网申：** Intuit PM Intern、Intuit TPM Intern、Google TPM Intern（10/9 前，越早越好）。APM intern 一开就投。
