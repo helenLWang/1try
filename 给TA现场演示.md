@@ -5,38 +5,23 @@
 
 `/srv/zulip` 和 `./tools/run-dev` 只存在于 **vagrant ssh 进去之后** 的虚拟机里。你现在还在 Windows 上时，这两条一定会报错。
 
-## 0. 先找到（或重新 clone）仓库
+## 0. 项目实际在哪
 
-在 PowerShell 里先回用户目录：
+这台电脑上真 Zulip（有 `Vagrantfile`）是：
 
-```powershell
-cd $HOME
-dir
-```
+`C:\Users\13360\f26-zulip-lew2`
 
-然后搜有没有现成的 Zulip / 1try / Vagrantfile（可能要等十几秒）：
-
-```powershell
-Get-ChildItem $HOME -Recurse -Depth 4 -ErrorAction SilentlyContinue | Where-Object { $_.Name -in @('1try','f26-zulip-lew2','Vagrantfile') } | Select-Object FullName
-```
-
-- 若出现某个文件夹里有 `Vagrantfile`：`cd` 进**含有 Vagrantfile 的那个目录**（不要 cd 进 system32）。
-- 若搜不到：仓库还不在这台电脑上，在用户目录新建一份（会比较大，要等）：
-
-```powershell
-cd $HOME
-git clone https://github.com/helenLWang/1try.git
-cd 1try
-git fetch origin
-git checkout cursor/zulip-i1-331d
-dir Vagrantfile
-```
-
-`main` 分支没有 `Vagrantfile`，必须 checkout `cursor/zulip-i1-331d`。看到 `Vagrantfile` 才算路径对了。
+不要用 `C:\Users\13360\1try`（没有 Vagrantfile）。不要在 `C:\WINDOWS\system32` 里跑命令。
+`Desktop\claude\f26-zulip-lew2` 是另一份拷贝，演示用上面这个即可。
 
 ## 1–6. 启动真 Zulip
 
-确认当前目录不是 system32，且 `dir Vagrantfile` 能列出文件之后：
+```powershell
+cd C:\Users\13360\f26-zulip-lew2
+dir Vagrantfile
+```
+
+必须能列出 `Vagrantfile`，然后：
 
 ```powershell
 vagrant up
@@ -61,7 +46,7 @@ cd /srv/zulip
 
 ## 给 TA 看的文件（相对仓库根目录）
 
-用 Cursor 打开你刚才 `cd` 进去、能看到 `Vagrantfile` 的那个文件夹。虚拟机里同一份在 `/srv/zulip/...`。
+用 Cursor 打开 `C:\Users\13360\f26-zulip-lew2`。虚拟机里同一份在 `/srv/zulip/...`。
 
 | 文件 | 干什么 |
 |---|---|
