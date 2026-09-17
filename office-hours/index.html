@@ -96,6 +96,7 @@
     }
     .nav-item:hover, .chan:hover, .nav-item.active { background: #3b3450; }
     .nav-item.recap { color: #d7d2ff; font-weight: 700; }
+    .nav-item.recap.active { background: #4a4370; }
     .main { display: grid; grid-template-rows: auto 1fr auto; min-width: 0; }
     .topicbar {
       background: #fff; border-bottom: 1px solid var(--line);
@@ -672,6 +673,8 @@ if not llm_is_configured():
 
     $("#btn-recap").addEventListener("click", () => {
       setCoach(2);
+      $$(".nav-item").forEach((n) => n.classList.remove("active"));
+      $("#btn-recap").classList.add("active");
       $("#url-hash").textContent = "#recap";
       $("#recap-overlay").classList.add("show");
       $("#recap-body").innerHTML = `
@@ -698,7 +701,7 @@ if not llm_is_configured():
           setChannel("Verona", "CI blockers");
           $("#url-hash").textContent = "#narrow/channel/3-Verona/topic/CI.20blockers/near/104";
         });
-      }, 1100);
+      }, 2500);
     });
 
     $("#close-recap").addEventListener("click", () => $("#recap-overlay").classList.remove("show"));
@@ -712,6 +715,7 @@ if not llm_is_configured():
       state.topic = t;
       $("#topic-name").textContent = "Topic: " + t;
       $("#url-hash").textContent = "#narrow/channel/1-Denmark/topic/" + t.replace(/ /g, ".20");
+      $("#composer").placeholder = `Compose message to #Denmark > ${t}`;
       $("#rename-banner").classList.remove("show");
       $("#move-overlay").classList.remove("show");
       state.denmarkMsgs.push({ user: "hamlet", text: "(topic moved from Weekend plans)" });
