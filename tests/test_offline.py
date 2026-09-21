@@ -87,6 +87,21 @@ def test_gemini_aiza_key_selects_google_endpoint(monkeypatch: pytest.MonkeyPatch
     assert model.startswith("gemini")
 
 
+def test_m1_line_has_no_spaces(monkeypatch: pytest.MonkeyPatch) -> None:
+    from src.m1_recommend import recommend_line
+
+    monkeypatch.setattr(
+        "src.m1_recommend.recommend",
+        lambda user_id, model_name, k: {
+            "movie_ids": ["star+wars+1977", "pulp+fiction+1994", "fargo+1996"]
+        },
+    )
+    line = recommend_line(1, k=20)
+    assert line == "star+wars+1977,pulp+fiction+1994,fargo+1996"
+    assert " " not in line
+    assert "\n" not in line
+
+
 def test_openai_key_keeps_default_host(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("LLM_BASE_URL", raising=False)
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)

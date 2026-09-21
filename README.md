@@ -104,6 +104,20 @@ present so cold-start calls the LLM. `--no-llm` uses the schema-compatible
 heuristic extractor (same catalog scorer). Metrics: `artifacts/metrics.json`.
 Definitions: `evaluation.md`.
 
+## For teammates (Milestone 1)
+
+Le Wang’s **one** candidate for the team comparison is **item–item CF + LLM cold-start** (not the content model).
+
+```bash
+python -m src.m1_recommend 9375
+# -> movieId1,movieId2,...   (max 20, no spaces)
+
+python -m src.m1_measure     # four M1 qualities -> artifacts/m1_lew2_measures.json
+python -m src.m1_server      # optional: :8082/recommend/<userid>
+```
+
+Details: `m1_candidate_lew2.md`.
+
 ## 4. Recommend
 
 ```bash

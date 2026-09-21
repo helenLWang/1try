@@ -1,0 +1,49 @@
+{
+  "contributor": "Le Wang (lew2)",
+  "candidate_name": "item-item CF + LLM cold-start",
+  "call": "python -m src.m1_recommend <user_id>",
+  "accuracy": {
+    "metric": "HitRate@20 and NDCG@20 on a per-user time split",
+    "data": "Merged ratings + watches (>=3 min). For each user, sort by time. 2-4 interactions: leave-one-out. 5+: hold out last 20%. Fit on the prefix. Predict 20 ids. Hide train movies. 400 random test users, seed 42.",
+    "operationalization": "HitRate@20 = 1 if any held-out movie is in the 20. NDCG@20 uses binary relevance. Code: src/evaluate.py",
+    "result": {
+      "hitrate_at_20": 0.095,
+      "ndcg_at_20": 0.034947272125832,
+      "n_users": 400,
+      "cold_start_hitrate_at_20": 0.05
+    }
+  },
+  "training_cost": {
+    "metric": "Wall-clock seconds to fit the candidate on the train split",
+    "data": "Same train split as evaluation (n_train_rows in train_log.json)",
+    "operationalization": "time.time() around src.train.train(). Logged as elapsed_s. This run also fits content/popularity in the same job; CF fit is the bulk of the personalized work.",
+    "result": {
+      "elapsed_s": 35.39,
+      "n_train_rows": 99708,
+      "machine_note": "Recorded in artifacts/train_log.json"
+    }
+  },
+  "inference_cost": {
+    "metric": "Mean milliseconds to return 20 ids for one user (CPU)",
+    "data": "Recommend() for users already in the CF matrix",
+    "operationalization": "From evaluation: collaborative.elapsed_s / n_users * 1000. Optional live re-time: src/m1_measure.py after train. M1 budget is 600ms per HTTP request.",
+    "result": {
+      "mean_ms_from_eval": 0.3,
+      "eval_elapsed_s": 0.12,
+      "eval_users": 400,
+      "live": null
+    }
+  },
+  "model_size": {
+    "metric": "Bytes on disk of the saved artifact (joblib)",
+    "data": "artifacts/models/recommenders.joblib after python -m src.train",
+    "operationalization": "os.path.getsize(model_path)",
+    "result": {
+      "bytes": null,
+      "mib": null,
+      "note": "File not in this clone (gitignored). Run train and re-run this script."
+    }
+  },
+  "why_this_candidate": "Among Le's two I2 models, CF has much higher HitRate@20 than content (0.095 vs 0.010) and is fast enough for 600ms. New users go to the LLM path.",
+  "k": 20
+}

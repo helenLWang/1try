@@ -14,3 +14,6 @@ kafka-python-ng>=2.2.2
 
 # LLM cold-start (OpenAI-compatible APIs: OpenAI, Gemini, OpenRouter, Groq, ...)
 openai>=1.40.0
+
+# Optional local M1 demo server
+flask>=3.0
