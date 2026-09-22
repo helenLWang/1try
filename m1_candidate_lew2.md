@@ -1,69 +1,83 @@
-# Le Wang (lew2) 的 M1 候选模型
+# Le Wang (lew2)'s M1 Candidate Model
 
-明天交给队友用这一份。**这是我一个人的方案**，不是整组的 Milestone 1。
+Give this to teammates tomorrow. **This is my individual submission**,
+not the team's final Milestone 1.
 
-组里还要另外两个人各出一套不一样的。最后一起比四个数，选一个上线。
+Two other teammates will each bring a different approach. We'll compare
+all four numbers together and pick one to deploy.
 
-## 这一套是什么
+## What this is
 
-名字：**item–item CF + LLM 冷启动**
+Name: **item–item CF + LLM cold-start**
 
-有历史的用户：看过 A 的人也看过什么（协同过滤）。  
-没历史的新用户：读注册时写的 likes/dislikes，用 Gemini 抽 JSON，再在真电影列表里打分。  
-两边都没有：先给热门电影。
+Returning users: people who watched A also watched what? (collaborative
+filtering).
+New users with no history: read the likes/dislikes they wrote at
+signup, extract structured JSON with Gemini, then score against the
+real movie list.
+Neither case: fall back to popular movies.
 
-代码入口（队友只要调这个）：
+Code entry point (this is all teammates need to call):
 
 ```text
 python -m src.m1_recommend 9375
 ```
 
-打印一行，没有空格，没有 JSON，最多 20 个电影 id，逗号隔开。这就是作业要的：
+Prints one line, no spaces, no JSON, up to 20 movie IDs separated by
+commas. This is exactly the format the assignment expects for
+`http://<machine>:8082/recommend/<userid>`.
 
-`http://机器:8082/recommend/<userid>` 的返回格式。
+Implementation: `src/m1_recommend.py`
+Local test server: `python -m src.m1_server`, then
+`curl http://127.0.0.1:8082/recommend/9375`
 
-实现：`src/m1_recommend.py`  
-本地试服务：`python -m src.m1_server` 然后 `curl http://127.0.0.1:8082/recommend/9375`
-
-## 仓库
+## Repo
 
 https://github.com/cmu-seai/f26-model-lew2
 
-也可以看这个分支：https://github.com/helenLWang/1try/tree/cursor/i2-recommendation-model-f5a6
+Or this branch: https://github.com/helenLWang/1try/tree/cursor/i2-recommendation-model-f5a6
 
-主要文件：
+Key files:
 
-- `src/models/collaborative.py` 协同过滤
-- `src/models/cold_start.py` 新用户 LLM
-- `src/evaluate.py` 怎么测准确率
-- `src/m1_recommend.py` 给组里接服务用
-- `evaluation.md` / `model.md` 作业说明
+- `src/models/collaborative.py` — collaborative filtering
+- `src/models/cold_start.py` — new-user LLM path
+- `src/evaluate.py` — how accuracy is measured
+- `src/m1_recommend.py` — the team-facing entry point
+- `evaluation.md` / `model.md` — assignment write-up
 
-## 四个数（先拿去填表）
+## The four numbers (for the comparison table)
 
-在同一份数据上测的（约 5e6 条 Kafka，时间切分，400 个测试用户）。
+Measured on the same dataset (~5e6 Kafka records, time-based split, 400
+test users).
 
-准确率（HitRate@20）：**0.095**  
-准确率（NDCG@20）：**0.035**  
-新用户只看自我介绍的 HitRate@20：**0.05**
+Accuracy (HitRate@20): **0.095**
+Accuracy (NDCG@20): **0.035**
+New-user HitRate@20 (self-description only): **0.05**
 
-训练时间：一次 `python -m src.train` 大约 **35.4 秒**（`artifacts/train_log.json` 里的 elapsed_s）
+Training time: one `python -m src.train` run takes about **35.4
+seconds** (`elapsed_s` in `artifacts/train_log.json`)
 
-推理时间：评估里 400 个用户一共 0.12 秒，平均大约 **0.3 毫秒 / 人**。作业限制是 600 毫秒，够用。
+Inference time: 400 users took 0.12 seconds total in evaluation, about
+**0.3 ms/user** on average. The assignment limit is 600 ms, so this is
+well within budget.
 
-模型文件大小：`artifacts/models/recommenders.joblib` 没有提交（大于 5MB 不能进 git）。队友在自己电脑跑完 train 之后执行：
+Model file size: `artifacts/models/recommenders.joblib` is not
+committed (over 5MB, can't go into git). After a teammate trains it
+locally, run:
 
 ```text
 python -m src.m1_measure
 ```
 
-会写出 `artifacts/m1_lew2_measures.json`，里面有磁盘字节数。
+This writes `artifacts/m1_lew2_measures.json`, which includes the file
+size in bytes.
 
-我建议组里上线用这一套，不用我的 content TF-IDF（HitRate 只有 0.010）。
+I recommend the team deploy this one — not my content/TF-IDF variant,
+which only scored 0.010 HitRate.
 
-## 队友怎么跑
+## How teammates run it
 
-需要课上 VPN / Kafka 隧道，和 I2 一样。
+Needs the course VPN / Kafka tunnel, same as I2.
 
 ```text
 python3 -m venv .venv
@@ -75,9 +89,11 @@ python -m src.train
 python -m src.m1_recommend 9375
 ```
 
-LLM key 放仓库根目录 `api.key`，不要提交。没有 key 时新用户会走简单规则，格式还是那一行 id。
+Put the LLM key in `api.key` at the repo root — do not commit it.
+Without a key, new users fall back to a simple rule-based path; the
+output format is unchanged.
 
-## 接进组里的 Flask
+## Wiring it into the team's Flask app
 
 ```python
 from src.m1_recommend import recommend_line
@@ -87,8 +103,17 @@ def rec(user_id):
     return recommend_line(user_id)
 ```
 
-新用户要持续能用：服务里如果发现这个 user 不在 CF 矩阵，就会走冷启动。组里之后要从 `http://128.2.220.123:8080/user/<id>` 把新注册用户的自我介绍补进 `users.jsonl`，或者直接把 likes 文本传给 `cold.recommend(..., likes=..., dislikes=...)`。
+For new users to keep working: the service checks whether the user is
+in the CF matrix, and falls back to cold-start if not. Later, the team
+should pull newly registered users' self-descriptions from
+`http://128.2.220.123:8080/user/<id>` into `users.jsonl`, or pass the
+likes text directly to `cold.recommend(..., likes=..., dislikes=...)`.
 
-## 给队友的短消息（复制发群）
+## Short message for the team chat (copy-paste)
 
-明天我出的方案是 item-item CF，新用户走 LLM。调用 `python -m src.m1_recommend <userid>`，返回一行电影 id。HitRate@20 是 0.095，训练大约 35 秒，单次推荐大约 0.3ms。代码在课仓库 f26-model-lew2，入口 src/m1_recommend.py。我的 content 模型不参赛，太弱了。
+My candidate for tomorrow is item-item CF, with new users routed to an
+LLM. Call `python -m src.m1_recommend <userid>` — it returns one line of
+movie IDs. HitRate@20 is 0.095, training takes about 35 seconds, and a
+single recommendation takes about 0.3ms. Code is in the course repo
+`f26-model-lew2`, entry point `src/m1_recommend.py`. My content-based
+model isn't in the running — it was too weak.
