@@ -1,0 +1,36 @@
+{
+  "collaborative": {
+    "train_time_s": 53.64727539999876,
+    "rss_after_mb": 1954.770944,
+    "users_scored": 137694,
+    "k": 20,
+    "relevance": "binary",
+    "precision@20": 0.010807297340474606,
+    "recall@20": 0.09995827382859533,
+    "ndcg@20": 0.05027247506311318,
+    "hit_rate@20": 0.19499760338141095,
+    "mean_truth_size": 2.158946649817712,
+    "latency_median_ms": 5.646949983201921,
+    "latency_p95_ms": 10.195194970583541,
+    "coverage_films": 2191,
+    "coverage_pct": 0.10541762894534257,
+    "artifact_mb": 133.285644
+  },
+  "content": {
+    "train_time_s": 68.43237519997638,
+    "rss_after_mb": 2524.89728,
+    "users_scored": 137694,
+    "k": 20,
+    "relevance": "binary",
+    "precision@20": 0.001439786773570456,
+    "recall@20": 0.01313988217720406,
+    "ndcg@20": 0.007387649619635203,
+    "hit_rate@20": 0.02822199950615132,
+    "mean_truth_size": 2.158946649817712,
+    "latency_median_ms": 1.0861000046133995,
+    "latency_p95_ms": 1.385385065805167,
+    "coverage_films": 6142,
+    "coverage_pct": 0.29551578137028484,
+    "artifact_mb": 115.597708
+  }
+}

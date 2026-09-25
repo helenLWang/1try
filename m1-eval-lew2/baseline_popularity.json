@@ -1,0 +1,12 @@
+{
+  "users_scored": 137694,
+  "k": 20,
+  "relevance": "binary",
+  "precision@20": 0.01077062181358164,
+  "recall@20": 0.10063835946663144,
+  "ndcg@20": 0.050242230696835706,
+  "hit_rate@20": 0.19520821531802401,
+  "mean_truth_size": 2.158946649817712,
+  "snapshot": "a07a47ee48a2",
+  "model": "popularity: top-300 by train count, minus already watched"
+}
