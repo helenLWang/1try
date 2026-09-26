@@ -1,0 +1,22 @@
+{
+  "sampled_users": 150,
+  "used_llm_path": 150,
+  "used_heuristic_path": 0,
+  "cold_start": {
+    "precision@20": 0.003333333333333333,
+    "recall@20": 0.03133333333333333,
+    "ndcg@20": 0.017722642781991895,
+    "hit_rate@20": 0.06
+  },
+  "popularity_same_users": {
+    "precision@20": 0.010333333333333338,
+    "recall@20": 0.10044444444444446,
+    "ndcg@20": 0.048410883832363194,
+    "hit_rate@20": 0.20666666666666667
+  },
+  "latency_median_ms": 66301.08049995033,
+  "latency_p95_ms": 79371.66870501803,
+  "distinct_films_recommended": 1265,
+  "distinct_films_pct": 0.060864126250962276,
+  "fit_time_s": 2.463085600058548
+}

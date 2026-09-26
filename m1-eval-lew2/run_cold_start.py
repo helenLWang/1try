@@ -25,7 +25,7 @@ from adapters import load_interactions, load_movies, load_users  # noqa: E402
 from metrics import load_eval_data, precision_at_k, recall_at_k, ndcg_at_k  # noqa: E402
 
 PROC = psutil.Process(os.getpid())
-SAMPLE_N = 2000
+SAMPLE_N = int(os.environ.get("COLD_START_SAMPLE_N", "2000"))
 K = 20
 
 
@@ -118,9 +118,10 @@ def main():
         "fit_time_s": train_s,
     }
     print(json.dumps(result, indent=2))
-    with open("results_cold_start.json", "w") as f:
+    out_name = os.environ.get("COLD_START_OUT", "results_cold_start.json")
+    with open(out_name, "w") as f:
         json.dump(result, f, indent=2)
-    print("\nWrote results_cold_start.json")
+    print(f"\nWrote {out_name}")
 
 
 if __name__ == "__main__":

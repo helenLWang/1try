@@ -107,20 +107,23 @@ Report on the **full user set**. Use `sample_users` only while developing.
 
 | | Collaborative | Content-based | Cold start |
 | --- | --- | --- | --- |
-| Recall@20 | 0.0999 | 0.0131 | 0.0149* |
-| Precision@20 | 0.0108 | 0.0014 | 0.0017* |
-| NDCG@20 | 0.0503 | 0.0074 | 0.0100* |
-| Hit rate@20 | 0.1950 | 0.0282 | 0.0315* |
-| Beats popularity? | essentially tied (-0.0007 recall) | no, by ~7x | no — see 3.3, popularity on the *same* 2,000 users scores 0.0853 recall |
-| Train time | 53.6s | 68.4s | 3.6s (`fit()`, no LLM training) |
-| p95 latency (ms) | 10.2 | 1.4 | 590.1 |
+| Recall@20 | 0.0999 | 0.0131 | 0.0313* |
+| Precision@20 | 0.0108 | 0.0014 | 0.0033* |
+| NDCG@20 | 0.0503 | 0.0074 | 0.0177* |
+| Hit rate@20 | 0.1950 | 0.0282 | 0.0600* |
+| Beats popularity? | essentially tied (-0.0007 recall) | no, by ~7x | no — see 3.3, popularity on the *same* 150 users scores 0.1004 recall |
+| Train time | 53.6s | 68.4s | 2.5s (`fit()`, no LLM call yet — the LLM runs at request time) |
+| p95 latency (ms) | 10.2 | 1.4 | **79,372** (that is 79 seconds, not a typo) |
 | Artifact size (MB) | 133.3 | 115.6 | n/a (no serialized model — pure lookup + prompt) |
-| Catalogue coverage | 2,191 films (10.5%) | 6,142 films (29.6%) | 4,398 films (21.2%) |
+| Catalogue coverage | 2,191 films (10.5%) | 6,142 films (29.6%) | 1,265 films (6.1%) |
 
 *Cold-start metrics are **not comparable** to the other two columns — different
-protocol, different (smaller, sampled) user set, and the LLM path was not
-exercised (see 3.3 and 4.2). Popularity is at 0.1006 recall on the full set,
-0.0853 on this cold-start sample specifically.
+protocol, a much smaller sampled user set (150, down from 2,000 — see 4.2 for
+why), and these numbers are from the **real LLM path**, confirmed via
+`used_llm_path: 150/150` in `results_cold_start_llm.json` (an earlier run on
+the same code, before a working key was available, used the heuristic
+fallback instead — see 4.2 for that comparison). Popularity is at 0.1006
+recall on the full set, 0.1004 on this specific 150-user sample.
 
 ---
 
@@ -252,24 +255,30 @@ schema runs instead so the function still returns something.
 | Command to reproduce | `python run_cold_start.py` |
 
 **How you evaluated it.** `metrics.py` cannot score users with no training
-history, so per DATA_GUIDE.md I held out the *real* training history of 2,000
-warm test users who have a non-empty self-description (sampled from the
-96,936 eligible warm users who have one), and scored them purely from that
-text against the same post-cutoff ground truth `metrics.py` uses — i.e.
+history, so per DATA_GUIDE.md I held out the *real* training history of a
+sample of warm test users who have a non-empty self-description (sampled from
+the 96,936 eligible warm users who have one), and scored them purely from
+that text against the same post-cutoff ground truth `metrics.py` uses — i.e.
 pretending each one is a brand-new user. Compared against the popularity list
-for that *same* 2,000-user sample, not the full-set baseline (a subsample
-shifts the mean).
+for that *same* user sample, not the full-set baseline (a subsample shifts
+the mean). Ran twice: once on 2,000 users before a working LLM key was
+available (heuristic fallback only), once on 150 users with a working Gemini
+key (real LLM path, confirmed via `used_llm_path: 150/150`). The sample
+shrank 2,000 -> 150 for the LLM run purely because of latency, see cost row
+below.
 
 | | |
 | --- | --- |
 | Method | held out real history of warm users, scored from self-description text only |
-| Result | Recall@20 0.0149, Precision@20 0.0017, NDCG@20 0.0100, Hit rate@20 0.0315 |
-| Better than giving them the popularity list? | **No.** Popularity on the same 2,000 users: Recall@20 0.0853, Hit rate@20 0.1665 — popularity wins by roughly 5-6x on every metric |
+| Result (real LLM, 150 users) | Recall@20 0.0313, Precision@20 0.0033, NDCG@20 0.0177, Hit rate@20 0.0600 |
+| Result (heuristic fallback, 2,000 users, no working key at the time) | Recall@20 0.0149, Precision@20 0.0017, NDCG@20 0.0100, Hit rate@20 0.0315 |
+| Better than giving them the popularity list? | **No, either way.** Popularity on the same 150 users: Recall@20 0.1004, Hit rate@20 0.2067 — the real LLM path roughly **doubles** recall over the heuristic fallback, but still loses to popularity by ~3.2x |
 
 | Cost | Value |
 | --- | --- |
-| Train time / peak memory | `fit()` (loads catalog + user table, no model training): 3.6s / RSS delta 149.6 MB |
-| Median / p95 latency | **438.1ms / 590.1ms** — model-only, no HTTP yet. This is close to the 600ms end-to-end graded limit before any network/server overhead is added |
+| Train time / peak memory | `fit()` (loads catalog + user table, no LLM call yet): 2.5s / RSS delta 149.5 MB |
+| Median / p95 latency, heuristic | 438.1ms / 590.1ms — model-only, no HTTP. Already close to the 600ms end-to-end limit |
+| Median / p95 latency, **real LLM** | **66,301ms / 79,372ms — that is 66 to 79 *seconds* per recommendation**, not milliseconds. Two sequential LLM calls per request (extract, then re-rank), plus retry/backoff on rate limits. This is roughly **130x over the 600ms budget** and is the actual finding here, not the accuracy numbers |
 | Artifact on disk | n/a — no serialized model, this is a lookup + scoring function, not a fitted object |
 | Machine | Laptop (Windows) |
 
@@ -277,15 +286,16 @@ shifts the mean).
 
 | | |
 | --- | --- |
-| Distinct films across unknown users | 4,398 (of the 2,000 sampled) |
-| Identical list for every unknown user? | No — 21.2% of the catalog appears across the sample, so it is not the popularity-baseline-with-extra-steps failure mode, just a less accurate one |
+| Distinct films across unknown users | Heuristic: 4,398 of 2,000 sampled (21.2%). Real LLM: 1,265 of 150 sampled (6.1%) |
+| Identical list for every unknown user? | No, either run — not the popularity-baseline-with-extra-steps failure mode, just a less accurate (and, with a real LLM, far too slow) one |
 
 **What you tried**
 
 | Variant | Result | Verdict |
 | --- | --- | --- |
-| LLM path (`OPENAI_API_KEY` env var present) | 0/2,000 calls succeeded — `AuthenticationError` on every call | not usable, see 4.2 |
-| Heuristic fallback (regex/keyword genre extraction, same JSON schema) | Recall@20 0.0149, reported above | this is what was actually scored |
+| LLM path, `OPENAI_API_KEY` env var present (not a key I generated) | 0/2,000 calls succeeded — `AuthenticationError` on every call | not usable |
+| Heuristic fallback (regex/keyword genre extraction, same JSON schema) | Recall@20 0.0149 on 2,000 users | works, but the point of this block is the LLM path |
+| LLM path, working `GEMINI_API_KEY` | Recall@20 0.0313 on 150 users, **p95 latency 79.4s** | accuracy roughly doubles over heuristic; latency makes this undeployable as-is, see 4.2 |
 
 ---
 
@@ -305,26 +315,32 @@ candidate for the required 4-dimension comparison, but its accuracy (about
 
 ## 4.2 Honest caveats
 
-- **The cold-start LLM path did not actually run.** The only API key available
-  in this environment (`OPENAI_API_KEY`, not one I generated) failed
-  authentication on every one of 2,000 calls, so every cold-start number above
-  reflects the deterministic heuristic fallback, not an LLM. This needs a
-  working key before this can be called done — I do not have one right now.
-- **Cold start's p95 latency (590ms) is a real risk, not just a number.** It
-  is measured with the model alone; once HTTP and VM contention are added on
-  top, this is likely to blow the 600ms budget outright. The bottleneck is
-  scoring the full 20,784-film catalog in a Python loop per request — this
-  needs to be fixed (vectorize the scoring, or precompute/cache per-genre
-  scores) before cold start goes anywhere near production, independent of
-  whether the LLM key gets fixed.
+- **The real LLM path now runs (a working `GEMINI_API_KEY` was obtained after
+  the first version of this report), and it is a much bigger problem than the
+  earlier "no key" caveat.** Accuracy roughly doubles over the heuristic
+  fallback (Recall@20 0.0313 vs 0.0149), but p95 latency is **79 seconds per
+  request** — two sequential LLM calls (extract, then re-rank) plus
+  rate-limit backoff, against a 600ms budget. This is not a "needs a key"
+  problem anymore, it is a "needs a completely different request-time
+  architecture" problem: precompute the extraction at signup instead of
+  per-request, cut the second (re-rank) LLM call, and/or cache aggressively.
+  As shipped today, this cannot go into the 600ms endpoint at all.
+- Sample size dropped from 2,000 users (heuristic) to 150 (real LLM) purely
+  because of that latency — 2,000 real Gemini calls at ~70s each was not
+  practical to run before this report. 150 is small enough that the LLM
+  recall number (0.0313) should be treated as a rough estimate, not a
+  precise one.
+- **Both `.pkl` artifacts are >100MB** (133.3 MB and 115.6 MB) — over GitHub's
+  hard limit, consistent with DATA_GUIDE.md's warning to gitignore `models/`.
+  Neither has been committed.
 - **Both `.pkl` artifacts are >100MB** (133.3 MB and 115.6 MB) — over GitHub's
   hard limit, consistent with DATA_GUIDE.md's warning to gitignore `models/`.
   Neither has been committed.
 - I scored the **full 137,694-user set** for collaborative and content-based
   (not a dev sample), per the "report on the full user set" instruction. Cold
-  start used a 2,000-user sample of *only* users with a non-empty
-  self-description — the other ~30% of users.csv, and the un-sampled 94,936
-  remaining eligible users, are untested.
+  start used a 150-user (real LLM) / 2,000-user (heuristic) sample of *only*
+  users with a non-empty self-description — the other ~30% of users.csv, and
+  the un-sampled remainder of the 96,936 eligible users, are untested.
 - I did not get to re-sweep any hyperparameters (CF's min-interaction
   thresholds, content's genre weighting) before this meeting — both models
   are running I2's original defaults unchanged.
@@ -334,10 +350,15 @@ candidate for the required 4-dimension comparison, but its accuracy (about
 
 ## 4.3 What you would build next
 
-Fix the LLM key and re-run cold start for real — the heuristic-only numbers
-here are not the graded result. Separately, vectorize `score_catalog` so cold
-start's latency has a chance of fitting the 600ms budget even before the LLM
-call is added on top.
+Redesign cold start around a 79-second-per-request LLM call being unusable
+at request time: run the extraction step once at signup (or on a schedule)
+and cache the structured preferences, so the `/recommend` path only does the
+cheap catalog-scoring step, not a live LLM call. Drop the second (re-rank)
+LLM call entirely — it roughly doubles latency for a step that `score_catalog`
+already does reasonably on its own. Also vectorize `score_catalog` itself
+(currently a per-film Python loop over 20,784 rows), and re-score on the
+full 150+ user sample once the above lands, since 150 users is too few to
+trust the recall number precisely.
 
 ---
 
