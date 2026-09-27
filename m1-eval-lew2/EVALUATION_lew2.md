@@ -74,12 +74,15 @@ Report on the **full user set**. Use `sample_users` only while developing.
   fit.
 - **Data:** `data/v2/train.csv` (+ `data/movies.csv` for content, + `data/users.csv`
   for cold start).
-- **Operationalization:** `time.perf_counter()` around each `.fit(...)` call.
-  Memory measured with `psutil.Process().memory_info().rss` before/after,
-  **not** `resource.getrusage` — that module is POSIX-only and this ran on
-  Windows, which the guide's snippet doesn't account for. Reported as process
-  RSS delta, not a true peak, since `psutil` doesn't expose `ru_maxrss` on
-  Windows either.
+- **Operationalization:** `time.perf_counter()` around each `.fit(...)` call
+  for training time. Memory follows the team's standardized definition
+  (proposed by Sarah, 2026-09-27): **maximum resident set size (RSS) for one
+  full training process, including data loading + model fitting, but
+  excluding serialization/pickling.** Measured via a background thread
+  polling `psutil.Process().memory_info().rss` every 20ms from just before
+  `load_interactions(...)` through the end of `.fit(...)`, keeping the
+  running max — not `resource.getrusage`, which is POSIX-only and unavailable
+  on Windows.
 
 ## 1.3 Inference cost and throughput
 
@@ -155,7 +158,7 @@ a matrix-projection trick that avoids ever materializing the full 20,784 x
 
 | Cost | Value |
 | --- | --- |
-| Train time / peak memory | 53.6s / RSS delta 931.2 MB (process total 1,954.8 MB) |
+| Train time / peak memory | 53.6s / **1,894.0 MB peak** (Sarah's standardized definition: data load + fit, excl. pickling) |
 | Median / p95 latency | 5.65ms / 10.20ms |
 | Artifact on disk | 133.3 MB (pickled) |
 | Machine | Laptop (Windows), not the VM — per DATA_GUIDE.md, training must not run on the shared VM |
@@ -210,7 +213,7 @@ is cosine similarity to that profile, blended 85/15 with a popularity prior.
 
 | Cost | Value |
 | --- | --- |
-| Train time / peak memory | 68.4s / RSS delta 372.4 MB (process total 2,524.9 MB) |
+| Train time / peak memory | 68.4s / **1,525.7 MB peak** (Sarah's standardized definition: data load + fit, excl. pickling) |
 | Median / p95 latency | 1.09ms / 1.39ms |
 | Artifact on disk | 115.6 MB (pickled — mostly the TF-IDF sparse matrix over 20,784 films) |
 | Machine | Laptop (Windows) |
@@ -344,9 +347,14 @@ candidate for the required 4-dimension comparison, but its accuracy (about
 - I did not get to re-sweep any hyperparameters (CF's min-interaction
   thresholds, content's genre weighting) before this meeting — both models
   are running I2's original defaults unchanged.
-- Peak memory is a **process RSS delta**, not a true peak (`resource.getrusage`
-  from the guide's own snippet is POSIX-only and unavailable on Windows) — it
-  understates memory used and freed mid-run, e.g. during TF-IDF fitting.
+- Peak memory was originally reported as a before/after RSS delta, which
+  understates true peak. Updated to a proper running-max measurement (sampled
+  every 20ms across data load + fit) once the team standardized the
+  definition — see 1.2 and Part 3.1/3.2. This redo also ran under heavier
+  system load than the original timing runs, so its train-time readings
+  (198s / 222s) are noisy and **not** used to replace the originally measured
+  train times (53.6s / 68.4s) above, which came from an isolated run — only
+  the peak-memory number from the redo is used.
 
 ## 4.3 What you would build next
 

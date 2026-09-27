@@ -1,0 +1,12 @@
+{
+  "collaborative": {
+    "model": "collaborative",
+    "peak_training_rss_mb": 1893.974016,
+    "train_time_s": 198.37646860000677
+  },
+  "content": {
+    "model": "content",
+    "peak_training_rss_mb": 1525.669888,
+    "train_time_s": 222.1816897999961
+  }
+}
