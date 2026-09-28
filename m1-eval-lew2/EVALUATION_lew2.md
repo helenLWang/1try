@@ -115,7 +115,7 @@ Report on the **full user set**. Use `sample_users` only while developing.
 | NDCG@20 | 0.0503 | 0.0074 | 0.0177* |
 | Hit rate@20 | 0.1950 | 0.0282 | 0.0600* |
 | Beats popularity? | essentially tied (-0.0007 recall) | no, by ~7x | no — see 3.3, popularity on the *same* 150 users scores 0.1004 recall |
-| Train time | 53.6s | 68.4s | 2.5s (`fit()`, no LLM call yet — the LLM runs at request time) |
+| Train time | 93.3s (re-measured 9/28) | 68.4s | 2.5s (`fit()`, no LLM call yet — the LLM runs at request time) |
 | p95 latency (ms) | 10.2 | 1.4 | **79,372** (that is 79 seconds, not a typo) |
 | Artifact size (MB) | 133.3 | 115.6 | n/a (no serialized model — pure lookup + prompt) |
 | Catalogue coverage | 2,191 films (10.5%) | 6,142 films (29.6%) | 1,265 films (6.1%) |
@@ -158,7 +158,7 @@ a matrix-projection trick that avoids ever materializing the full 20,784 x
 
 | Cost | Value |
 | --- | --- |
-| Train time / peak memory | 53.6s / **1,894.0 MB peak** (Sarah's standardized definition: data load + fit, excl. pickling) |
+| Train time / peak memory | **93.3s** / **1,894.0 MB peak** (both per the team's standard: data load + fit, excl. pickling; train time re-measured 9/28, two runs 93.1s/93.5s) |
 | Median / p95 latency | 5.65ms / 10.20ms |
 | Artifact on disk | 133.3 MB (pickled) |
 | Machine | Laptop (Windows), not the VM — per DATA_GUIDE.md, training must not run on the shared VM |
@@ -350,11 +350,18 @@ candidate for the required 4-dimension comparison, but its accuracy (about
 - Peak memory was originally reported as a before/after RSS delta, which
   understates true peak. Updated to a proper running-max measurement (sampled
   every 20ms across data load + fit) once the team standardized the
-  definition — see 1.2 and Part 3.1/3.2. This redo also ran under heavier
-  system load than the original timing runs, so its train-time readings
-  (198s / 222s) are noisy and **not** used to replace the originally measured
-  train times (53.6s / 68.4s) above, which came from an isolated run — only
-  the peak-memory number from the redo is used.
+  definition — see 1.2 and Part 3.1/3.2.
+- **Training time for collaborative filtering was re-measured on
+  2026-09-28** per Balkan's request (data load through end of fit, excl.
+  pickling), and came out to **~93s** (two runs: 93.1s, 93.5s) — noticeably
+  slower than the 53.6s first reported. The original 53.6s only timed
+  `.fit()` itself, not data loading (which was done once, shared, before the
+  timer started) — it undercounted relative to the team's standard, which is
+  why this needed a redo. The gap isn't fully explained by that alone (data
+  loading itself is only ~1.8s), so some of it may be this laptop being
+  slower now than when the original number was measured days earlier; either
+  way, 93s is the number that follows the agreed definition and is what's
+  reported in 1.2, 3.1 and the summary table.
 
 ## 4.3 What you would build next
 
